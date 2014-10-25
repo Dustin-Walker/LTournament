@@ -1,0 +1,64 @@
+/** Add css rules here for your application. */
+
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    background: dodgerblue;
+}
+
+body, td, a, div, .p {
+    font-family: arial, sans-serif;
+}
+
+.roster-table {
+    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+}
+
+.footer {
+    color: grey;
+    font-size: small;
+}
+
+.unranked{
+    background-color: rgba(255, 0, 210, 0.21);
+}
+
+.bronze{
+    background-color: rgba(216, 131, 37, 0.79);
+}
+
+.silver{
+    background-color: silver;
+}
+
+.gold{
+    background-color: gold;
+}
+
+.platinum{
+    background-color: ghostwhite;
+}
+
+.diamond{
+    background-color: dodgerblue;
+}
+
+.challenger{
+    background-color: red;
+}
+
+.addpanel {
+    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+
+}
+
+.rostertableheader {
+    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+
+}
+
+.footerpanel {
+    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+
+}
