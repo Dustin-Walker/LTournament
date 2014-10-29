@@ -35,7 +35,7 @@ public class LTournament implements EntryPoint {
     private static final String summonerByName_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
     private static final String leagueEntries_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
     //API Key goes here
-    private static final String APIKEY = "";
+    private static final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
 
     /**
      * This is the entry point method.
@@ -158,6 +158,7 @@ public class LTournament implements EntryPoint {
 
                                         }
                                     });
+                                    System.out.println("test1: "+playerDataList.get(playerDataList.size()-1).getRank());
                                 }
                                 @Override
                                 public void onError(Request request, Throwable exception) {
@@ -170,7 +171,7 @@ public class LTournament implements EntryPoint {
                             } catch (RequestException e) {
                                 e.printStackTrace();
                             }
-                            System.out.println(playerDataList.get(playerDataList.size()-1).getRank());
+                            System.out.println("test2: "+playerDataList.get(playerDataList.size()-1).getRank());
                             rosterTable.setText(row, 0, d.getSummonerName());
                         }
                     }
