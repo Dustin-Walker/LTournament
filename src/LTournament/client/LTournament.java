@@ -21,6 +21,7 @@ public class LTournament implements EntryPoint {
     private HorizontalPanel addPanel = new HorizontalPanel();
     private HorizontalPanel footerPanel = new HorizontalPanel();
     private HorizontalPanel rosterTableHeader = new HorizontalPanel();
+    private VerticalPanel playerListPanel = new VerticalPanel();
     private FlexTable rosterTable = new FlexTable();
     private TextBox newPlayerNameTextBox = new TextBox();
     private Button addPlayerButton = new Button("Add");
@@ -42,25 +43,26 @@ public class LTournament implements EntryPoint {
     public void onModuleLoad() {
 
         // Create roster table
-        rosterTable.setText(0,0,"Player Number");
-        rosterTable.setText(0,1,"Player Name");
-        rosterTable.setText(0,2,"Summoner Icon");
-        rosterTable.setText(0,3,"Remove");
+        //rosterTable.setText(0,0,"Rank");
+        rosterTable.setText(0,0,"Player Name");
+        //rosterTable.setText(0,1,"Player Name");
+        //rosterTable.setText(0,2,"Summoner Icon");
+        rosterTable.setText(0,1,"Remove");
 
         // Assemble Add Player panel
         addPanel.add(addPlayerNameLabel);
         addPanel.add(newPlayerNameTextBox);
         addPanel.add(addPlayerButton);
+        addPanel.add(resetRosterButton);
         addPanel.addStyleName("addpanel");
 
-        // Assemble the Player Roster Header panel
+        // Assemble the header panel
         rosterListLabel.setText("Player List");
         rosterTableHeader.add(rosterListLabel);
-        rosterTableHeader.add(resetRosterButton);
         rosterTableHeader.addStyleName("rostertableheader");
 
         // Assemble the roster table
-        rosterPanel.add(rosterTableHeader);
+        //rosterPanel.add(rosterTableHeader);
         rosterPanel.add(rosterTable);
 
         // Assemble the footer panel
@@ -70,9 +72,15 @@ public class LTournament implements EntryPoint {
         footerPanel.addStyleName("footerpanel");
         footerPanel.add(footGrid);
 
+        // Assemble the playerListPanel
+        playerListPanel.add(rosterTableHeader);
+        playerListPanel.add(addPanel);
+        playerListPanel.add(rosterPanel);
+
         // Assemble the main panel
-        mainTopPanel.add(addPanel);
-        mainTopPanel.add(rosterPanel);
+        //mainTopPanel.add(addPanel);
+        //mainTopPanel.add(rosterPanel);
+        mainTopPanel.add(playerListPanel);
         mainTopPanel.add(footerPanel);
 
         // Associate main panel with HTML host page
@@ -113,7 +121,7 @@ public class LTournament implements EntryPoint {
                                 public void onResponseReceived(Request request, Response response) {
                                     final int row = rosterTable.getRowCount();
                                     String s = response.getText();
-                                    System.out.println(s);
+                                    //System.out.println(s);
                                     final PlayerData dd = playerDataList.get(playerDataList.size()-1);
                                     if(s.contains("CHALLENGER")){
                                         dd.setRank("CHALLENGER");
@@ -133,18 +141,21 @@ public class LTournament implements EntryPoint {
                                     } else if (s.contains("BRONZE")) {
                                         dd.setRank("BRONZE");
                                         rosterTable.getRowFormatter().addStyleName(row-1,"bronze");
+                                        playerDataList.get(playerDataList.size()-1).setRank("bronze");
                                     } else {
                                         System.out.println("NO RANK AVAIlABLE");
                                         dd.setRank("BEGINNER");
                                         rosterTable.getRowFormatter().addStyleName(row-1,"unranked");
                                     }
+                                    playerDataList.get(playerDataList.size()-1).setRank(dd.getRank());
                                     final Button removePlayerButton = new Button("Remove");
-                                    rosterTable.setWidget(row-1, 3, removePlayerButton);
+                                    rosterTable.setWidget(row-1, 1, removePlayerButton);
                                     removePlayerButton.addClickHandler(new ClickHandler() {
                                         @Override
                                         public void onClick(ClickEvent event) {
                                             rosterTable.removeRow(row-1);
                                             playerDataList.remove(dd);
+
                                         }
                                     });
                                 }
@@ -159,9 +170,8 @@ public class LTournament implements EntryPoint {
                             } catch (RequestException e) {
                                 e.printStackTrace();
                             }
-                            rosterTable.setText(row, 0, d.getPlayerID());
-                            rosterTable.setText(row, 1, d.getSummonerName());
-                            rosterTable.setText(row, 2, d.getSummonerIconID());
+                            System.out.println(playerDataList.get(playerDataList.size()-1).getRank());
+                            rosterTable.setText(row, 0, d.getSummonerName());
                         }
                     }
                     @Override
@@ -227,7 +237,7 @@ public class LTournament implements EntryPoint {
                                             rosterTable.getRowFormatter().addStyleName(row-1,"unranked");
                                         }
                                         final Button removePlayerButton = new Button("Remove");
-                                        rosterTable.setWidget(row-1, 3, removePlayerButton);
+                                        rosterTable.setWidget(row-1, 1, removePlayerButton);
                                         removePlayerButton.addClickHandler(new ClickHandler() {
                                             @Override
                                             public void onClick(ClickEvent event) {
@@ -247,9 +257,8 @@ public class LTournament implements EntryPoint {
                                 } catch (RequestException e) {
                                     e.printStackTrace();
                                 }
-                                rosterTable.setText(row, 0, d.getPlayerID());
-                                rosterTable.setText(row, 1, d.getSummonerName());
-                                rosterTable.setText(row, 2, d.getSummonerIconID());
+                                System.out.println("test2: "+rosterTable.getRowFormatter().getStyleName(row-1));
+                                rosterTable.setText(row, 0, d.getSummonerName());
                             }
                         }
                         @Override
