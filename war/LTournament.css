@@ -1,10 +1,15 @@
 /** Add css rules here for your application. */
-
-h1 {
+.header {
     font-size: 2em;
     font-weight: bold;
-    text-align: center;
-    background: dodgerblue;
+    text-align: left;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 5px;
+}
+
+.seam{
+    border: 1px solid rgba(0, 0, 0, 0.12);
+
 }
 
 body, td, a, div, .p {
@@ -12,7 +17,17 @@ body, td, a, div, .p {
 }
 
 .roster-table {
-    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.51);
+    background-color: white;
+    margin: 5px;
+    padding: 5px;
+}
+
+.team-list{
+    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.51);
+    background-color: white;
+    margin: 5px;
+    padding: 5px;
 }
 
 .footer {
@@ -49,16 +64,43 @@ body, td, a, div, .p {
 }
 
 .addpanel {
-    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+   /* box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);*/
 
 }
 
 .rostertableheader {
-    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+   /* box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);*/
 
 }
 
 .footerpanel {
     box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
 
+}
+
+.playerListPanel {
+    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+
+}
+
+.middle-main {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+.remove-button {
+    width: 30px;
+    height: 30px;
+    background: transparent url(img/ic_highlight_remove_black_18dp.png) no-repeat;
+}
+
+.add-button {
+    width: 30px;
+    height: 30px;
+    background: transparent url(img/ic_assignment_returned_black_18dp.png) no-repeat;
+}
+
+.reset-button{
+    width: 30px;
+    height: 30px;
+    background: transparent url(img/ic_settings_backup_restore_black_18dp.png) no-repeat;
 }

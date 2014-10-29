@@ -17,17 +17,20 @@ import java.util.ArrayList;
 public class LTournament implements EntryPoint {
     //Create GWT widgets
     private VerticalPanel mainTopPanel = new VerticalPanel();
-    private VerticalPanel rosterPanel = new VerticalPanel();
     private HorizontalPanel addPanel = new HorizontalPanel();
     private HorizontalPanel footerPanel = new HorizontalPanel();
+    private HorizontalPanel headerPanel = new HorizontalPanel();
     private HorizontalPanel rosterTableHeader = new HorizontalPanel();
+    private HorizontalPanel middleMainPanel = new HorizontalPanel();
+    private VerticalPanel teamListPanel = new VerticalPanel();
     private VerticalPanel playerListPanel = new VerticalPanel();
     private FlexTable rosterTable = new FlexTable();
     private TextBox newPlayerNameTextBox = new TextBox();
-    private Button addPlayerButton = new Button("Add");
-    private Button resetRosterButton = new Button("Reset");
+    private Button addPlayerButton = new Button();
+    private Button resetRosterButton = new Button();
     private Label addPlayerNameLabel = new Label();
     private Label rosterListLabel = new Label();
+    private DockPanel dockPanel = new DockPanel();
 
     //Non-GWT objects
     ArrayList<PlayerData> playerDataList = new ArrayList<PlayerData>();
@@ -35,19 +38,19 @@ public class LTournament implements EntryPoint {
     private static final String summonerByName_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
     private static final String leagueEntries_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
     //API Key goes here
-    private static final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
+    private static final String APIKEY = "";
 
     /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
 
-        // Create roster table
-        //rosterTable.setText(0,0,"Rank");
-        rosterTable.setText(0,0,"Player Name");
-        //rosterTable.setText(0,1,"Player Name");
-        //rosterTable.setText(0,2,"Summoner Icon");
-        rosterTable.setText(0,1,"Remove");
+        // TODO Fix remove button
+        // TODO Add buffers to CSS
+        // TODO Go cray on CSS
+        // TODO Create panels for team list section
+        // TODO Create algorithm to create teams
+        // TODO Update the team list panel
 
         // Assemble Add Player panel
         addPanel.add(addPlayerNameLabel);
@@ -55,15 +58,13 @@ public class LTournament implements EntryPoint {
         addPanel.add(addPlayerButton);
         addPanel.add(resetRosterButton);
         addPanel.addStyleName("addpanel");
+        addPlayerButton.addStyleName("add-button");
+        resetRosterButton.addStyleName("reset-button");
 
         // Assemble the header panel
         rosterListLabel.setText("Player List");
         rosterTableHeader.add(rosterListLabel);
         rosterTableHeader.addStyleName("rostertableheader");
-
-        // Assemble the roster table
-        //rosterPanel.add(rosterTableHeader);
-        rosterPanel.add(rosterTable);
 
         // Assemble the footer panel
         Grid footGrid = new Grid(1,1);
@@ -75,16 +76,33 @@ public class LTournament implements EntryPoint {
         // Assemble the playerListPanel
         playerListPanel.add(rosterTableHeader);
         playerListPanel.add(addPanel);
-        playerListPanel.add(rosterPanel);
+        playerListPanel.add(rosterTable);
+        playerListPanel.addStyleName("roster-table");
 
-        // Assemble the main panel
-        //mainTopPanel.add(addPanel);
-        //mainTopPanel.add(rosterPanel);
-        mainTopPanel.add(playerListPanel);
-        mainTopPanel.add(footerPanel);
+        // Assemble the header panel
+        headerPanel.add(new Label("League of Legends Tournament System"));
+        headerPanel.addStyleName("header");
+
+        // Assemble the middle panel
+        middleMainPanel.add(playerListPanel);
+        middleMainPanel.add(teamListPanel);
+        teamListPanel.addStyleName("team-list");
+        middleMainPanel.addStyleName("seam");
+        middleMainPanel.addStyleName("middle-main");
+
+        // Assemble the dock panel
+        teamListPanel.add(new Label("Team List"));
+        dockPanel.add(headerPanel, DockPanel.NORTH);
+        dockPanel.add(footerPanel, DockPanel.SOUTH);
+        dockPanel.add(middleMainPanel, DockPanel.CENTER);
+        dockPanel.setCellHorizontalAlignment(middleMainPanel, HasHorizontalAlignment.ALIGN_CENTER);
+        dockPanel.setCellHorizontalAlignment(headerPanel, HasHorizontalAlignment.ALIGN_CENTER);
+        dockPanel.setCellHorizontalAlignment(footerPanel, HasHorizontalAlignment.ALIGN_CENTER);
+
+
 
         // Associate main panel with HTML host page
-        RootPanel.get("playerRoster").add(mainTopPanel);
+        RootPanel.get("playerRoster").add(dockPanel);
 
         // Get some CSS goin
         rosterTable.setStyleName("roster-table");
@@ -92,9 +110,7 @@ public class LTournament implements EntryPoint {
         resetRosterButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                for(int row=1;row<=rosterTable.getRowCount();row++)
-                    rosterTable.removeRow(row);
-                playerDataList.clear();
+                rosterTable.removeAllRows();
             }
         });
 
@@ -121,7 +137,6 @@ public class LTournament implements EntryPoint {
                                 public void onResponseReceived(Request request, Response response) {
                                     final int row = rosterTable.getRowCount();
                                     String s = response.getText();
-                                    //System.out.println(s);
                                     final PlayerData dd = playerDataList.get(playerDataList.size()-1);
                                     if(s.contains("CHALLENGER")){
                                         dd.setRank("CHALLENGER");
@@ -141,14 +156,13 @@ public class LTournament implements EntryPoint {
                                     } else if (s.contains("BRONZE")) {
                                         dd.setRank("BRONZE");
                                         rosterTable.getRowFormatter().addStyleName(row-1,"bronze");
-                                        playerDataList.get(playerDataList.size()-1).setRank("bronze");
                                     } else {
-                                        System.out.println("NO RANK AVAIlABLE");
-                                        dd.setRank("BEGINNER");
+                                        dd.setRank("UNRANKED");
                                         rosterTable.getRowFormatter().addStyleName(row-1,"unranked");
                                     }
                                     playerDataList.get(playerDataList.size()-1).setRank(dd.getRank());
-                                    final Button removePlayerButton = new Button("Remove");
+                                    final Button removePlayerButton = new Button();
+                                    removePlayerButton.addStyleName("remove-button");
                                     rosterTable.setWidget(row-1, 1, removePlayerButton);
                                     removePlayerButton.addClickHandler(new ClickHandler() {
                                         @Override
@@ -158,7 +172,7 @@ public class LTournament implements EntryPoint {
 
                                         }
                                     });
-                                    System.out.println("test1: "+playerDataList.get(playerDataList.size()-1).getRank());
+                                    //System.out.println("test1: "+playerDataList.get(playerDataList.size()-1).getRank());
                                 }
                                 @Override
                                 public void onError(Request request, Throwable exception) {
@@ -171,7 +185,7 @@ public class LTournament implements EntryPoint {
                             } catch (RequestException e) {
                                 e.printStackTrace();
                             }
-                            System.out.println("test2: "+playerDataList.get(playerDataList.size()-1).getRank());
+                            //System.out.println("test2: "+playerDataList.get(playerDataList.size()-1).getRank());
                             rosterTable.setText(row, 0, d.getSummonerName());
                         }
                     }
@@ -212,7 +226,7 @@ public class LTournament implements EntryPoint {
                                     public void onResponseReceived(Request request, Response response) {
                                         final int row = rosterTable.getRowCount();
                                         String s = response.getText();
-                                        System.out.println(s);
+                                       // System.out.println(s);
                                         final PlayerData dd = playerDataList.get(playerDataList.size()-1);
                                         if(s.contains("CHALLENGER")){
                                             dd.setRank("CHALLENGER");
@@ -233,11 +247,12 @@ public class LTournament implements EntryPoint {
                                             dd.setRank("BRONZE");
                                             rosterTable.getRowFormatter().addStyleName(row-1,"bronze");
                                         } else {
-                                            System.out.println("NO RANK AVAIlABLE");
-                                            dd.setRank("BEGINNER");
+                                            //System.out.println("NO RANK AVAIlABLE");
+                                            dd.setRank("UNRANKED");
                                             rosterTable.getRowFormatter().addStyleName(row-1,"unranked");
                                         }
-                                        final Button removePlayerButton = new Button("Remove");
+                                        final Button removePlayerButton = new Button();
+                                        removePlayerButton.addStyleName("remove-button");
                                         rosterTable.setWidget(row-1, 1, removePlayerButton);
                                         removePlayerButton.addClickHandler(new ClickHandler() {
                                             @Override
@@ -258,7 +273,6 @@ public class LTournament implements EntryPoint {
                                 } catch (RequestException e) {
                                     e.printStackTrace();
                                 }
-                                System.out.println("test2: "+rosterTable.getRowFormatter().getStyleName(row-1));
                                 rosterTable.setText(row, 0, d.getSummonerName());
                             }
                         }

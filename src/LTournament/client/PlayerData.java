@@ -1,7 +1,5 @@
 package LTournament.client;
 
-import com.google.gwt.core.client.JavaScriptObject;
-
 /**
  * Created by User on 10/2/2014.
  * This is an overlay type, used to manipulate a JSON object.
@@ -16,7 +14,6 @@ public class PlayerData  {
     public PlayerData(String response){
         this.setPlayerID(response);
         this.setSummonerName(response);
-        this.setSummonerIconID(response);
     }
 
     // Members
@@ -24,8 +21,6 @@ public class PlayerData  {
     private String playerID;
     private String summonerName;
     private String rank;
-    private String division;
-    private String summonerIconID;
 
     public void setPlayerID(String response){
         this.playerID = response.split("[:]")[2].split("[,]")[0];
@@ -33,14 +28,6 @@ public class PlayerData  {
 
     public void setSummonerName(String response){
         this.summonerName = response.split("[:]")[3].split("[,]")[0].replace("\"", "");
-    }
-
-    // public void setTest(){
-    //   this.summonerName = "TEST";
-    // }
-
-    public void setSummonerIconID(String response){
-        this.summonerIconID = response.split("[:]")[4].split("[,]")[0];
     }
 
     public String getPlayerID() {
@@ -57,13 +44,5 @@ public class PlayerData  {
 
     public void setRank(String newRank) {
         this.rank = newRank;
-    }
-
-    public String getDivision() {
-        return division;
-    }
-
-    public String getSummonerIconID() {
-        return summonerIconID;
     }
 }
