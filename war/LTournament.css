@@ -1,23 +1,31 @@
 /** Add css rules here for your application. */
 .header {
-    font-size: 2em;
+    font-size: x-large;
     font-weight: bold;
     text-align: left;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    /*border: 1px solid rgba(0, 0, 0, 0.12);*/
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding: 5px;
+    font-family: Roboto,sans-serif;
+    background-color: #5677fc;
+    color: white;
+
 }
 
 .seam{
     border: 1px solid rgba(0, 0, 0, 0.12);
-
 }
 
 body, td, a, div, .p {
-    font-family: arial, sans-serif;
+    /*font-family: arial, sans-serif;*/
+    font-family: Roboto,sans-serif;
+
 }
 
 .roster-table {
-    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.51);
+    /*box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.51);*/
+    box-shadow: none;
+    border: none;
     background-color: white;
     margin: 5px;
     padding: 5px;
@@ -31,7 +39,7 @@ body, td, a, div, .p {
 }
 
 .footer {
-    color: grey;
+    color: white;
     font-size: small;
 }
 
@@ -65,7 +73,6 @@ body, td, a, div, .p {
 
 .addpanel {
    /* box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);*/
-
 }
 
 .rostertableheader {
@@ -74,13 +81,14 @@ body, td, a, div, .p {
 }
 
 .footerpanel {
-    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
-
+    /*box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);*/
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: #5677fc;
+    color: white;
 }
 
 .playerListPanel {
     box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
-
 }
 
 .middle-main {
@@ -88,19 +96,119 @@ body, td, a, div, .p {
 }
 
 .remove-button {
-    width: 30px;
-    height: 30px;
-    background: transparent url(img/ic_highlight_remove_black_18dp.png) no-repeat;
+    width: 24px;
+    height: 24px;
+    background: transparent url(img/ic_remove_circle_outline_grey600_24dp.png) no-repeat;
+    border: none;
+    box-shadow: none;
+    align-self: center;
+    background-color: white;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: 4px;
+    margin-left: 48px;
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+    -ms-transition: background 0.5s;
+    -o-transition: background 0.5s;
+    transition: background 0.5s;
 }
 
-.add-button {
-    width: 30px;
-    height: 30px;
-    background: transparent url(img/ic_assignment_returned_black_18dp.png) no-repeat;
+.remove-button:hover{
+    background: transparent url(img/ic_remove_circle_outline_black_24dp.png) no-repeat;
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+    -ms-transition: background 0.5s;
+    -o-transition: background 0.5s;
+    transition: background 0.5s;
+}
+
+.add-button{
+    width: 24px;
+    height: 24px;
+    background: transparent url(img/ic_person_add_grey600_24dp.png) no-repeat;
+    border: none;
+    box-shadow: none;
+    margin: 4px;
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+    -ms-transition: background 0.5s;
+    -o-transition: background 0.5s;
+    transition: background 0.5s;
+}
+
+.add-button:hover{
+    background: transparent url(img/ic_person_add_black_24dp.png) no-repeat;
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+    -ms-transition: background 0.5s;
+    -o-transition: background 0.5s;
+    transition: background 0.5s;
 }
 
 .reset-button{
-    width: 30px;
-    height: 30px;
-    background: transparent url(img/ic_settings_backup_restore_black_18dp.png) no-repeat;
+    width: 24px;
+    height: 24px;
+    background: transparent url(img/ic_clear_grey600_24dp.png) no-repeat;
+    border: none;
+    box-shadow: none;
+   /* background-color: white; */
+    margin: 4px;
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+    -ms-transition: background 0.5s;
+    -o-transition: background 0.5s;
+    transition: background 0.5s;
+}
+
+.reset-button:hover{
+    background: transparent url(img/ic_clear_black_24dp.png) no-repeat;
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+    -ms-transition: background 0.5s;
+    -o-transition: background 0.5s;
+    transition: background 0.5s;
+}
+
+.player-name-textbox {
+    height: 26px;
+    margin: 4px;
+}
+
+.player-list-panel {
+    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.50);
+   /* box-shadow: none;*/
+    border: none;
+    background-color: white;
+    margin: 4px;
+    padding: 4px;
+}
+
+.player-list-entry{
+    margin: 24px;
+    font-family: Roboto,sans-serif;
+    font-size: small;
+  /*  color: rgba(0, 0, 0, 0.50);*/
+}
+
+.create-teams-button {
+    color: rgba(0, 0, 0, 0.50);
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+    -ms-transition: background 0.5s;
+    -o-transition: background 0.5s;
+    transition: background 0.5s;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.create-teams-button:hover{
+    color: rgba(0, 0, 0, 1);
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+    -ms-transition: background 0.5s;
+    -o-transition: background 0.5s;
+    transition: background 0.5s;
+    background-color: transparent;
 }
