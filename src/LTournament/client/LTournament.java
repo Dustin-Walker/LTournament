@@ -1,6 +1,7 @@
 package LTournament.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -32,6 +33,7 @@ public class LTournament implements EntryPoint {
     private DockPanel dockPanel = new DockPanel();
     private HorizontalPanel bracketPanel = new HorizontalPanel();
     final Label teamWarning = new Label("Not enough players to create two teams. Add more players.");
+    DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
 
     //Non-GWT objects
     ArrayList<PlayerData> playerDataList = new ArrayList<PlayerData>();
@@ -85,7 +87,6 @@ public class LTournament implements EntryPoint {
         headerPanel.setWidth("100%");
 
         // Assemble the team list panel
-        //teamListPanel.add(new Label("Team List"));
         teamListPanel.add(createTeamsButton);
         createTeamsButton.setText("Create Teams");
         createTeamsButton.addStyleName("create-teams-button");
@@ -108,8 +109,16 @@ public class LTournament implements EntryPoint {
         dockPanel.add(footerPanel, DockPanel.SOUTH);
         dockPanel.add(middleMainPanel, DockPanel.WEST);
 
+        // Assemble the dock layout panel
+        dockLayoutPanel.addNorth(headerPanel, 2);
+        dockLayoutPanel.addSouth(footerPanel,3);
+        dockLayoutPanel.add(middleMainPanel);
+
+
         // Associate main panel with HTML host page
-        RootPanel.get("playerRoster").add(dockPanel);
+        //RootPanel.get("playerRoster").add(dockPanel);
+        RootLayoutPanel rp = RootLayoutPanel.get();
+        rp.add(dockLayoutPanel);
 
         // Get some CSS goin
         rosterTable.setStyleName("roster-table");
@@ -339,6 +348,12 @@ public class LTournament implements EntryPoint {
                         teamStackPanel.add(teamPanel);
                     }
                     teamListPanel.add(teamStackPanel);
+                    addPlayerButton.setEnabled(false);
+                    resetRosterButton.setEnabled(false);
+                    newPlayerNameTextBox.setEnabled(false);
+                    for(int i=0;i<rosterTable.getRowCount();i++)
+                        rosterTable.getCellFormatter().setVisible(i, 2, false);
+                    // TODO Figure out how to make remove player buttons disabled instead of invisible
                 }
             }
         });

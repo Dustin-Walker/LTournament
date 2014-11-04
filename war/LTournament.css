@@ -9,7 +9,6 @@
     font-family: Roboto,sans-serif;
     background-color: #5677fc;
     color: white;
-
 }
 
 .seam{
@@ -17,13 +16,10 @@
 }
 
 body, td, a, div, .p {
-    /*font-family: arial, sans-serif;*/
     font-family: Roboto,sans-serif;
-
 }
 
 .roster-table {
-    /*box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.51);*/
     box-shadow: none;
     border: none;
     background-color: white;
@@ -41,43 +37,6 @@ body, td, a, div, .p {
 .footer {
     color: white;
     font-size: small;
-}
-
-.unranked{
-    background-color: rgba(255, 0, 210, 0.21);
-}
-
-.bronze{
-    background-color: rgba(216, 131, 37, 0.79);
-}
-
-.silver{
-    background-color: silver;
-}
-
-.gold{
-    background-color: gold;
-}
-
-.platinum{
-    background-color: ghostwhite;
-}
-
-.diamond{
-    background-color: dodgerblue;
-}
-
-.challenger{
-    background-color: red;
-}
-
-.addpanel {
-   /* box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);*/
-}
-
-.rostertableheader {
-   /* box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);*/
-
 }
 
 .footerpanel {
@@ -219,6 +178,6 @@ body, td, a, div, .p {
 }
 
 .team-name {
-    color: black;
+    color: #5677fc;
     font-size: xx-large;
 }
