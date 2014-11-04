@@ -3,11 +3,11 @@ package LTournament.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.http.client.*;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
@@ -31,6 +31,7 @@ public class LTournament implements EntryPoint {
     private Label rosterListLabel = new Label();
     private DockPanel dockPanel = new DockPanel();
     private HorizontalPanel bracketPanel = new HorizontalPanel();
+    final Label teamWarning = new Label("Not enough players to create two teams. Add more players.");
 
     //Non-GWT objects
     ArrayList<PlayerData> playerDataList = new ArrayList<PlayerData>();
@@ -44,13 +45,10 @@ public class LTournament implements EntryPoint {
      * This is the entry point method.
      */
     public void onModuleLoad() {
-
-        // TODO Fix remove button
-        // TODO Add buffers to CSS
-        // TODO Go cray on CSS
-        // TODO Create panels for team list section
+        // TODO Assemble panels using void methods to clean up the onModuleLoad() method
         // TODO Create algorithm to create teams
         // TODO Update the team list panel
+        // TODO Prevent user from adding duplicate entries to player list
 
         // Assemble Add Player panel
         addPanel.add(addPlayerNameLabel);
@@ -87,7 +85,7 @@ public class LTournament implements EntryPoint {
         headerPanel.setWidth("100%");
 
         // Assemble the team list panel
-        teamListPanel.add(new Label("Team List"));
+        //teamListPanel.add(new Label("Team List"));
         teamListPanel.add(createTeamsButton);
         createTeamsButton.setText("Create Teams");
         createTeamsButton.addStyleName("create-teams-button");
@@ -121,10 +119,10 @@ public class LTournament implements EntryPoint {
             @Override
             public void onClick(ClickEvent event) {
                 rosterTable.removeAllRows();
+                playerDataList.clear();
             }
         });
 
-        // Listen for mouse events on the Add button
         addPlayerButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -217,7 +215,6 @@ public class LTournament implements EntryPoint {
             }
         });
 
-        //Listen for keyboard events in the input box, pressing ENTER
         newPlayerNameTextBox.addKeyDownHandler(new KeyDownHandler() {
             @Override
             public void onKeyDown(KeyDownEvent event) {
@@ -312,6 +309,39 @@ public class LTournament implements EntryPoint {
                     }
                 }
             }});
+
+        createTeamsButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                int numTeams = playerDataList.size() / 5;
+                int leftoverPlayers = playerDataList.size() % 5;
+                VerticalPanel teamStackPanel = new VerticalPanel();
+                if(numTeams<2){
+                    if(!teamWarning.isAttached())
+                        teamListPanel.add(teamWarning);
+                } else {
+                    createTeamsButton.setVisible(false);
+                    ArrayList<ArrayList<PlayerData>> teamList = generateRandomTeams();
+                    int j=0;
+                    for(ArrayList<PlayerData> team : teamList){
+                        j++;
+                        VerticalPanel teamPanel = new VerticalPanel();
+                        for(PlayerData player : team){
+                            Label playerLabel = new Label(player.getSummonerName());
+                            playerLabel.addStyleName("team-player");
+                            teamPanel.add(playerLabel);
+                        }
+                        // TODO Replace team # with value from TeamNameList
+                        Label teamLabel = new Label();
+                        teamLabel.setText("Team #"+j);
+                        teamLabel.addStyleName("team-name");
+                        teamStackPanel.add(teamLabel);
+                        teamStackPanel.add(teamPanel);
+                    }
+                    teamListPanel.add(teamStackPanel);
+                }
+            }
+        });
     }
 
     private static class MyAsyncCallback implements AsyncCallback<String> {
@@ -328,6 +358,29 @@ public class LTournament implements EntryPoint {
         public void onFailure(Throwable throwable) {
             label.setText("Failed to receive answer from server!");
         }
+    }
+
+    /**
+     * This method generates teams based on a randomization algorithm. These teams are teams of 5 to be used
+     * for the Summoner's Rift map and any other 5 player per team map.
+     * @return List of teams
+     */
+    private ArrayList<ArrayList<PlayerData>> generateRandomTeams(){
+        Random rnd = new Random();
+        ArrayList<ArrayList<PlayerData>> teamList = new ArrayList<ArrayList<PlayerData>>();
+        int next=0;
+        for (int i = 0, teamListSize = playerDataList.size() / 5; i < teamListSize; i++) {
+            ArrayList<PlayerData> team = new ArrayList<PlayerData>();
+            int j = 0;
+            while (j < 5) {
+                next = rnd.nextInt(playerDataList.size());
+                team.add(playerDataList.get(next));
+                playerDataList.remove(next);
+                j++;
+            }
+            teamList.add(team);
+        }
+        return teamList;
     }
 
 }

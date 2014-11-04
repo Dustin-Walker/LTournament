@@ -204,11 +204,21 @@ body, td, a, div, .p {
 }
 
 .create-teams-button:hover{
-    color: rgba(0, 0, 0, 1);
+    color: black;
     -webkit-transition: background 0.5s;
     -moz-transition: background 0.5s;
     -ms-transition: background 0.5s;
     -o-transition: background 0.5s;
     transition: background 0.5s;
     background-color: transparent;
+}
+
+.team-player {
+    color: black;
+    font-size: small;
+}
+
+.team-name {
+    color: black;
+    font-size: xx-large;
 }
