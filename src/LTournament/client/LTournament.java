@@ -86,7 +86,6 @@ public class LTournament implements EntryPoint {
         headerPanel.addStyleName("header");
         headerPanel.setWidth("100%");
 
-
         // Assemble the team list panel
         teamListPanel.add(new Label("Team List"));
         teamListPanel.add(createTeamsButton);
@@ -110,18 +109,13 @@ public class LTournament implements EntryPoint {
         dockPanel.add(headerPanel, DockPanel.NORTH);
         dockPanel.add(footerPanel, DockPanel.SOUTH);
         dockPanel.add(middleMainPanel, DockPanel.WEST);
-        //dockPanel.add(playerListPanel, DockPanel.WEST);
-        //dockPanel.add(teamListPanel, DockPanel.WEST);
-        //dockPanel.add(bracketPanel, DockPanel.CENTER);
-        //dockPanel.setCellHorizontalAlignment(middleMainPanel, HasHorizontalAlignment.ALIGN_CENTER);
-        //dockPanel.setCellHorizontalAlignment(headerPanel, HasHorizontalAlignment.ALIGN_CENTER);
-        //dockPanel.setCellHorizontalAlignment(footerPanel, HasHorizontalAlignment.ALIGN_CENTER);
 
         // Associate main panel with HTML host page
         RootPanel.get("playerRoster").add(dockPanel);
 
         // Get some CSS goin
         rosterTable.setStyleName("roster-table");
+
         //Listen for mouse events on Reset button
         resetRosterButton.addClickHandler(new ClickHandler() {
             @Override
@@ -156,56 +150,30 @@ public class LTournament implements EntryPoint {
                                     final PlayerData dd = playerDataList.get(playerDataList.size()-1);
                                     if(s.contains("CHALLENGER")){
                                         dd.setRank("CHALLENGER");
-                                        //rosterTable.getRowFormatter().addStyleName(row-1,"challenger");
-                                        //rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"challenger");
-                                         //HTML challengerIcon = new HTML("<img src=\"img/challenger_icon_24.png\" />");
-                                        //SafeHtml cIcon = (SafeHtml) challengerIcon;
                                         String cIcon = ("<img src=\"img/challenger_icon_24.png\" >");
                                         rosterTable.setHTML(row-1,0, cIcon );
                                     } else if(s.contains("DIAMOND")){
                                         dd.setRank("DIAMOND");
-                                        //rosterTable.getRowFormatter().addStyleName(row-1,"diamond");
-                                        //rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"diamond");
-                                        //HTML challengerIcon = new HTML("<img src=\"img/diamond_icon_24.png\" />");
-                                        //SafeHtml cIcon = (SafeHtml) challengerIcon;
                                         String cIcon = ("<img src=\"img/diamond_icon_24.png\" >");
                                         rosterTable.setHTML(row-1,0, cIcon );
                                     } else if(s.contains("PLATINUM")){
                                         dd.setRank("PLATINUM");
-                                       // rosterTable.getRowFormatter().addStyleName(row-1,"platinum");
-                                        //rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"platinum");
-                                        //HTML challengerIcon = new HTML("<img src=\"img/platinum_icon_24.png\" />");
-                                        //SafeHtml cIcon = (SafeHtml) challengerIcon;
                                         String cIcon = ("<img src=\"img/platinum_icon_24.png\" >");
                                         rosterTable.setHTML(row-1,0, cIcon );
                                     } else if(s.contains("GOLD")){
                                         dd.setRank("GOLD");
-                                        //rosterTable.getRowFormatter().addStyleName(row-1,"gold");
-                                        //rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"gold");
-                                        //HTML challengerIcon = new HTML("<img src=\"img/gold_icon_24.png\" />");
-                                        //SafeHtml cIcon = (SafeHtml) challengerIcon;
                                         String cIcon = ("<img src=\"img/gold_icon_24.png\" >");
                                         rosterTable.setHTML(row-1,0, cIcon );
                                     } else if (s.contains("SILVER")) {
                                         dd.setRank("SILVER");
-                                        //rosterTable.getRowFormatter().addStyleName(row-1,"silver");
-                                        //rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"silver");
-                                        //HTML challengerIcon = new HTML("<img src=\"img/silver_icon_24.png\" />");
-                                        //SafeHtml cIcon = (SafeHtml) challengerIcon;
                                         String cIcon = ("<img src=\"img/silver_icon_24.png\" >");
                                         rosterTable.setHTML(row-1,0, cIcon );
                                     } else if (s.contains("BRONZE")) {
                                         dd.setRank("BRONZE");
-                                       // rosterTable.getRowFormatter().addStyleName(row-1,"bronze");
-                                      //  rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"bronze");
-                                       // HTML challengerIcon = new HTML("<img src=\"img/bronze_icon_24.png\" />");
-                                        //SafeHtml cIcon = (SafeHtml) challengerIcon;
                                         String cIcon = ("<img src=\"img/bronze_icon_24.png\" >");
                                         rosterTable.setHTML(row-1,0, cIcon );
                                     } else {
                                         dd.setRank("UNRANKED");
-                                       // rosterTable.getRowFormatter().addStyleName(row-1,"unranked");
-                                      //  rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"unranked");
                                         String cIcon = ("<img src=\"img/unranked_icon_24.png\" >");
                                         rosterTable.setHTML(row-1,0,cIcon );
                                     }
@@ -216,17 +184,15 @@ public class LTournament implements EntryPoint {
                                     removePlayerButton.addClickHandler(new ClickHandler() {
                                         @Override
                                         public void onClick(ClickEvent event) {
-                                            rosterTable.removeRow(row-1);
+                                            int rowIndex = rosterTable.getCellForEvent(event).getRowIndex();
+                                            rosterTable.removeRow(rowIndex);
                                             playerDataList.remove(dd);
-
                                         }
                                     });
-                                    //System.out.println("test1: "+playerDataList.get(playerDataList.size()-1).getRank());
                                 }
                                 @Override
                                 public void onError(Request request, Throwable exception) {
                                     // TODO Add something to the error section when this REST call fails.
-
                                 }
                             });
                             try {
@@ -234,7 +200,6 @@ public class LTournament implements EntryPoint {
                             } catch (RequestException e) {
                                 e.printStackTrace();
                             }
-                            //System.out.println("test2: "+playerDataList.get(playerDataList.size()-1).getRank());
                             rosterTable.setText(row, 1, d.getSummonerName());
                             rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
                         }
@@ -276,46 +241,47 @@ public class LTournament implements EntryPoint {
                                     public void onResponseReceived(Request request, Response response) {
                                         final int row = rosterTable.getRowCount();
                                         String s = response.getText();
-                                       // System.out.println(s);
                                         final PlayerData dd = playerDataList.get(playerDataList.size()-1);
                                         if(s.contains("CHALLENGER")){
                                             dd.setRank("CHALLENGER");
-                                            //rosterTable.getRowFormatter().addStyleName(row-1,"challenger");
-                                            rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"challenger");
+                                            String cIcon = ("<img src=\"img/challenger_icon_24.png\" >");
+                                            rosterTable.setHTML(row-1,0, cIcon );
                                         } else if(s.contains("DIAMOND")){
                                             dd.setRank("DIAMOND");
-                                            //rosterTable.getRowFormatter().addStyleName(row-1,"diamond");
-                                            rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"diamond");
+                                            String cIcon = ("<img src=\"img/diamond_icon_24.png\" >");
+                                            rosterTable.setHTML(row-1,0, cIcon );
                                         } else if(s.contains("PLATINUM")){
                                             dd.setRank("PLATINUM");
-                                            // rosterTable.getRowFormatter().addStyleName(row-1,"platinum");
-                                            rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"platinum");
+                                            String cIcon = ("<img src=\"img/platinum_icon_24.png\" >");
+                                            rosterTable.setHTML(row-1,0, cIcon );
                                         } else if(s.contains("GOLD")){
                                             dd.setRank("GOLD");
-                                            //rosterTable.getRowFormatter().addStyleName(row-1,"gold");
-                                            rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"gold");
+                                            String cIcon = ("<img src=\"img/gold_icon_24.png\" >");
+                                            rosterTable.setHTML(row-1,0, cIcon );
                                         } else if (s.contains("SILVER")) {
                                             dd.setRank("SILVER");
-                                            //rosterTable.getRowFormatter().addStyleName(row-1,"silver");
-                                            rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"silver");
+                                            String cIcon = ("<img src=\"img/silver_icon_24.png\" >");
+                                            rosterTable.setHTML(row-1,0, cIcon );
                                         } else if (s.contains("BRONZE")) {
                                             dd.setRank("BRONZE");
-                                            // rosterTable.getRowFormatter().addStyleName(row-1,"bronze");
-                                            rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"bronze");
+                                            String cIcon = ("<img src=\"img/bronze_icon_24.png\" >");
+                                            rosterTable.setHTML(row-1,0, cIcon );
                                         } else {
                                             dd.setRank("UNRANKED");
-                                            // rosterTable.getRowFormatter().addStyleName(row-1,"unranked");
-                                            rosterTable.getFlexCellFormatter().addStyleName(row-1,0,"unranked");
+                                            String cIcon = ("<img src=\"img/unranked_icon_24.png\" >");
+                                            rosterTable.setHTML(row-1,0,cIcon );
                                         }
                                         playerDataList.get(playerDataList.size()-1).setRank(dd.getRank());
                                         final Button removePlayerButton = new Button();
                                         removePlayerButton.addStyleName("remove-button");
-                                        rosterTable.setWidget(row - 1, 1, removePlayerButton);
+                                        rosterTable.setWidget(row-1, 2, removePlayerButton);
                                         removePlayerButton.addClickHandler(new ClickHandler() {
                                             @Override
                                             public void onClick(ClickEvent event) {
-                                                rosterTable.removeRow(row-1);
+                                                int rowIndex = rosterTable.getCellForEvent(event).getRowIndex();
+                                                rosterTable.removeRow(rowIndex);
                                                 playerDataList.remove(dd);
+
                                             }
                                         });
                                     }
@@ -330,7 +296,8 @@ public class LTournament implements EntryPoint {
                                 } catch (RequestException e) {
                                     e.printStackTrace();
                                 }
-                                rosterTable.setText(row, 0, d.getSummonerName());
+                                rosterTable.setText(row, 1, d.getSummonerName());
+                                rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
                             }
                         }
                         @Override
