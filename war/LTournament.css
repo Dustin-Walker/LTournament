@@ -17,6 +17,9 @@
 
 body, td, a, div, .p {
     font-family: Roboto,sans-serif;
+}
+
+body{
     background-color: rgba(0, 0, 0, 0.12);
 }
 
@@ -29,7 +32,7 @@ body, td, a, div, .p {
 }
 
 .team-list{
-    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.51);
+    box-shadow: 0px 0px  4px 2px rgba(0, 0, 0, 0.24);
     background-color: white;
     margin: 5px;
     padding: 5px;
@@ -48,11 +51,12 @@ body, td, a, div, .p {
 }
 
 .playerListPanel {
-    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);
+    /*box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.12);*/
 }
 
 .middle-main {
-    /*background-color: rgba(0, 0, 0, 0.12);*/
+   /* background-color: rgba(0, 0, 0, 0.12);*/
+    border: none;
 }
 
 .remove-button {
@@ -88,8 +92,8 @@ body, td, a, div, .p {
     height: 24px;
     background: transparent url(img/ic_person_add_grey600_24dp.png) no-repeat;
     border: none;
-    box-shadow: none;
-    margin: 4px;
+    margin: 20% 6px;
+    box-shadow: 0px 0px  5px 2px rgba(0, 0, 0, 0.24);
     -webkit-transition: background 0.5s;
     -moz-transition: background 0.5s;
     -ms-transition: background 0.5s;
@@ -99,6 +103,7 @@ body, td, a, div, .p {
 
 .add-button:hover{
     background: transparent url(img/ic_person_add_black_24dp.png) no-repeat;
+    box-shadow: 0px 0px  5px 2px rgba(0, 0, 0, 0.24);
     -webkit-transition: background 0.5s;
     -moz-transition: background 0.5s;
     -ms-transition: background 0.5s;
@@ -111,9 +116,9 @@ body, td, a, div, .p {
     height: 24px;
     background: transparent url(img/ic_clear_grey600_24dp.png) no-repeat;
     border: none;
-    box-shadow: none;
-    /* background-color: white; */
-    margin: 4px;
+    box-shadow: 0px 0px  5px 2px rgba(0, 0, 0, 0.24);
+   /* background-color: white; */
+    margin: 20% 6px;
     -webkit-transition: background 0.5s;
     -moz-transition: background 0.5s;
     -ms-transition: background 0.5s;
@@ -123,6 +128,7 @@ body, td, a, div, .p {
 
 .reset-button:hover{
     background: transparent url(img/ic_clear_black_24dp.png) no-repeat;
+    box-shadow: 0px 0px  5px 2px rgba(0, 0, 0, 0.24);
     -webkit-transition: background 0.5s;
     -moz-transition: background 0.5s;
     -ms-transition: background 0.5s;
@@ -136,8 +142,8 @@ body, td, a, div, .p {
 }
 
 .player-list-panel {
-    box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.50);
-    /* box-shadow: none;*/
+    box-shadow: 0px 0px  4px 2px rgba(0, 0, 0, 0.24);
+   /* box-shadow: none;*/
     border: none;
     background-color: white;
     margin: 4px;
@@ -148,7 +154,7 @@ body, td, a, div, .p {
     margin: 24px;
     font-family: Roboto,sans-serif;
     font-size: small;
-    /*  color: rgba(0, 0, 0, 0.50);*/
+  /*  color: rgba(0, 0, 0, 0.50);*/
 }
 
 .create-teams-button {
