@@ -57,7 +57,6 @@ public class LTournament implements EntryPoint {
         addPanel.add(newPlayerNameTextBox);
         addPanel.add(addPlayerButton);
         addPanel.add(resetRosterButton);
-        addPanel.addStyleName("addpanel");
         addPlayerButton.addStyleName("add-button");
         resetRosterButton.addStyleName("reset-button");
         newPlayerNameTextBox.addStyleName("player-name-textbox");
@@ -65,7 +64,6 @@ public class LTournament implements EntryPoint {
         // Assemble the player list table header panel
         rosterListLabel.setText("Player List");
         rosterTableHeader.add(rosterListLabel);
-        rosterTableHeader.addStyleName("rostertableheader");
 
         // Assemble the footer panel
         Grid footGrid = new Grid(1,1);
@@ -110,7 +108,7 @@ public class LTournament implements EntryPoint {
         dockPanel.add(middleMainPanel, DockPanel.WEST);
 
         // Assemble the dock layout panel
-        dockLayoutPanel.addNorth(headerPanel, 2);
+        dockLayoutPanel.addNorth(headerPanel,3);
         dockLayoutPanel.addSouth(footerPanel,3);
         dockLayoutPanel.add(middleMainPanel);
 
@@ -329,6 +327,7 @@ public class LTournament implements EntryPoint {
                     if(!teamWarning.isAttached())
                         teamListPanel.add(teamWarning);
                 } else {
+                    teamWarning.setVisible(false);
                     createTeamsButton.setVisible(false);
                     ArrayList<ArrayList<PlayerData>> teamList = generateRandomTeams();
                     int j=0;

@@ -17,6 +17,7 @@
 
 body, td, a, div, .p {
     font-family: Roboto,sans-serif;
+    background-color: rgba(0, 0, 0, 0.12);
 }
 
 .roster-table {
@@ -51,7 +52,7 @@ body, td, a, div, .p {
 }
 
 .middle-main {
-    background-color: rgba(0, 0, 0, 0.12);
+    /*background-color: rgba(0, 0, 0, 0.12);*/
 }
 
 .remove-button {
@@ -111,7 +112,7 @@ body, td, a, div, .p {
     background: transparent url(img/ic_clear_grey600_24dp.png) no-repeat;
     border: none;
     box-shadow: none;
-   /* background-color: white; */
+    /* background-color: white; */
     margin: 4px;
     -webkit-transition: background 0.5s;
     -moz-transition: background 0.5s;
@@ -136,7 +137,7 @@ body, td, a, div, .p {
 
 .player-list-panel {
     box-shadow: 1px 0px 2px rgba(0, 0, 0, 0.50);
-   /* box-shadow: none;*/
+    /* box-shadow: none;*/
     border: none;
     background-color: white;
     margin: 4px;
@@ -147,7 +148,7 @@ body, td, a, div, .p {
     margin: 24px;
     font-family: Roboto,sans-serif;
     font-size: small;
-  /*  color: rgba(0, 0, 0, 0.50);*/
+    /*  color: rgba(0, 0, 0, 0.50);*/
 }
 
 .create-teams-button {
