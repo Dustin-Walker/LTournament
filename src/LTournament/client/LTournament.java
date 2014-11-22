@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -32,22 +33,28 @@ public class LTournament implements EntryPoint {
     private Label rosterListLabel = new Label();
     private DockPanel dockPanel = new DockPanel();
     private HorizontalPanel bracketPanel = new HorizontalPanel();
-    final Label teamWarning = new Label("Not enough players to create two teams. Add more players.");
+    final Label teamWarning = new Label("Not enough players for two teams. Add more players.");
+    // TODO Convert this team warning into a popup panel
     DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
 
     //Non-GWT objects
     ArrayList<PlayerData> playerDataList = new ArrayList<PlayerData>();
+    final private String[] teamNameArray = {"Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7",
+            "Team 8", "Team 9", "Team 10", "Team 11", "Team 12", "Team 13", "Team 14", "Team 15", "Team 16",
+            "Team 17", "Team 18", "Team 19", "Team 20"};
+    private ArrayList<String> teamNameList = new ArrayList<String>();
     // URLs for REST calls
     private static final String summonerByName_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
     private static final String leagueEntries_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
     //API Key goes here
-    private static final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
+    private static final String APIKEY = "";
 
     /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
         // TODO Prevent user from adding duplicate entries to player list
+        // TODO Do something about the left over players
 
         // Assemble Add Player panel
         addPanel.add(addPlayerNameLabel);
@@ -109,13 +116,15 @@ public class LTournament implements EntryPoint {
         dockLayoutPanel.addSouth(footerPanel,3);
         dockLayoutPanel.add(middleMainPanel);
 
-
         // Associate main panel with HTML host page
         RootLayoutPanel rp = RootLayoutPanel.get();
         rp.add(dockLayoutPanel);
 
         // Get some CSS goin
         rosterTable.setStyleName("roster-table");
+
+        //Initialize the team name list
+        Collections.addAll(teamNameList, teamNameArray);
 
         //Listen for mouse events on Reset button
         resetRosterButton.addClickHandler(new ClickHandler() {
@@ -154,20 +163,18 @@ public class LTournament implements EntryPoint {
                     teamWarning.setVisible(false);
                     createTeamsButton.setVisible(false);
                     ArrayList<ArrayList<PlayerData>> teamList = generateRandomTeams();
-                    int j=0;
                     for(ArrayList<PlayerData> team : teamList){
-                        j++;
                         VerticalPanel teamPanel = new VerticalPanel();
                         for(PlayerData player : team){
                             Label playerLabel = new Label(player.getSummonerName());
                             playerLabel.addStyleName("team-player");
                             teamPanel.add(playerLabel);
                         }
-                        // TODO Replace team # with value from TeamNameList
                         Label teamLabel = new Label();
-                        teamLabel.setText("Team #"+j);
+                        teamLabel.setText(randomTeamName());
                         teamLabel.addStyleName("team-name");
                         teamStackPanel.add(teamLabel);
+                        teamStackPanel.add(teamPanel);
                     }
                     teamListPanel.add(teamStackPanel);
                     addPlayerButton.setEnabled(false);
@@ -176,11 +183,27 @@ public class LTournament implements EntryPoint {
                     for(int i=0;i<rosterTable.getRowCount();i++)
                         rosterTable.getCellFormatter().setVisible(i, 2, false);
                     // TODO Figure out how to make remove player buttons disabled instead of invisible
+                    // TODO Change CSS of player list panel show the whole panel when disabled
                 }
             }
         });
     }
 
+    /**
+     * This method pulls a random team name from the team name list. The method checks to make sure
+     * duplicates do not occur.
+     * @return String containing a random team name
+     */
+    private String randomTeamName() {
+        Random rnd = new Random();
+        String returnString = "";
+        returnString = teamNameList.remove(rnd.nextInt(teamNameList.size()));
+        return returnString;
+    }
+
+    /**
+     * No clue what any of this means. IDEA must have created this.
+     */
     private static class MyAsyncCallback implements AsyncCallback<String> {
         private Label label;
 
@@ -203,6 +226,8 @@ public class LTournament implements EntryPoint {
      * @return List of teams
      */
     private ArrayList<ArrayList<PlayerData>> generateRandomTeams(){
+        // TODO Convert method to accept a parameter specifying 3 or 5 players per team and handle that
+        // TODO Add a radio button specifying 3 or 5 players per team on the team list panel
         Random rnd = new Random();
         ArrayList<ArrayList<PlayerData>> teamList = new ArrayList<ArrayList<PlayerData>>();
         int next=0;
