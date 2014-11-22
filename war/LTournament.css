@@ -16,7 +16,7 @@
 }
 
 body, td, a, div, .p {
-    font-family: Roboto,sans-serif;
+    font-family: Roboto, sans-serif;
 }
 
 body{
@@ -136,6 +136,12 @@ body{
     transition: background 0.5s;
 }
 
+
+.gwt-PopupPanel{
+    background-color: white;
+}
+
+
 .player-name-textbox {
     height: 26px;
     margin: 4px;
@@ -153,7 +159,7 @@ body{
 .player-list-entry{
     margin: 24px;
     font-family: Roboto,sans-serif;
-    font-size: small;
+    font-size: medium;
   /*  color: rgba(0, 0, 0, 0.50);*/
 }
 
