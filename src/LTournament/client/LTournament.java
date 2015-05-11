@@ -47,7 +47,7 @@ public class LTournament implements EntryPoint {
     private static final String summonerByName_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
     private static final String leagueEntries_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
     //API Key goes here
-    private static final String APIKEY = "";
+    private static final String APIKEY = "?api_key=";
 
     /**
      * This is the entry point method.
@@ -71,7 +71,8 @@ public class LTournament implements EntryPoint {
 
         // Assemble the footer panel
         Grid footGrid = new Grid(1,1);
-        footGrid.setText(0,0,"League of Legends Tournament System isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.");
+        final String leagueCopyright = "League of Legends Tournament System isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.";
+        footGrid.setText(0,0,leagueCopyright);
         footGrid.setStylePrimaryName("footer");
         footerPanel.addStyleName("footerpanel");
         footerPanel.add(footGrid);
@@ -291,6 +292,7 @@ public class LTournament implements EntryPoint {
                                 String getResponse = response.getText();
                                 final PlayerData localPlayerData = playerDataList.get(playerDataList.size()-1);
                                 String playerRankIcon="";
+                                // TODO Move this into its own method
                                 if(getResponse.contains("CHALLENGER")){
                                     localPlayerData.setRank("CHALLENGER");
                                     playerRankIcon = ("<img src=\"img/challenger_icon_24.png\" >");
