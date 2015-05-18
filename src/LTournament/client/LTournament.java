@@ -34,6 +34,28 @@ public class LTournament implements EntryPoint {
     private DockPanel dockPanel = new DockPanel();
     private HorizontalPanel bracketPanel = new HorizontalPanel();
     final Label teamWarning = new Label("Not enough players for two teams. Add more players.");
+    public static DialogBox alertWidget(final String header, final String content) {
+        final DialogBox box = new DialogBox();
+        final VerticalPanel panel = new VerticalPanel();
+        box.setText(header);
+        panel.add(new Label(content));
+        final Button buttonClose = new Button("Close",new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent event) {
+                box.hide();
+            }
+        });
+        // few empty labels to make widget larger
+        final Label emptyLabel = new Label("");
+        emptyLabel.setSize("auto","25px");
+        panel.add(emptyLabel);
+        panel.add(emptyLabel);
+        buttonClose.setWidth("90px");
+        panel.add(buttonClose);
+        panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
+        box.add(panel);
+        return box;
+    }
     // TODO Convert this team warning into a popup panel
     DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
 
@@ -48,7 +70,7 @@ public class LTournament implements EntryPoint {
     private static final String summonerByName_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
     private static final String leagueEntries_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
     //API Key goes here
-    private static final String APIKEY = "?api_key=";
+    private static final String APIKEY = "?api_key=581e4a04-deb0-4e70-898f-765ad96e2016";
 
     /**
      * This is the entry point method.
@@ -278,9 +300,13 @@ public class LTournament implements EntryPoint {
                 }
                 if (response.getStatusCode() == 429){
                     // TODO rate limit exceeded error
+                    //NEEDS TO BE TESTED
+                    LTournament.alertWidget("Adding player failed", "You are trying to add players too quickly.");  
                 }
                 if (response.getStatusCode() == 503 || response.getStatusCode() == 500){
                     // TODO error about server
+                    //NEEDS TO BE TESTED
+                    LTournament.alertWidget("Adding player failed", "Server currently unavailable.");      
                 }
                 if (200 == response.getStatusCode()){
                     int row = rosterTable.getRowCount();
