@@ -34,7 +34,9 @@ public class LTournament implements EntryPoint {
     private DockPanel dockPanel = new DockPanel();
     private HorizontalPanel bracketPanel = new HorizontalPanel();
     final Label teamWarning = new Label("Not enough players for two teams. Add more players.");
-    public static DialogBox alertWidget(final String header, final String content) {
+
+    //Stole this online for an error box but doesn't work
+    /*public static DialogBox alertWidget(final String header, final String content) {
         final DialogBox box = new DialogBox();
         final VerticalPanel panel = new VerticalPanel();
         box.setText(header);
@@ -55,7 +57,7 @@ public class LTournament implements EntryPoint {
         panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
         box.add(panel);
         return box;
-    }
+    } */
     // TODO Convert this team warning into a popup panel
     DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
 
@@ -300,13 +302,13 @@ public class LTournament implements EntryPoint {
                 }
                 if (response.getStatusCode() == 429){
                     // TODO rate limit exceeded error
-                    //NEEDS TO BE TESTED
-                    LTournament.alertWidget("Adding player failed", "You are trying to add players too quickly.");  
+                    //NEEDS TO BE TESTED - doesnt work
+                    //LTournament.alertWidget("Adding player failed", "You are trying to add players too quickly.");
                 }
                 if (response.getStatusCode() == 503 || response.getStatusCode() == 500){
                     // TODO error about server
-                    //NEEDS TO BE TESTED
-                    LTournament.alertWidget("Adding player failed", "Server currently unavailable.");      
+                    //NEEDS TO BE TESTED - doesnt work
+                    //LTournament.alertWidget("Adding player failed", "Server currently unavailable.");
                 }
                 if (200 == response.getStatusCode()){
                     int row = rosterTable.getRowCount();
