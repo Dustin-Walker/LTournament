@@ -49,7 +49,7 @@ public class LTournament implements EntryPoint {
         });
         // few empty labels to make widget larger
         final Label emptyLabel = new Label("");
-        emptyLabel.setSize("auto","25px");
+        emptyLabel.setSize("auto", "25px");
         panel.add(emptyLabel);
         panel.add(emptyLabel);
         buttonClose.setWidth("90px");
@@ -291,16 +291,10 @@ public class LTournament implements EntryPoint {
             @Override
             public void onResponseReceived(Request request, Response response) {
                 if (response.getStatusCode() == 404){
-                    // TODO player data not found error
-                    PopupPanel playerDataNotFoundPopup = new PopupPanel(true);
-                    playerDataNotFoundPopup.setAnimationEnabled(true);
-                    playerDataNotFoundPopup.setPopupPosition(addPlayerButton.getAbsoluteLeft() + 10,
-                            addPlayerButton.getAbsoluteTop() + 10);
-                    playerDataNotFoundPopup.setGlassEnabled(true);
-                    playerDataNotFoundPopup.setWidget(new Label("Summoner not found."));
-                    playerDataNotFoundPopup.show();
-                    LTournament.alertWidget("TEST TEXT", "SUBTEXT").show();
-
+                    // TODO Style this box better
+                    DialogBox dbox = LTournament.alertWidget("Please try again", "Summoner not found");
+                    dbox.show();
+                    dbox.addStyleName("missing-player-popup");
                 }
                 if (response.getStatusCode() == 429){
                     // TODO rate limit exceeded error
