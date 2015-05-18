@@ -48,7 +48,7 @@ public class LTournament implements EntryPoint {
     private static final String summonerByName_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
     private static final String leagueEntries_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
     //API Key goes here
-    private static final String APIKEY = "?api_key=581e4a04-deb0-4e70-898f-765ad96e2016";
+    private static final String APIKEY = "?api_key=";
 
     /**
      * This is the entry point method.
