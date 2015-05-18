@@ -36,7 +36,7 @@ public class LTournament implements EntryPoint {
     final Label teamWarning = new Label("Not enough players for two teams. Add more players.");
 
     //Stole this online for an error box but doesn't work
-    /*public static DialogBox alertWidget(final String header, final String content) {
+    public static DialogBox alertWidget(final String header, final String content) {
         final DialogBox box = new DialogBox();
         final VerticalPanel panel = new VerticalPanel();
         box.setText(header);
@@ -57,7 +57,7 @@ public class LTournament implements EntryPoint {
         panel.setCellHorizontalAlignment(buttonClose, HasAlignment.ALIGN_RIGHT);
         box.add(panel);
         return box;
-    } */
+    }
     // TODO Convert this team warning into a popup panel
     DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
 
@@ -294,11 +294,13 @@ public class LTournament implements EntryPoint {
                     // TODO player data not found error
                     PopupPanel playerDataNotFoundPopup = new PopupPanel(true);
                     playerDataNotFoundPopup.setAnimationEnabled(true);
-                    playerDataNotFoundPopup.setPopupPosition(addPlayerButton.getAbsoluteLeft()+10,
-                            addPlayerButton.getAbsoluteTop()+10);
+                    playerDataNotFoundPopup.setPopupPosition(addPlayerButton.getAbsoluteLeft() + 10,
+                            addPlayerButton.getAbsoluteTop() + 10);
                     playerDataNotFoundPopup.setGlassEnabled(true);
                     playerDataNotFoundPopup.setWidget(new Label("Summoner not found."));
                     playerDataNotFoundPopup.show();
+                    LTournament.alertWidget("TEST TEXT", "SUBTEXT").show();
+
                 }
                 if (response.getStatusCode() == 429){
                     // TODO rate limit exceeded error
