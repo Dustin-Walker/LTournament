@@ -39,6 +39,7 @@ public class LTournament implements EntryPoint {
 
     //Non-GWT objects
     ArrayList<PlayerData> playerDataList = new ArrayList<PlayerData>();
+    ArrayList<String> summonerNameList = new ArrayList<String>();
     final private String[] teamNameArray = {"Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7",
             "Team 8", "Team 9", "Team 10", "Team 11", "Team 12", "Team 13", "Team 14", "Team 15", "Team 16",
             "Team 17", "Team 18", "Team 19", "Team 20"};
@@ -47,13 +48,12 @@ public class LTournament implements EntryPoint {
     private static final String summonerByName_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
     private static final String leagueEntries_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
     //API Key goes here
-    private static final String APIKEY = "?api_key=";
+    private static final String APIKEY = "?api_key=581e4a04-deb0-4e70-898f-765ad96e2016";
 
     /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
-        // TODO Prevent user from adding duplicate entries to player list
         // TODO Do something about the left over players
 
         // Assemble Add Player panel
@@ -139,7 +139,10 @@ public class LTournament implements EntryPoint {
         addPlayerButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                addPlayerEvent();
+                if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase())) {
+                    addPlayerEvent();
+                    summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase());
+                }  
             }
         });
 
@@ -147,9 +150,13 @@ public class LTournament implements EntryPoint {
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if(event.getNativeKeyCode()== KeyCodes.KEY_ENTER){
-                    addPlayerEvent();
+                    if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase())) {
+                        addPlayerEvent();
+                        summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase());
+                    }
                 }
-            }});
+            }
+        });
 
         createTeamsButton.addClickHandler(new ClickHandler() {
             @Override
