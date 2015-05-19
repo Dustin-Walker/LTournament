@@ -106,7 +106,7 @@ public class LTournament implements EntryPoint {
         // Assemble the controlPanel
         controlPanel.add(rosterTableHeader);
         controlPanel.add(addPanel);
-        controlPanel.add(rosterTable);
+        //controlPanel.add(rosterTable);
         controlPanel.addStyleName("player-list-panel");
         controlPanel.setWidth("20%");
         controlPanel.setHeight("100%");
@@ -129,6 +129,7 @@ public class LTournament implements EntryPoint {
         playerPanel.setHeight("100px");
         playerPanel.setWidth("100px");
         playerPanel.add(new Label("TEST"));
+        playerPanel.add(rosterTable);
         playerPanel.addStyleName("player-list-panel");
 
         // Assemble the middle panel
