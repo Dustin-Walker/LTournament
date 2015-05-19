@@ -107,6 +107,8 @@ public class LTournament implements EntryPoint {
         playerListPanel.add(addPanel);
         playerListPanel.add(rosterTable);
         playerListPanel.addStyleName("player-list-panel");
+        playerListPanel.setWidth("60%");
+        playerListPanel.setHeight("80%");
 
         // Assemble the header panel
         headerPanel.add(new Label("League of Legends Tournament System"));
@@ -124,11 +126,11 @@ public class LTournament implements EntryPoint {
 
         // Assemble the middle panel
         middleMainPanel.add(playerListPanel);
-        middleMainPanel.add(teamListPanel);
+        //middleMainPanel.add(teamListPanel);
         teamListPanel.addStyleName("team-list");
         middleMainPanel.addStyleName("seam");
         middleMainPanel.addStyleName("middle-main");
-        middleMainPanel.add(bracketPanel);
+        //middleMainPanel.add(bracketPanel);
         middleMainPanel.setWidth("100%");
 
         // Assemble the dock panel
@@ -157,15 +159,17 @@ public class LTournament implements EntryPoint {
             public void onClick(ClickEvent event) {
                 rosterTable.removeAllRows();
                 playerDataList.clear();
+                summonerNameList.clear();
             }
         });
 
+        // TODO DRY
         addPlayerButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase())) {
+                if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase().trim())) {
                     addPlayerEvent();
-                    summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase());
+                    summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
                 }  
             }
         });
@@ -174,9 +178,9 @@ public class LTournament implements EntryPoint {
             @Override
             public void onKeyDown(KeyDownEvent event) {
                 if(event.getNativeKeyCode()== KeyCodes.KEY_ENTER){
-                    if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase())) {
+                    if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase().trim())) {
                         addPlayerEvent();
-                        summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase());
+                        summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
                     }
                 }
             }
