@@ -23,7 +23,7 @@ public class LTournament implements EntryPoint {
     private HorizontalPanel rosterTableHeader = new HorizontalPanel();
     private HorizontalPanel middleMainPanel = new HorizontalPanel();
     private VerticalPanel teamListPanel = new VerticalPanel();
-    private VerticalPanel playerListPanel = new VerticalPanel();
+    private VerticalPanel controlPanel = new VerticalPanel();
     private FlexTable rosterTable = new FlexTable();
     private TextBox newPlayerNameTextBox = new TextBox();
     private Button addPlayerButton = new Button();
@@ -34,6 +34,7 @@ public class LTournament implements EntryPoint {
     private DockPanel dockPanel = new DockPanel();
     private HorizontalPanel bracketPanel = new HorizontalPanel();
     final Label teamWarning = new Label("Not enough players for two teams. Add more players.");
+    private HorizontalPanel playerPanel = new HorizontalPanel();
 
     //Stole this online for an error box but doesn't work
     public static DialogBox alertWidget(final String header, final String content) {
@@ -96,19 +97,19 @@ public class LTournament implements EntryPoint {
         // Assemble the footer panel
         Grid footGrid = new Grid(1,1);
         final String leagueCopyright = "League of Legends Tournament System isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.";
-        footGrid.setText(0,0,leagueCopyright);
+        footGrid.setText(0, 0, leagueCopyright);
         footGrid.setStylePrimaryName("footer");
         footerPanel.addStyleName("footerpanel");
         footerPanel.add(footGrid);
         footerPanel.setWidth("100%");
 
-        // Assemble the playerListPanel
-        playerListPanel.add(rosterTableHeader);
-        playerListPanel.add(addPanel);
-        playerListPanel.add(rosterTable);
-        playerListPanel.addStyleName("player-list-panel");
-        playerListPanel.setWidth("60%");
-        playerListPanel.setHeight("80%");
+        // Assemble the controlPanel
+        controlPanel.add(rosterTableHeader);
+        controlPanel.add(addPanel);
+        controlPanel.add(rosterTable);
+        controlPanel.addStyleName("player-list-panel");
+        controlPanel.setWidth("20%");
+        controlPanel.setHeight("100%");
 
         // Assemble the header panel
         headerPanel.add(new Label("League of Legends Tournament System"));
@@ -124,8 +125,15 @@ public class LTournament implements EntryPoint {
         bracketPanel.add(new Label("Bracket Panel"));
         bracketPanel.addStyleName("team-list");
 
+        // Control panel assembly
+        playerPanel.setHeight("100px");
+        playerPanel.setWidth("100px");
+        playerPanel.add(new Label("TEST"));
+        playerPanel.addStyleName("player-list-panel");
+
         // Assemble the middle panel
-        middleMainPanel.add(playerListPanel);
+        middleMainPanel.add(controlPanel);
+        middleMainPanel.add(playerPanel);
         //middleMainPanel.add(teamListPanel);
         teamListPanel.addStyleName("team-list");
         middleMainPanel.addStyleName("seam");
