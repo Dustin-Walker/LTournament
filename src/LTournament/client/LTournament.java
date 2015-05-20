@@ -179,6 +179,7 @@ public class LTournament implements EntryPoint {
                 if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase().trim())) {
                     addPlayerEvent();
                     summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
+                    newPlayerNameTextBox.setText("");
                 }  
             }
         });
@@ -190,6 +191,7 @@ public class LTournament implements EntryPoint {
                     if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase().trim())) {
                         addPlayerEvent();
                         summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
+                        newPlayerNameTextBox.setText("");
                     }
                 }
             }
