@@ -178,8 +178,6 @@ public class LTournament implements EntryPoint {
             public void onClick(ClickEvent event) {
                 if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase().trim())) {
                     addPlayerEvent();
-                    summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
-                    newPlayerNameTextBox.setText("");
                 }  
             }
         });
@@ -190,8 +188,6 @@ public class LTournament implements EntryPoint {
                 if(event.getNativeKeyCode()== KeyCodes.KEY_ENTER){
                     if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase().trim())) {
                         addPlayerEvent();
-                        summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
-                        newPlayerNameTextBox.setText("");
                     }
                 }
             }
@@ -387,6 +383,8 @@ public class LTournament implements EntryPoint {
                         }
                         rosterTable.setText(row, 1, newPlayerData.getSummonerName());
                         rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
+                        summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
+                        newPlayerNameTextBox.setText("");
                     }
                 }
             }
