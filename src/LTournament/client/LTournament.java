@@ -423,6 +423,7 @@ public class LTournament implements EntryPoint {
             builder.send();
         } catch (RequestException e) {
             e.printStackTrace();
+            setCreatorButtonVis();
         }
     }
 
