@@ -29,6 +29,9 @@ public class LTournament implements EntryPoint {
     private Button addPlayerButton = new Button();
     private Button resetRosterButton = new Button();
     private Button createTeamsButton = new Button();
+    private Button matchmakingBy3 = new Button();
+    private Button matchmakingBy5 = new Button();
+    private Button startTeamPicker = new Button();
     private Label addPlayerNameLabel = new Label();
     private Label rosterListLabel = new Label();
     private DockPanel dockPanel = new DockPanel();
@@ -110,6 +113,16 @@ public class LTournament implements EntryPoint {
         controlPanel.addStyleName("player-list-panel");
         controlPanel.setWidth("20%");
         controlPanel.setHeight("100%");
+        controlPanel.add(matchmakingBy3);
+        matchmakingBy3.setText("Automatically create 3 player teams");
+        controlPanel.add(matchmakingBy5);
+        matchmakingBy5.setText("Automatically create 5 player teams");
+        controlPanel.add(startTeamPicker);
+        startTeamPicker.setText("Create teams");
+        matchmakingBy3.setVisible(false);
+        matchmakingBy5.setVisible(false);
+        startTeamPicker.setVisible(false);
+
 
         // Assemble the header panel
         headerPanel.add(new Label("League of Legends Tournament System"));
