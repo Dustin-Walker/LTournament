@@ -411,6 +411,7 @@ public class LTournament implements EntryPoint {
                     rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
                     summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
                     newPlayerNameTextBox.setText("");
+                    setCreatorButtonVis();
                 }
             }
             @Override
