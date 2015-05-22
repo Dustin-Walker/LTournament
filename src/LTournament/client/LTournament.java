@@ -38,6 +38,7 @@ public class LTournament implements EntryPoint {
     private HorizontalPanel bracketPanel = new HorizontalPanel();
     final Label teamWarning = new Label("Not enough players for two teams. Add more players.");
     private HorizontalPanel playerPanel = new HorizontalPanel();
+    private Label playerPanelHeader = new Label("Player Roster");
 
     //Stole this online for an error box but doesn't work
     public static DialogBox alertWidget(final String header, final String content) {
@@ -93,6 +94,7 @@ public class LTournament implements EntryPoint {
         resetRosterButton.addStyleName("reset-button");
         newPlayerNameTextBox.addStyleName("player-name-textbox");
         addPlayerButton.addStyleName("btn btn-default");
+        resetRosterButton.addStyleName("btn btn-default");
 
         // Assemble the player list table header panel
         rosterListLabel.setText("Player List");
@@ -124,6 +126,18 @@ public class LTournament implements EntryPoint {
         matchmakingBy5.setVisible(false);
         startTeamPicker.setVisible(false);
 
+        // Style the buttons
+        matchmakingBy3.addStyleName("btn btn-default");
+        matchmakingBy5.addStyleName("btn btn-default");
+        startTeamPicker.addStyleName("btn btn-default");
+
+        // Style the panels
+        playerPanel.addStyleName("list-group");
+
+        playerPanel.add(playerPanelHeader);
+        //playerPanelHeader.addStyleName("panel-heading");
+        //rosterTable.addStyleName("panel-body ");
+        rosterTable.addStyleName("table");
 
         // Assemble the header panel
         headerPanel.add(new Label("League of Legends Tournament System"));
@@ -144,7 +158,7 @@ public class LTournament implements EntryPoint {
         playerPanel.setWidth("100px");
         //playerPanel.add(new Label("TEST"));
         playerPanel.add(rosterTable);
-        playerPanel.addStyleName("player-list-panel");
+        //playerPanel.addStyleName("player-list-panel");
 
         // Assemble the middle panel
         middleMainPanel.add(controlPanel);
@@ -314,6 +328,10 @@ public class LTournament implements EntryPoint {
         }
 
     }
+
+    // TODO Make a new column of players on the player panel every few entries
+    // TODO FontAwesome
+
     /**
      * This method adds a player to the roster table and to the internal player list.
      * This method is called by both keyboard and mouse click events for entry of player data.
@@ -330,7 +348,7 @@ public class LTournament implements EntryPoint {
                     // TODO Style this box better
                     DialogBox dbox = LTournament.alertWidget("Please try again", "Summoner not found");
                     dbox.show();
-                    dbox.addStyleName("missing-player-popup");
+                    dbox.addStyleName("missing-player-popup alert alert-danger");
                 }
                 if (response.getStatusCode() == 429){
                     // TODO rate limit exceeded error
@@ -349,6 +367,7 @@ public class LTournament implements EntryPoint {
                 String playerName = response.getText();
                 PlayerData newPlayerData = new PlayerData(playerName);
                     playerDataList.add(newPlayerData);
+
                     String leagueEntryURL = leagueEntries_URL+newPlayerData.getPlayerID()+"/entry"+APIKEY;
                     RequestBuilder builder2 =new RequestBuilder(RequestBuilder.GET, leagueEntryURL);
                     builder2.setCallback(new RequestCallback() {
@@ -409,9 +428,10 @@ public class LTournament implements EntryPoint {
                         e.printStackTrace();
                     }
                     rosterTable.setText(row, 1, newPlayerData.getSummonerName());
-                    rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
+                    rosterTable.getRowFormatter().addStyleName(row, "player-list-entry list-group-item");
                     summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
                     newPlayerNameTextBox.setText("");
+                    setCreatorButtonVis();
                 }
             }
             @Override
