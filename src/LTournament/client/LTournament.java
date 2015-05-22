@@ -141,13 +141,14 @@ public class LTournament implements EntryPoint {
         // Control panel assembly
         playerPanel.setHeight("100px");
         playerPanel.setWidth("100px");
-        playerPanel.add(new Label("TEST"));
+        //playerPanel.add(new Label("TEST"));
         playerPanel.add(rosterTable);
         playerPanel.addStyleName("player-list-panel");
 
         // Assemble the middle panel
         middleMainPanel.add(controlPanel);
         middleMainPanel.add(playerPanel);
+        playerPanel.setVisible(false);
         //middleMainPanel.add(teamListPanel);
         teamListPanel.addStyleName("team-list");
         middleMainPanel.addStyleName("seam");
@@ -179,6 +180,7 @@ public class LTournament implements EntryPoint {
         resetRosterButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+                playerPanel.setVisible(false);
                 rosterTable.removeAllRows();
                 playerDataList.clear();
                 summonerNameList.clear();
@@ -340,74 +342,75 @@ public class LTournament implements EntryPoint {
                     //LTournament.alertWidget("Adding player failed", "Server currently unavailable.");
                 }
                 if (200 == response.getStatusCode()){
-                    int row = rosterTable.getRowCount();
-                    String playerName = response.getText();
-                    PlayerData newPlayerData = new PlayerData(playerName);
-                    if(playerDataList.contains(newPlayerData)){
-                        // generate error window
-                    } else {
-                        playerDataList.add(newPlayerData);
-                        String leagueEntryURL = leagueEntries_URL+newPlayerData.getPlayerID()+"/entry"+APIKEY;
-                        RequestBuilder builder2 =new RequestBuilder(RequestBuilder.GET, leagueEntryURL);
-                        builder2.setCallback(new RequestCallback() {
-                            @Override
-                            public void onResponseReceived(Request request, Response response) {
-                                final int row = rosterTable.getRowCount();
-                                String getResponse = response.getText();
-                                final PlayerData localPlayerData = playerDataList.get(playerDataList.size()-1);
-                                String playerRankIcon="";
-                                // TODO Move this into its own method
-                                if(getResponse.contains("CHALLENGER")){
-                                    localPlayerData.setRank("CHALLENGER");
-                                    playerRankIcon = ("<img src=\"img/challenger_icon_24.png\" >");
-                                } else if(getResponse.contains("DIAMOND")){
-                                    localPlayerData.setRank("DIAMOND");
-                                    playerRankIcon = ("<img src=\"img/diamond_icon_24.png\" >");
-                                } else if(getResponse.contains("PLATINUM")){
-                                    localPlayerData.setRank("PLATINUM");
-                                    playerRankIcon = ("<img src=\"img/platinum_icon_24.png\" >");
-                                } else if(getResponse.contains("GOLD")){
-                                    localPlayerData.setRank("GOLD");
-                                    playerRankIcon = ("<img src=\"img/gold_icon_24.png\" >");
-                                } else if (getResponse.contains("SILVER")) {
-                                    localPlayerData.setRank("SILVER");
-                                    playerRankIcon = ("<img src=\"img/silver_icon_24.png\" >");
-                                } else if (getResponse.contains("BRONZE")) {
-                                    localPlayerData.setRank("BRONZE");
-                                    playerRankIcon = ("<img src=\"img/bronze_icon_24.png\" >");
-                                } else {
-                                    localPlayerData.setRank("UNRANKED");
-                                    playerRankIcon = ("<img src=\"img/unranked_icon_24.png\" >");
-                                }
-                                rosterTable.setHTML(row-1,0,playerRankIcon );
-                                playerDataList.get(playerDataList.size() - 1).setRank(localPlayerData.getRank());
-                                final Button removePlayerButton = new Button();
-                                removePlayerButton.addStyleName("remove-button");
-                                rosterTable.setWidget(row-1, 2, removePlayerButton);
-                                removePlayerButton.addClickHandler(new ClickHandler() {
-                                    @Override
-                                    public void onClick(ClickEvent event) {
-                                        int rowIndex = rosterTable.getCellForEvent(event).getRowIndex();
-                                        rosterTable.removeRow(rowIndex);
-                                        playerDataList.remove(localPlayerData);
+                if(!playerPanel.isVisible())
+                    playerPanel.setVisible(true);
+                int row = rosterTable.getRowCount();
+                String playerName = response.getText();
+                PlayerData newPlayerData = new PlayerData(playerName);
+                    playerDataList.add(newPlayerData);
+                    String leagueEntryURL = leagueEntries_URL+newPlayerData.getPlayerID()+"/entry"+APIKEY;
+                    RequestBuilder builder2 =new RequestBuilder(RequestBuilder.GET, leagueEntryURL);
+                    builder2.setCallback(new RequestCallback() {
+                        @Override
+                        public void onResponseReceived(Request request, Response response) {
+                            final int row = rosterTable.getRowCount();
+                            String getResponse = response.getText();
+                            final PlayerData localPlayerData = playerDataList.get(playerDataList.size()-1);
+                            String playerRankIcon="";
+                            // TODO Move this into its own method
+                            if(getResponse.contains("CHALLENGER")){
+                                localPlayerData.setRank("CHALLENGER");
+                                playerRankIcon = ("<img src=\"img/challenger_icon_24.png\" >");
+                            } else if(getResponse.contains("DIAMOND")){
+                                localPlayerData.setRank("DIAMOND");
+                                playerRankIcon = ("<img src=\"img/diamond_icon_24.png\" >");
+                            } else if(getResponse.contains("PLATINUM")){
+                                localPlayerData.setRank("PLATINUM");
+                                playerRankIcon = ("<img src=\"img/platinum_icon_24.png\" >");
+                            } else if(getResponse.contains("GOLD")){
+                                localPlayerData.setRank("GOLD");
+                                playerRankIcon = ("<img src=\"img/gold_icon_24.png\" >");
+                            } else if (getResponse.contains("SILVER")) {
+                                localPlayerData.setRank("SILVER");
+                                playerRankIcon = ("<img src=\"img/silver_icon_24.png\" >");
+                            } else if (getResponse.contains("BRONZE")) {
+                                localPlayerData.setRank("BRONZE");
+                                playerRankIcon = ("<img src=\"img/bronze_icon_24.png\" >");
+                            } else {
+                                localPlayerData.setRank("UNRANKED");
+                                playerRankIcon = ("<img src=\"img/unranked_icon_24.png\" >");
+                            }
+                            rosterTable.setHTML(row-1,0,playerRankIcon );
+                            playerDataList.get(playerDataList.size() - 1).setRank(localPlayerData.getRank());
+                            final Button removePlayerButton = new Button();
+                            removePlayerButton.addStyleName("remove-button");
+                            rosterTable.setWidget(row-1, 2, removePlayerButton);
+                            removePlayerButton.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent event) {
+                                    int rowIndex = rosterTable.getCellForEvent(event).getRowIndex();
+                                    rosterTable.removeRow(rowIndex);
+                                    playerDataList.remove(localPlayerData);
+                                    if(playerDataList.isEmpty()){
+                                        playerPanel.setVisible(false);
                                     }
-                                });
-                            }
-                            @Override
-                            public void onError(Request request, Throwable exception) {
-                                // TODO Add something to the error section when this REST call fails.
-                            }
-                        });
-                        try {
-                            builder2.send();
-                        } catch (RequestException e) {
-                            e.printStackTrace();
+                                }
+                            });
                         }
-                        rosterTable.setText(row, 1, newPlayerData.getSummonerName());
-                        rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
-                        summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
-                        newPlayerNameTextBox.setText("");
+                        @Override
+                        public void onError(Request request, Throwable exception) {
+                            // TODO Add something to the error section when this REST call fails.
+                        }
+                    });
+                    try {
+                        builder2.send();
+                    } catch (RequestException e) {
+                        e.printStackTrace();
                     }
+                    rosterTable.setText(row, 1, newPlayerData.getSummonerName());
+                    rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
+                    summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
+                    newPlayerNameTextBox.setText("");
                 }
             }
             @Override
