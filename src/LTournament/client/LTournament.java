@@ -92,6 +92,7 @@ public class LTournament implements EntryPoint {
         addPlayerButton.addStyleName("add-button");
         resetRosterButton.addStyleName("reset-button");
         newPlayerNameTextBox.addStyleName("player-name-textbox");
+        addPlayerButton.addStyleName("btn btn-default");
 
         // Assemble the player list table header panel
         rosterListLabel.setText("Player List");

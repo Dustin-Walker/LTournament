@@ -1,0 +1,6 @@
+Picking Phase > Click Teams
+
+Teams Phase > Click Start
+
+Brackets phase
+--Make invisible and zoom in when outer brackets are eliminated
