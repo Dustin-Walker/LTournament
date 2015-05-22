@@ -301,7 +301,16 @@ public class LTournament implements EntryPoint {
         return teamList;
     }
 
+    private void setCreatorButtonVis(){
+        if (playerDataList.size() >= 6 && !matchmakingBy3.isVisible()){
+            matchmakingBy3.setVisible(true);
+            startTeamPicker.setVisible(true);
+        } 
+        if (playerDataList.size() >= 10 && !matchmakingBy5.isVisible()){
+            matchmakingBy5.setVisible(true);
+        }
 
+    }
     /**
      * This method adds a player to the roster table and to the internal player list.
      * This method is called by both keyboard and mouse click events for entry of player data.
@@ -412,5 +421,7 @@ public class LTournament implements EntryPoint {
             e.printStackTrace();
         }
     }
+
+
 
 }
