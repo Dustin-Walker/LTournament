@@ -440,7 +440,4 @@ public class LTournament implements EntryPoint {
 
         }
     }
-
-
-
 }
