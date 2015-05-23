@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact name="LTournament:GWT">
+    <output-path>$PROJECT_DIR$/out/artifacts/LTournament_GWT</output-path>
+    <root id="root">
+      <element id="gwt-compiler-output" facet="LTournament/gwt/GWT" />
+    </root>
+  </artifact>
+</component>

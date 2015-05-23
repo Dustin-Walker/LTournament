@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_ltournament" default="compile.module.ltournament">
+  <dirname property="module.ltournament.basedir" file="${ant.file.module_ltournament}"/>
+  
+  <property name="module.jdk.home.ltournament" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.ltournament" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.ltournament" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.ltournament" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
+  
+  <property name="ltournament.output.dir" value="${module.ltournament.basedir}/out/production/LTournament"/>
+  <property name="ltournament.testoutput.dir" value="${module.ltournament.basedir}/out/test/LTournament"/>
+  
+  <path id="ltournament.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="ltournament.module.production.classpath">
+    <path refid="${module.jdk.classpath.ltournament}"/>
+    <path refid="library.gwt-user.classpath"/>
+  </path>
+  
+  <path id="ltournament.runtime.production.module.classpath">
+    <pathelement location="${ltournament.output.dir}"/>
+    <path refid="library.gwt-user.classpath"/>
+  </path>
+  
+  <path id="ltournament.module.classpath">
+    <path refid="${module.jdk.classpath.ltournament}"/>
+    <pathelement location="${ltournament.output.dir}"/>
+    <path refid="library.gwt-user.classpath"/>
+  </path>
+  
+  <path id="ltournament.runtime.module.classpath">
+    <pathelement location="${ltournament.testoutput.dir}"/>
+    <pathelement location="${ltournament.output.dir}"/>
+    <path refid="library.gwt-user.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.ltournament">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.ltournament">
+    <patternset refid="excluded.from.module.ltournament"/>
+  </patternset>
+  
+  <path id="ltournament.module.sourcepath">
+    <dirset dir="${module.ltournament.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.ltournament" depends="compile.module.ltournament.production,compile.module.ltournament.tests" description="Compile module LTournament"/>
+  
+  <target name="compile.module.ltournament.production" depends="register.custom.compilers" description="Compile module LTournament; production classes">
+    <mkdir dir="${ltournament.output.dir}"/>
+    <javac2 destdir="${ltournament.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.ltournament}/javac">
+      <compilerarg line="${compiler.args.ltournament}"/>
+      <bootclasspath refid="ltournament.module.bootclasspath"/>
+      <classpath refid="ltournament.module.production.classpath"/>
+      <src refid="ltournament.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ltournament"/>
+    </javac2>
+    
+    <copy todir="${ltournament.output.dir}">
+      <fileset dir="${module.ltournament.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.ltournament.tests" depends="register.custom.compilers,compile.module.ltournament.production" description="compile module LTournament; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.ltournament" description="cleanup module">
+    <delete dir="${ltournament.output.dir}"/>
+    <delete dir="${ltournament.testoutput.dir}"/>
+  </target>
+  
+  <property name="gwt.compiler.output.ltournament" value="${module.ltournament.basedir}/GWTCompilerOutput_ltournament"/>
+  
+  <!-- Run GWT compiler for GWT module ${gwt.module.name} -->
+  <target name="run.gwt.compiler.ltournament" description="Run GWT compiler">
+    <java fork="true" jvm="${module.jdk.bin.ltournament}/java" classname="com.google.gwt.dev.Compiler">
+      <jvmarg line="-Xmx1024m"/>
+      <classpath>
+        <pathelement location="${gwt.sdk.home.ltournament}/gwt-dev.jar"/>
+        <path refid="ltournament.module.sourcepath"/>
+        <path refid="ltournament.module.classpath"/>
+      </classpath>
+      <arg value="-logLevel"/>
+      <arg value="WARN"/>
+      <arg value="-war"/>
+      <arg value="${gwt.compiler.output.ltournament}"/>
+      <arg value="-style"/>
+      <arg value="DETAILED"/>
+      <arg value="${gwt.module.name}"/>
+    </java>
+  </target>
+  
+  <target name="compile.gwt.ltournament" depends="compile.module.ltournament" description="Compile all GWT modules in module LTournament">
+    <property name="gwt.sdk.home.ltournament" value="${gwt.sdk.home}"/>
+    <antcall target="run.gwt.compiler.ltournament">
+      <param name="gwt.module.name" value="LTournament.LTournament"/>
+    </antcall>
+  </target>
+</project>
