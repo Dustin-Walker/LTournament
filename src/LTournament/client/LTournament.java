@@ -332,6 +332,7 @@ public class LTournament implements EntryPoint {
      */
     private void addPlayerEvent(){
         String name = newPlayerNameTextBox.getText();
+        summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
         String url = summonerByName_URL+name+APIKEY;
         // Send request to server and catch any errors
         RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
@@ -404,7 +405,9 @@ public class LTournament implements EntryPoint {
                                     int rowIndex = rosterTable.getCellForEvent(event).getRowIndex();
                                     setCreatorButtonVis();
                                     rosterTable.removeRow(rowIndex);
+                                    summonerNameList.remove(localPlayerData.toString());
                                     playerDataList.remove(localPlayerData);
+                                    //controlPanel.add(new Label(playerName));
                                     if(playerDataList.isEmpty()){
                                         playerPanel.setVisible(false);
                                     }
@@ -423,7 +426,6 @@ public class LTournament implements EntryPoint {
                     }
                     rosterTable.setText(row, 1, newPlayerData.getSummonerName());
                     rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
-                    summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
                     newPlayerNameTextBox.setText("");
                     setCreatorButtonVis();
                 }
