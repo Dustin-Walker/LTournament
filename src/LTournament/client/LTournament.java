@@ -17,7 +17,7 @@ import java.util.Random;
 public class LTournament implements EntryPoint {
     //Create GWT widgets
     private VerticalPanel mainTopPanel = new VerticalPanel();
-    private HorizontalPanel addPanel = new HorizontalPanel();
+    private VerticalPanel addPanel = new VerticalPanel();
     private HorizontalPanel footerPanel = new HorizontalPanel();
     private HorizontalPanel headerPanel = new HorizontalPanel();
     private HorizontalPanel rosterTableHeader = new HorizontalPanel();
@@ -88,17 +88,19 @@ public class LTournament implements EntryPoint {
         // Assemble Add Player panel
         addPanel.add(addPlayerNameLabel);
         addPanel.add(newPlayerNameTextBox);
-        addPanel.add(addPlayerButton);
-        addPanel.add(resetRosterButton);
         addPlayerButton.addStyleName("add-button");
         resetRosterButton.addStyleName("reset-button");
         newPlayerNameTextBox.addStyleName("player-name-textbox");
         addPlayerButton.addStyleName("btn btn-default");
         resetRosterButton.addStyleName("btn btn-default");
+        addPlayerButton.setHTML("<span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span>Add Player");
+        resetRosterButton.setHTML("<span class=\"glyphicon glyphicon-repeat\" aria-hidden=\"true\"></span>Reset All");
+        // TODO Confirm reset all
 
         // Assemble the player list table header panel
         rosterListLabel.setText("Player List");
         rosterTableHeader.add(rosterListLabel);
+        rosterListLabel.addStyleName("control-panel-header");
 
         // Assemble the footer panel
         Grid footGrid = new Grid(1,1);
@@ -112,16 +114,21 @@ public class LTournament implements EntryPoint {
         // Assemble the controlPanel
         controlPanel.add(rosterTableHeader);
         controlPanel.add(addPanel);
-        //controlPanel.add(rosterTable);
-        controlPanel.addStyleName("player-list-panel");
-        controlPanel.setWidth("20%");
-        controlPanel.setHeight("100%");
+        addPanel.add(addPlayerButton);
+        controlPanel.add(resetRosterButton);
+        controlPanel.addStyleName("control-panel");
+      //  controlPanel.setWidth("100%");
         controlPanel.add(matchmakingBy3);
         matchmakingBy3.setText("Automatically create 3 player teams");
+        matchmakingBy3.setHTML("Random Twisted Treelined<span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>");
         controlPanel.add(matchmakingBy5);
         matchmakingBy5.setText("Automatically create 5 player teams");
+        matchmakingBy5.setHTML("Random Summoner's Rift<span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>");
         controlPanel.add(startTeamPicker);
+        controlPanel.setHeight("100%");
         startTeamPicker.setText("Create teams");
+        startTeamPicker.setHTML("Custom Team Builder<span class=\"glyphicon glyphicon-hand-right\" aria-hidden=\"true\"></span>");
+        startTeamPicker.addStyleName("startTeamPicker-btn");
         matchmakingBy3.setVisible(false);
         matchmakingBy5.setVisible(false);
         startTeamPicker.setVisible(false);
@@ -153,7 +160,7 @@ public class LTournament implements EntryPoint {
         bracketPanel.add(new Label("Bracket Panel"));
         bracketPanel.addStyleName("team-list");
 
-        // Control panel assembly
+        // Player panel assembly
         playerPanel.setHeight("100px");
         playerPanel.setWidth("100px");
         //playerPanel.add(new Label("TEST"));
@@ -161,7 +168,7 @@ public class LTournament implements EntryPoint {
         //playerPanel.addStyleName("player-list-panel");
 
         // Assemble the middle panel
-        middleMainPanel.add(controlPanel);
+       // middleMainPanel.add(controlPanel);
         middleMainPanel.add(playerPanel);
         playerPanel.setVisible(false);
         //middleMainPanel.add(teamListPanel);
@@ -169,17 +176,19 @@ public class LTournament implements EntryPoint {
         middleMainPanel.addStyleName("seam");
         middleMainPanel.addStyleName("middle-main");
         //middleMainPanel.add(bracketPanel);
-        middleMainPanel.setWidth("100%");
+      //  middleMainPanel.setWidth("70%");
 
         // Assemble the dock panel
         dockPanel.add(headerPanel, DockPanel.NORTH);
         dockPanel.add(footerPanel, DockPanel.SOUTH);
-        dockPanel.add(middleMainPanel, DockPanel.WEST);
+        dockPanel.add(middleMainPanel, DockPanel.EAST);
+        dockPanel.add(controlPanel, DockPanel.WEST);
 
         // Assemble the dock layout panel
-        dockLayoutPanel.addNorth(headerPanel,3);
+        dockLayoutPanel.addNorth(headerPanel, 3);
         dockLayoutPanel.addSouth(footerPanel,3);
-        dockLayoutPanel.add(middleMainPanel);
+        dockLayoutPanel.addEast(middleMainPanel, 60);
+        dockLayoutPanel.addWest(controlPanel, 20);
 
         // Associate main panel with HTML host page
         RootLayoutPanel rp = RootLayoutPanel.get();

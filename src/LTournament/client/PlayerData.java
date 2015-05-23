@@ -17,6 +17,7 @@ public class PlayerData  {
     }
 
     // Members
+    // TODO Change default value for tier
     public String tier = "BRONZE";
     private String playerID;
     private String summonerName;
