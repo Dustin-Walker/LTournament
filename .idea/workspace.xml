@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ab7ea300-8637-4d34-893b-31c44efcebcc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LTournament/LTournament/client/PlayerData.class" afterPath="$PROJECT_DIR$/out/production/LTournament/LTournament/client/PlayerData.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/war/LTournament.css" afterPath="$PROJECT_DIR$/war/LTournament.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/war/LTournament.html" afterPath="$PROJECT_DIR$/war/LTournament.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LTournament.iml" afterPath="$PROJECT_DIR$/LTournament.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/LTournament/client/PlayerData.java" afterPath="$PROJECT_DIR$/src/LTournament/client/PlayerData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="ab7ea300-8637-4d34-893b-31c44efcebcc" name="Default" comment="" />
     <ignored path="LTournament.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -33,8 +26,8 @@
       <file leaf-file-name="LTournament.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/LTournament/client/LTournament.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.0128825">
-              <caret line="382" column="93" selection-start-line="382" selection-start-column="93" selection-end-line="382" selection-end-column="93" />
+            <state vertical-scroll-proportion="0.63607085">
+              <caret line="325" column="0" selection-start-line="325" selection-start-column="0" selection-end-line="325" selection-end-column="0" />
               <folding>
                 <element signature="e#2298#2299#0" expanded="true" />
                 <element signature="e#2340#2341#0" expanded="true" />
@@ -454,16 +447,16 @@
       <workItem from="1432378687586" duration="820000" />
       <workItem from="1432395507283" duration="223000" />
       <workItem from="1432399321959" duration="2173000" />
-      <workItem from="1432404204539" duration="253000" />
+      <workItem from="1432404204539" duration="447000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14345000" />
+    <option name="totallyTimeSpent" value="14539000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="61" y="0" width="1859" height="1080" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1122,8 +1115,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/LTournament/client/LTournament.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.0128825">
-          <caret line="382" column="93" selection-start-line="382" selection-start-column="93" selection-end-line="382" selection-end-column="93" />
+        <state vertical-scroll-proportion="0.63607085">
+          <caret line="325" column="0" selection-start-line="325" selection-start-column="0" selection-end-line="325" selection-end-column="0" />
           <folding>
             <element signature="e#2298#2299#0" expanded="true" />
             <element signature="e#2340#2341#0" expanded="true" />
