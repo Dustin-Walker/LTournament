@@ -35,7 +35,7 @@
       <configuration>
         <setting name="compilerMaxHeapSize" value="1024" />
         <setting name="gwtScriptOutputStyle" value="DETAILED" />
-        <setting name="gwtSdkUrl" value="file://$MODULE_DIR$/../gwt-2.7.0" />
+        <setting name="gwtSdkUrl" value="file://$USER_HOME$/Programming/gwt-2.7.0" />
         <setting name="webFacet" value="Web" />
       </configuration>
     </facet>
@@ -58,5 +58,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="gwt-user" level="project" />
+    <orderEntry type="library" name="gwt-user (2)" level="project" />
   </component>
 </module>
