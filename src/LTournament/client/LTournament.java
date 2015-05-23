@@ -185,6 +185,7 @@ public class LTournament implements EntryPoint {
                 rosterTable.removeAllRows();
                 playerDataList.clear();
                 summonerNameList.clear();
+                setCreatorButtonVis();
             }
         });
 
@@ -304,14 +305,25 @@ public class LTournament implements EntryPoint {
         return teamList;
     }
 
+    //TODO make them invisible if players are removed
     private void setCreatorButtonVis(){
-        if (playerDataList.size() >= 6 && !matchmakingBy3.isVisible()){
+        if (playerDataList.size() >= 6 && !matchmakingBy3.isVisible())
+        {
             matchmakingBy3.setVisible(true);
             startTeamPicker.setVisible(true);
-        } 
-        if (playerDataList.size() >= 10 && !matchmakingBy5.isVisible()){
-            matchmakingBy5.setVisible(true);
+        } else if (playerDataList.size() < 6 && matchmakingBy3.isVisible())
+        {
+            matchmakingBy3.setVisible(false);
+            startTeamPicker.setVisible(false);
         }
+        if (playerDataList.size() >= 10 && !matchmakingBy5.isVisible())
+        {
+            matchmakingBy5.setVisible(true);
+        } else if (playerDataList.size() < 10)
+        {
+            matchmakingBy5.setVisible(false);
+        }
+
 
     }
     /**
@@ -390,6 +402,7 @@ public class LTournament implements EntryPoint {
                                 @Override
                                 public void onClick(ClickEvent event) {
                                     int rowIndex = rosterTable.getCellForEvent(event).getRowIndex();
+                                    setCreatorButtonVis();
                                     rosterTable.removeRow(rowIndex);
                                     playerDataList.remove(localPlayerData);
                                     if(playerDataList.isEmpty()){
@@ -412,6 +425,7 @@ public class LTournament implements EntryPoint {
                     rosterTable.getRowFormatter().addStyleName(row, "player-list-entry");
                     summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
                     newPlayerNameTextBox.setText("");
+                    setCreatorButtonVis();
                 }
             }
             @Override
@@ -423,7 +437,7 @@ public class LTournament implements EntryPoint {
             builder.send();
         } catch (RequestException e) {
             e.printStackTrace();
-            setCreatorButtonVis();
+
         }
     }
 
