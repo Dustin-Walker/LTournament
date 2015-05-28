@@ -4,14 +4,12 @@ package LTournament.client;
  * Created by User on 10/2/2014.
  * This is an overlay type, used to manipulate a JSON object.
  */
-public class PlayerData  {
-    // Constructors
-
+public class Player {
     /**
      * Use this constructor when player submits player name
      * @param response Response to REST call to Riot API for summoner data
      */
-    public PlayerData(String response){
+    public Player(String response){
         this.setPlayerID(response);
         this.setSummonerName(response);
     }

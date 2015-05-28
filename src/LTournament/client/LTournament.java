@@ -67,7 +67,7 @@ public class LTournament implements EntryPoint {
     DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
 
     //Non-GWT objects
-    ArrayList<PlayerData> playerDataList = new ArrayList<PlayerData>();
+    ArrayList<Player> playerList = new ArrayList<Player>();
     ArrayList<String> summonerNameList = new ArrayList<String>();
     final private String[] teamNameArray = {"Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7",
             "Team 8", "Team 9", "Team 10", "Team 11", "Team 12", "Team 13", "Team 14", "Team 15", "Team 16",
@@ -206,7 +206,7 @@ public class LTournament implements EntryPoint {
             public void onClick(ClickEvent event) {
                 playerPanel.setVisible(false);
                 rosterTable.removeAllRows();
-                playerDataList.clear();
+                playerList.clear();
                 summonerNameList.clear();
             }
         });
@@ -235,8 +235,8 @@ public class LTournament implements EntryPoint {
         createTeamsButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                int numTeams = playerDataList.size() / 5;
-                int leftoverPlayers = playerDataList.size() % 5;
+                int numTeams = playerList.size() / 5;
+                int leftoverPlayers = playerList.size() % 5;
                 VerticalPanel teamStackPanel = new VerticalPanel();
                 if(numTeams<2){
                     if(!teamWarning.isAttached())
@@ -244,10 +244,10 @@ public class LTournament implements EntryPoint {
                 } else {
                     teamWarning.setVisible(false);
                     createTeamsButton.setVisible(false);
-                    ArrayList<ArrayList<PlayerData>> teamList = generateRandomTeams();
-                    for(ArrayList<PlayerData> team : teamList){
+                    ArrayList<ArrayList<Player>> teamList = generateRandomTeams();
+                    for(ArrayList<Player> team : teamList){
                         VerticalPanel teamPanel = new VerticalPanel();
-                        for(PlayerData player : team){
+                        for(Player player : team){
                             Label playerLabel = new Label(player.getSummonerName());
                             playerLabel.addStyleName("team-player");
                             teamPanel.add(playerLabel);
@@ -307,19 +307,19 @@ public class LTournament implements EntryPoint {
      * for the Summoner's Rift map and any other 5 player per team map.
      * @return List of teams
      */
-    private ArrayList<ArrayList<PlayerData>> generateRandomTeams(){
+    private ArrayList<ArrayList<Player>> generateRandomTeams(){
         // TODO Convert method to accept a parameter specifying 3 or 5 players per team and handle that
         // TODO Add a radio button specifying 3 or 5 players per team on the team list panel
         Random rnd = new Random();
-        ArrayList<ArrayList<PlayerData>> teamList = new ArrayList<ArrayList<PlayerData>>();
+        ArrayList<ArrayList<Player>> teamList = new ArrayList<ArrayList<Player>>();
         int next=0;
-        for (int i = 0, teamListSize = playerDataList.size() / 5; i < teamListSize; i++) {
-            ArrayList<PlayerData> team = new ArrayList<PlayerData>();
+        for (int i = 0, teamListSize = playerList.size() / 5; i < teamListSize; i++) {
+            ArrayList<Player> team = new ArrayList<Player>();
             int j = 0;
             while (j < 5) {
-                next = rnd.nextInt(playerDataList.size());
-                team.add(playerDataList.get(next));
-                playerDataList.remove(next);
+                next = rnd.nextInt(playerList.size());
+                team.add(playerList.get(next));
+                playerList.remove(next);
                 j++;
             }
             teamList.add(team);
@@ -328,11 +328,11 @@ public class LTournament implements EntryPoint {
     }
 
     private void setCreatorButtonVis(){
-        if (playerDataList.size() >= 6 && !matchmakingBy3.isVisible()){
+        if (playerList.size() >= 6 && !matchmakingBy3.isVisible()){
             matchmakingBy3.setVisible(true);
             startTeamPicker.setVisible(true);
         } 
-        if (playerDataList.size() >= 10 && !matchmakingBy5.isVisible()){
+        if (playerList.size() >= 10 && !matchmakingBy5.isVisible()){
             matchmakingBy5.setVisible(true);
         }
 
@@ -374,43 +374,43 @@ public class LTournament implements EntryPoint {
                     playerPanel.setVisible(true);
                 int row = rosterTable.getRowCount();
                 String playerName = response.getText();
-                PlayerData newPlayerData = new PlayerData(playerName);
-                    playerDataList.add(newPlayerData);
+                Player newPlayer = new Player(playerName);
+                    playerList.add(newPlayer);
 
-                    String leagueEntryURL = leagueEntries_URL+newPlayerData.getPlayerID()+"/entry"+APIKEY;
+                    String leagueEntryURL = leagueEntries_URL+ newPlayer.getPlayerID()+"/entry"+APIKEY;
                     RequestBuilder builder2 =new RequestBuilder(RequestBuilder.GET, leagueEntryURL);
                     builder2.setCallback(new RequestCallback() {
                         @Override
                         public void onResponseReceived(Request request, Response response) {
                             final int row = rosterTable.getRowCount();
                             String getResponse = response.getText();
-                            final PlayerData localPlayerData = playerDataList.get(playerDataList.size()-1);
+                            final Player localPlayer = playerList.get(playerList.size()-1);
                             String playerRankIcon="";
                             // TODO Move this into its own method
                             if(getResponse.contains("CHALLENGER")){
-                                localPlayerData.setRank("CHALLENGER");
+                                localPlayer.setRank("CHALLENGER");
                                 playerRankIcon = ("<img src=\"img/challenger_icon_24.png\" >");
                             } else if(getResponse.contains("DIAMOND")){
-                                localPlayerData.setRank("DIAMOND");
+                                localPlayer.setRank("DIAMOND");
                                 playerRankIcon = ("<img src=\"img/diamond_icon_24.png\" >");
                             } else if(getResponse.contains("PLATINUM")){
-                                localPlayerData.setRank("PLATINUM");
+                                localPlayer.setRank("PLATINUM");
                                 playerRankIcon = ("<img src=\"img/platinum_icon_24.png\" >");
                             } else if(getResponse.contains("GOLD")){
-                                localPlayerData.setRank("GOLD");
+                                localPlayer.setRank("GOLD");
                                 playerRankIcon = ("<img src=\"img/gold_icon_24.png\" >");
                             } else if (getResponse.contains("SILVER")) {
-                                localPlayerData.setRank("SILVER");
+                                localPlayer.setRank("SILVER");
                                 playerRankIcon = ("<img src=\"img/silver_icon_24.png\" >");
                             } else if (getResponse.contains("BRONZE")) {
-                                localPlayerData.setRank("BRONZE");
+                                localPlayer.setRank("BRONZE");
                                 playerRankIcon = ("<img src=\"img/bronze_icon_24.png\" >");
                             } else {
-                                localPlayerData.setRank("UNRANKED");
+                                localPlayer.setRank("UNRANKED");
                                 playerRankIcon = ("<img src=\"img/unranked_icon_24.png\" >");
                             }
                             rosterTable.setHTML(row-1,0,playerRankIcon );
-                            playerDataList.get(playerDataList.size() - 1).setRank(localPlayerData.getRank());
+                            playerList.get(playerList.size() - 1).setRank(localPlayer.getRank());
                             final Button removePlayerButton = new Button();
                             removePlayerButton.addStyleName("remove-button");
                             rosterTable.setWidget(row-1, 2, removePlayerButton);
@@ -419,8 +419,8 @@ public class LTournament implements EntryPoint {
                                 public void onClick(ClickEvent event) {
                                     int rowIndex = rosterTable.getCellForEvent(event).getRowIndex();
                                     rosterTable.removeRow(rowIndex);
-                                    playerDataList.remove(localPlayerData);
-                                    if(playerDataList.isEmpty()){
+                                    playerList.remove(localPlayer);
+                                    if(playerList.isEmpty()){
                                         playerPanel.setVisible(false);
                                     }
                                 }
@@ -436,7 +436,7 @@ public class LTournament implements EntryPoint {
                     } catch (RequestException e) {
                         e.printStackTrace();
                     }
-                    rosterTable.setText(row, 1, newPlayerData.getSummonerName());
+                    rosterTable.setText(row, 1, newPlayer.getSummonerName());
                     rosterTable.getRowFormatter().addStyleName(row, "player-list-entry list-group-item");
                     summonerNameList.add(newPlayerNameTextBox.getText().toLowerCase().trim());
                     newPlayerNameTextBox.setText("");
