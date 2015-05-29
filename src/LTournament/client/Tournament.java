@@ -1,11 +1,19 @@
 package LTournament.client;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
  * Created by user on 5/28/15.
+ * This class contains methods for generating the tournament.
  */
 public class Tournament {
     /**
@@ -13,7 +21,7 @@ public class Tournament {
      * This method is called by both keyboard and mouse click events for entry of player data.
      */
 
-            //Non-GWT objects
+  /*          //Non-GWT objects
     ArrayList playerDataList = new ArrayList();
     ArrayList<String> summonerNameList = new ArrayList<String>();
     final private String[] teamNameArray = {"Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7",
@@ -27,9 +35,6 @@ public class Tournament {
     private static final String APIKEY = "?api_key=581e4a04-deb0-4e70-898f-765ad96e2016";
 
     public Player addPlayerEvent(String name){
-        
-
-
         summonerNameList.add(name);
         String url = summonerByName_URL+name+APIKEY;
         // Send request to server and catch any errors
@@ -58,7 +63,7 @@ public class Tournament {
                     playerPanel.setVisible(true);
                 int row = rosterTable.getRowCount();
                 String playerName = response.getText();
-                PlayerData newPlayerData = new PlayerData(playerName);
+                Player newPlayerData = new Player(playerName);
                     playerDataList.add(newPlayerData);
                     String leagueEntryURL = leagueEntries_URL+newPlayerData.getPlayerID()+"/entry"+APIKEY;
                     RequestBuilder builder2 =new RequestBuilder(RequestBuilder.GET, leagueEntryURL);
@@ -67,7 +72,7 @@ public class Tournament {
                         public void onResponseReceived(Request request, Response response) {
                             final int row = rosterTable.getRowCount();
                             String getResponse = response.getText();
-                            final PlayerData localPlayerData = playerDataList.get(playerDataList.size()-1);
+                            final Player localPlayerData = playerDataList.get(playerDataList.size()-1);
                             String playerRankIcon="";
                             // TODO Move this into its own method
                             if(getResponse.contains("CHALLENGER")){
@@ -137,7 +142,17 @@ public class Tournament {
             builder.send();
         } catch (RequestException e) {
             e.printStackTrace();
-
         }
+    }*/
+
+    /**
+     * This method generates teams based on a randomization algorithm. These teams are teams of 5 to be used
+     * for the Summoner's Rift map and any other 5 player per team map. Teams of 3 for the other map.
+     * @param players Collection of all the players to put into teams
+     * @return List of teams containing players
+     */
+    private HashMap generateTeams(HashMap players){
+        return new HashMap();
     }
+
 }

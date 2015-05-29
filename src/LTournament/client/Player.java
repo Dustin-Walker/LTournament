@@ -2,6 +2,7 @@ package LTournament.client;
 
 /**
  * Created by User on 10/2/2014.
+ * This class represents a player in the tournament.
  * This is an overlay type, used to manipulate a JSON object.
  */
 public class Player {
