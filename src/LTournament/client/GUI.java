@@ -1,7 +1,10 @@
 package LTournament.client;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
+
+import java.util.ArrayList;
 
 /**
  * Created by user on 5/28/15.
@@ -47,6 +50,90 @@ public class GUI {
         assembleDockPanel();
         assembleDockLayoutPanel();
         styleForStartup();
+        createTeamsClickHandler();
+    }
+
+    private static void createTeamsClickHandler(){
+
+        createTeamsButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+
+            }
+        });
+        /*
+        createTeamsButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+           int numTeams = playerList.size() / 5;
+           //     int leftoverPlayers = playerList.size() % 5;
+                VerticalPanel teamStackPanel = new VerticalPanel();
+                if (numTeams < 2) {
+                    if (!teamWarning.isAttached())
+                        teamListPanel.add(teamWarning);
+                } else {
+                    teamWarning.setVisible(false);
+                    createTeamsButton.setVisible(false);
+                    ArrayList<ArrayList<Player>> teamList = generateRandomTeams();
+                    for (ArrayList<Player> team : teamList) {
+                        VerticalPanel teamPanel = new VerticalPanel();
+                        for (Player player : team) {
+                            Label playerLabel = new Label(player.getSummonerName());
+                            playerLabel.addStyleName("team-player");
+                            teamPanel.add(playerLabel);
+                        }
+                        Label teamLabel = new Label();
+                       // teamLabel.setText(randomTeamName());
+                        teamLabel.addStyleName("team-name");
+                        teamStackPanel.add(teamLabel);
+                        teamStackPanel.add(teamPanel);
+                    }
+                    teamListPanel.add(teamStackPanel);
+                    addPlayerButton.setEnabled(false);
+                    resetRosterButton.setEnabled(false);
+                    newPlayerNameTextBox.setEnabled(false);
+                    for (int i = 0; i < rosterTable.getRowCount(); i++)
+                        rosterTable.getCellFormatter().setVisible(i, 2, false);
+                    // TODO Figure out how to make remove player buttons disabled instead of invisible
+                    // TODO Change CSS of player list panel show the whole panel when disabled
+                }
+            }
+        });*/
+
+    }
+
+    private static void addPlayerKeyHandler(){
+        newPlayerNameTextBox.addKeyDownHandler(new KeyDownHandler() {
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                    //   if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase().trim())) {
+                    //   addPlayerEvent();
+                    // }
+                }
+            }
+        });
+    }
+
+    private static void addPlayerButtonHandler(){
+        addPlayerButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // Same as newPlayerKeyDownHandler
+            }
+        });
+    }
+
+    private static void resetButtonHandler(){
+        resetRosterButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                playerPanel.setVisible(false);
+                rosterTable.removeAllRows();
+             //   playerList.clear();
+           //     summonerNameList.clear();
+            }
+        });
     }
 
     private static void assembleAddPanel(){
@@ -156,5 +243,7 @@ public class GUI {
         dockLayoutPanel.addEast(middleMainPanel, 60);
         dockLayoutPanel.addWest(controlPanel, 20);
     }
+
+
 
 }
