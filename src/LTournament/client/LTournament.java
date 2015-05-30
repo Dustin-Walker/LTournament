@@ -63,7 +63,6 @@ public class LTournament implements EntryPoint {
         box.add(panel);
         return box;
     }
-    // TODO Convert this team warning into a popup panel
     DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
 
     //Non-GWT objects
@@ -88,7 +87,7 @@ public class LTournament implements EntryPoint {
         RootLayoutPanel rp = RootLayoutPanel.get();
         rp.add(GUI.dockLayoutPanel);
 
-/*        // TODO Do something about the left over players
+/*
 
         // Assemble Add Player panel
         addPanel.add(addPlayerNameLabel);
@@ -100,7 +99,7 @@ public class LTournament implements EntryPoint {
         resetRosterButton.addStyleName("btn btn-default");
         addPlayerButton.setHTML("<span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span>Add Player");
         resetRosterButton.setHTML("<span class=\"glyphicon glyphicon-repeat\" aria-hidden=\"true\"></span>Reset All");
-        // TODO Confirm reset all
+
 
         // Assemble the player list table header panel
         rosterListLabel.setText("Player List");
@@ -216,7 +215,6 @@ public class LTournament implements EntryPoint {
             }
         });
 
-        // TODO DRY
         addPlayerButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -269,8 +267,6 @@ public class LTournament implements EntryPoint {
                     newPlayerNameTextBox.setEnabled(false);
                     for(int i=0;i<rosterTable.getRowCount();i++)
                         rosterTable.getCellFormatter().setVisible(i, 2, false);
-                    // TODO Figure out how to make remove player buttons disabled instead of invisible
-                    // TODO Change CSS of player list panel show the whole panel when disabled
                 }
             }
         });*/
@@ -310,8 +306,8 @@ public class LTournament implements EntryPoint {
 
     }
 */
-    // TODO Make a new column of players on the player panel every few entries
-    // TODO FontAwesome
+
+
 
 
 

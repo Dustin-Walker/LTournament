@@ -12,7 +12,9 @@ import java.util.ArrayList;
  */
 public class GUI {
 
-    private static VerticalPanel mainTopPanel = new VerticalPanel();
+    // TODO Change size of flex table for players based on number of players
+    // TODO FontAwesome
+
     private static VerticalPanel addPanel = new VerticalPanel();
     private static HorizontalPanel footerPanel = new HorizontalPanel();
     private static HorizontalPanel headerPanel = new HorizontalPanel();
@@ -51,6 +53,7 @@ public class GUI {
         assembleDockLayoutPanel();
         styleForStartup();
         createTeamsClickHandler();
+        addPlayerKeyHandler();
     }
 
     private static void createTeamsClickHandler(){
@@ -94,8 +97,6 @@ public class GUI {
                     newPlayerNameTextBox.setEnabled(false);
                     for (int i = 0; i < rosterTable.getRowCount(); i++)
                         rosterTable.getCellFormatter().setVisible(i, 2, false);
-                    // TODO Figure out how to make remove player buttons disabled instead of invisible
-                    // TODO Change CSS of player list panel show the whole panel when disabled
                 }
             }
         });*/

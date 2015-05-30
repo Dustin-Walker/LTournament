@@ -43,18 +43,17 @@ public class Tournament {
             @Override
             public void onResponseReceived(Request request, Response response) {
                 if (response.getStatusCode() == 404){
-                    // TODO Style this box better
                     DialogBox dbox = LTournament.alertWidget("Please try again", "Summoner not found");
                     dbox.show();
                     dbox.addStyleName("missing-player-popup");
                 }
                 if (response.getStatusCode() == 429){
-                    // TODO rate limit exceeded error
+                    //  rate limit exceeded error
                     //NEEDS TO BE TESTED - doesnt work
                     //LTournament.alertWidget("Adding player failed", "You are trying to add players too quickly.");
                 }
                 if (response.getStatusCode() == 503 || response.getStatusCode() == 500){
-                    // TODO error about server
+                    //  error about server
                     //NEEDS TO BE TESTED - doesnt work
                     //LTournament.alertWidget("Adding player failed", "Server currently unavailable.");
                 }
