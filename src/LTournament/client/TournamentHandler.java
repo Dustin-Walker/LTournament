@@ -13,7 +13,7 @@ public class TournamentHandler {
 
     public boolean addPlayer(){
         // TODO This method should make the API call to League's servers
-        GUI.rosterListLabel.setText("WORDS");
+   
         return true;
     }
 
