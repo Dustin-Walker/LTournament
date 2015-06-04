@@ -4,8 +4,6 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-import java.util.ArrayList;
-
 /**
  * Created by user on 5/28/15.
  * This class contains the GUI.
@@ -32,12 +30,13 @@ public class GUI {
     private static Button startTeamPicker = new Button();
     private static Label playerPanelHeader = new Label("Player Roster");
     private static Label addPlayerNameLabel = new Label();
-    private static Label rosterListLabel = new Label();
+    public static Label rosterListLabel = new Label();
     private static DockPanel dockPanel = new DockPanel();
     private static HorizontalPanel bracketPanel = new HorizontalPanel();
     final static Label teamWarning = new Label("Not enough players for two teams. Add more players.");
     private static HorizontalPanel playerPanel = new HorizontalPanel();
     public static DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
+    private static TournamentHandler tournamentHandler = new TournamentHandler();
 
     public static void assembleStartUp(){
         assembleAddPanel();
@@ -54,10 +53,10 @@ public class GUI {
         styleForStartup();
         createTeamsClickHandler();
         addPlayerKeyHandler();
+        addPlayerButtonHandler();
     }
 
     private static void createTeamsClickHandler(){
-
         createTeamsButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -103,36 +102,36 @@ public class GUI {
 
     }
 
-    private static void addPlayerKeyHandler(){
+    public static void addPlayerKeyHandler(){
         newPlayerNameTextBox.addKeyDownHandler(new KeyDownHandler() {
             @Override
             public void onKeyDown(KeyDownEvent event) {
+
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                    //   if (!summonerNameList.contains(newPlayerNameTextBox.getText().toLowerCase().trim())) {
+                       if (!Tournament.summonerNameList.containsKey(newPlayerNameTextBox.getText().toLowerCase().trim())) {
                     //   addPlayerEvent();
-                    // }
+                     }
                 }
             }
         });
     }
 
-    private static void addPlayerButtonHandler(){
+    public static void addPlayerButtonHandler(){
         addPlayerButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // Same as newPlayerKeyDownHandler
+                tournamentHandler.addPlayer();
             }
         });
     }
 
-    private static void resetButtonHandler(){
+    public static void resetButtonHandler(){
         resetRosterButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 playerPanel.setVisible(false);
                 rosterTable.removeAllRows();
-             //   playerList.clear();
-           //     summonerNameList.clear();
+                Tournament.summonerNameList.clear();
             }
         });
     }

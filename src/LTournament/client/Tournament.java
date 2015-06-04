@@ -16,6 +16,9 @@ import java.util.Random;
  * This class contains methods for generating the tournament.
  */
 public class Tournament {
+
+    static HashMap summonerNameList = new HashMap();
+
     /**
      * This method adds a player to the roster table and to the internal player list.
      * This method is called by both keyboard and mouse click events for entry of player data.
