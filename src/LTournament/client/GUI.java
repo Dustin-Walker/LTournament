@@ -109,7 +109,7 @@ public class GUI {
 
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                        if (!Tournament.summonerNameList.containsKey(newPlayerNameTextBox.getText().toLowerCase().trim())) {
-                    //   addPlayerEvent();
+                           tournamentHandler.addPlayer();
                      }
                 }
             }
