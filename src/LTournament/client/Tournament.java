@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class Tournament {
 
-    static HashMap summonerNameList = new HashMap();
+    static HashMap<String, Player> summonerNameList = new HashMap<String, Player>();
 
     /**
      * This method adds a player to the roster table and to the internal player list.

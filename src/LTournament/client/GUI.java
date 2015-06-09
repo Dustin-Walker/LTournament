@@ -13,7 +13,7 @@ public class GUI {
     // TODO Change size of flex table for players based on number of players
     // TODO FontAwesome
 
-    private static VerticalPanel addPanel = new VerticalPanel();
+    public static VerticalPanel addPanel = new VerticalPanel();
     private static HorizontalPanel footerPanel = new HorizontalPanel();
     private static HorizontalPanel headerPanel = new HorizontalPanel();
     private static HorizontalPanel rosterTableHeader = new HorizontalPanel();
@@ -37,6 +37,7 @@ public class GUI {
     private static HorizontalPanel playerPanel = new HorizontalPanel();
     public static DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
     private static TournamentHandler tournamentHandler = new TournamentHandler();
+    private static HTML bootstrapAlert = new HTML("");
 
     public static void assembleStartUp(){
         assembleAddPanel();
@@ -56,13 +57,20 @@ public class GUI {
         addPlayerButtonHandler();
     }
 
+    public static String getPlayerName(){
+        return newPlayerNameTextBox.getText().trim().toLowerCase();
+    }
+
     private static void createTeamsClickHandler(){
         createTeamsButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
 
+
             }
         });
+
+
         /*
         createTeamsButton.addClickHandler(new ClickHandler() {
             @Override
@@ -108,9 +116,7 @@ public class GUI {
             public void onKeyDown(KeyDownEvent event) {
 
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                       if (!Tournament.summonerNameList.containsKey(newPlayerNameTextBox.getText().toLowerCase().trim())) {
-                           tournamentHandler.addPlayer();
-                     }
+                       tournamentHandler.addPlayer();
                 }
             }
         });
@@ -167,6 +173,7 @@ public class GUI {
 
     private static void assembleControlPanel(){
         controlPanel.add(rosterTableHeader);
+        controlPanel.add(bootstrapAlert);
         controlPanel.add(addPanel);
         addPanel.add(addPlayerButton);
         controlPanel.add(resetRosterButton);
@@ -186,6 +193,10 @@ public class GUI {
         matchmakingBy3.setVisible(false);
         matchmakingBy5.setVisible(false);
         startTeamPicker.setVisible(false);
+    }
+
+    public static void setBootstrapAlert(String s){
+        bootstrapAlert.setHTML(s);
     }
 
     private static void styleForStartup(){
