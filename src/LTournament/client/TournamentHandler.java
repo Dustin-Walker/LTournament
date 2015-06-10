@@ -73,6 +73,12 @@ public class TournamentHandler {
                                     final Player localPlayer = playerDataList.get(playerDataList.size()-1);
                                     // TODO Remake the player icon section, put it into its own method
                                     // TODO Add player to the GUI
+
+                                    /*
+                                    Use this data structure instead of the current flex table approach
+                                    http://www.gwtproject.org/javadoc/latest/com/google/gwt/user/cellview/client/CellList.html
+                                    this should look better and allow for scroll which will work better on mobile devices
+                                     */
                                 }
 
                                 @Override
