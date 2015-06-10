@@ -34,7 +34,7 @@ public class GUI {
     private static DockPanel dockPanel = new DockPanel();
     private static HorizontalPanel bracketPanel = new HorizontalPanel();
     final static Label teamWarning = new Label("Not enough players for two teams. Add more players.");
-    private static HorizontalPanel playerPanel = new HorizontalPanel();
+    public static HorizontalPanel playerPanel = new HorizontalPanel();
     public static DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
     private static TournamentHandler tournamentHandler = new TournamentHandler();
     private static HTML bootstrapAlert = new HTML("");
@@ -59,6 +59,10 @@ public class GUI {
 
     public static String getPlayerName(){
         return newPlayerNameTextBox.getText().trim().toLowerCase();
+    }
+
+    public static int rosterTableRowCount(){
+        return rosterTable.getRowCount();
     }
 
     private static void createTeamsClickHandler(){
