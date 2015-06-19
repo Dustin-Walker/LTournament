@@ -23,9 +23,9 @@ public class TournamentHandler {
      * This method makes two calls to the league of legends API. The first call uses the summoner name to gather
      * more information, specifically the summoner ID number. The second call uses the summoner ID number to obtain
      * the rest of the information used to build the player object.
-     * @return true for a successful call, false if unsuccessful
+     * @return Return the new player object
      */
-    public boolean addPlayer(){
+    public Player addPlayer(){
         // TODO This method should make the API call to League's servers
 
 
@@ -46,9 +46,14 @@ public class TournamentHandler {
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){
                         case 404: // Player not found
-                            GUI.setBootstrapAlert("<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>");
+                            try {
+                                throw new PlayerNotFoundException();
+                            } catch (PlayerNotFoundException e) {
+                                GUI.setBootstrapAlert("<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>");
+                            }
                             break;
                         case 429: // Rate limit exceeded
+                            // TODO: throw exceptions in cases where no player object is created
                             break;
                         case 500: // Server error
                             break;
@@ -103,9 +108,10 @@ public class TournamentHandler {
             }
         }
 
+        GUI.setBootstrapAlert("<div class=\"alert alert-success text-center\" role=\"alert\"><strong>!!!!!!!!!!!!</strong><br />Player successfully added.</div>");
 
+        return new Player("words");
 
-        return true;
     }
 
     public boolean resetPlayerList(){
