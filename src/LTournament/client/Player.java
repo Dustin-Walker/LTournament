@@ -42,7 +42,22 @@ public class Player {
         return rank;
     }
 
-    public void setRank(String newRank) {
-        this.rank = newRank;
+    public void setRank(String serverResponse){
+        if (serverResponse.contains("CHALLENGER"))
+            this.rank = "CHALLENGER";
+        else if (serverResponse.contains("MASTER"))
+            this.rank = "MASTER";
+        else if (serverResponse.contains("DIAMOND"))
+            this.rank = "DIAMOND";
+        else if (serverResponse.contains("PLATINUM"))
+            this.rank = "PLATINUM";
+        else if (serverResponse.contains("GOLD"))
+            this.rank = "GOLD";
+        else if (serverResponse.contains("SILVER"))
+            this.rank = "SILVER";
+        else if (serverResponse.contains("BRONZE"))
+            this.rank = "BRONZE";
+        else
+            this.rank = "UNRANKED";
     }
 }

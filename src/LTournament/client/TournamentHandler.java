@@ -1,6 +1,8 @@
 package LTournament.client;
 
 import com.google.gwt.http.client.*;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.user.client.ui.HTML;
 
 import java.util.ArrayList;
 
@@ -23,9 +25,8 @@ public class TournamentHandler {
      * This method makes two calls to the league of legends API. The first call uses the summoner name to gather
      * more information, specifically the summoner ID number. The second call uses the summoner ID number to obtain
      * the rest of the information used to build the player object.
-     * @return Return the new player object
      */
-    public Player addPlayer(){
+    public void addPlayer(){
         // TODO This method should make the API call to League's servers
 
 
@@ -37,7 +38,7 @@ public class TournamentHandler {
             GUI.setBootstrapAlert("<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is already in the game.</div>");
         } else {
             // This is a new entry
-            GUI.rosterListLabel.setText("test");
+
             String summonerNameURL = BY_NAME_URL+playerName+APIKEY;
             // Send request to the server
             RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, summonerNameURL);
@@ -46,21 +47,19 @@ public class TournamentHandler {
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){
                         case 404: // Player not found
-                            try {
-                                throw new PlayerNotFoundException();
-                            } catch (PlayerNotFoundException e) {
-                                GUI.setBootstrapAlert("<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>");
-                            }
+                            GUI.setBootstrapAlert("<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>");
                             break;
                         case 429: // Rate limit exceeded
-                            // TODO: throw exceptions in cases where no player object is created
+                            GUI.setBootstrapAlert("<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Slow down!</strong><br />You are sending too many requests.</div>");
                             break;
                         case 500: // Server error
+                            GUI.setBootstrapAlert("<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />The remote server encountered an error.</div>");
                             break;
                         case 503: // Server error
+                            GUI.setBootstrapAlert("<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />The remote server encountered an error.</div>");
                             break;
                         case 200: // Success
-                            GUI.setBootstrapAlert("<div class=\"alert alert-success text-center\" role=\"alert\"><strong>Success!</strong><br />Player successfully added.</div>");
+
                             if(!GUI.playerPanel.isVisible())
                                 GUI.playerPanel.setVisible(true);
                             String responseText = response.getText();
@@ -73,29 +72,31 @@ public class TournamentHandler {
                             builder1.setCallback(new RequestCallback() {
                                 @Override
                                 public void onResponseReceived(Request request, Response response) {
-                                    final int rowCount = GUI.rosterTableRowCount();
-                                    String responseText1 = response.getText();
-                                    final Player localPlayer = playerDataList.get(playerDataList.size()-1);
-                                    // TODO Remake the player icon section, put it into its own method
-                                    // TODO Add player to the GUI
+                                    int playerListSize = (playerDataList.size()-1);
+                                    int row = playerListSize/10;
+                                    int column = playerListSize%10;
+                                    Player localPlayer = playerDataList.get(playerListSize);
+                                    localPlayer.setRank(response.getText());
 
-                                    /*
-                                    Use this data structure instead of the current flex table approach
-                                    http://www.gwtproject.org/javadoc/latest/com/google/gwt/user/cellview/client/CellList.html
-                                    this should look better and allow for scroll which will work better on mobile devices
-                                     */
+                                    String html = "<h4>"+localPlayer.getSummonerName()+"</h4>";
+
+                                    GUI.rosterTable.setHTML(row, column, html);
+                                    GUI.rosterTable.getFlexCellFormatter().setStyleName(row, column, localPlayer.getRank());
                                 }
 
                                 @Override
                                 public void onError(Request request, Throwable exception) {
-                                    // Something went very wrong if things ever end up here
-                                }
-                            });
-                            break;
-                    }
-                    GUI.rosterListLabel.setText("words");
-                }
 
+                                }
+
+                            });
+                            try {
+                                builder1.send();
+                            } catch (RequestException e) {
+                                e.printStackTrace();
+                            }
+                    }
+                }
                 @Override
                 public void onError(Request request, Throwable exception) {
                     GUI.rosterListLabel.setText("error");
@@ -107,11 +108,6 @@ public class TournamentHandler {
                 e.printStackTrace();
             }
         }
-
-        GUI.setBootstrapAlert("<div class=\"alert alert-success text-center\" role=\"alert\"><strong>!!!!!!!!!!!!</strong><br />Player successfully added.</div>");
-
-        return new Player("words");
-
     }
 
     public boolean resetPlayerList(){

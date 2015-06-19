@@ -10,17 +10,16 @@ import com.google.gwt.user.client.ui.*;
  */
 public class GUI {
 
-    // TODO Change size of flex table for players based on number of players
-    // TODO FontAwesome
+    // TODO change position of roster table
 
     public static VerticalPanel addPanel = new VerticalPanel();
     private static HorizontalPanel footerPanel = new HorizontalPanel();
     private static HorizontalPanel headerPanel = new HorizontalPanel();
     private static HorizontalPanel rosterTableHeader = new HorizontalPanel();
-    private static HorizontalPanel middleMainPanel = new HorizontalPanel();
+    private static VerticalPanel middleMainPanel = new VerticalPanel();
     private static VerticalPanel teamListPanel = new VerticalPanel();
     private static VerticalPanel controlPanel = new VerticalPanel();
-    private static FlexTable rosterTable = new FlexTable();
+    public static FlexTable rosterTable = new FlexTable();
     private static TextBox newPlayerNameTextBox = new TextBox();
     private static Button addPlayerButton = new Button();
     private static Button resetRosterButton = new Button();
@@ -34,10 +33,11 @@ public class GUI {
     private static DockPanel dockPanel = new DockPanel();
     private static HorizontalPanel bracketPanel = new HorizontalPanel();
     final static Label teamWarning = new Label("Not enough players for two teams. Add more players.");
-    public static HorizontalPanel playerPanel = new HorizontalPanel();
+    public static VerticalPanel playerPanel = new VerticalPanel();
     public static DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
     private static TournamentHandler tournamentHandler = new TournamentHandler();
     private static HTML bootstrapAlert = new HTML("");
+    private static VerticalPanel eastPanel = new VerticalPanel();
 
     public static void assembleStartUp(){
         assembleAddPanel();
@@ -49,7 +49,7 @@ public class GUI {
         assembleTeamListPanel();
         assembleBracketPanel();
         assembleMiddlePanel();
-        assembleDockPanel();
+     //   assembleDockPanel();
         assembleDockLayoutPanel();
         styleForStartup();
         createTeamsClickHandler();
@@ -120,7 +120,7 @@ public class GUI {
             public void onKeyDown(KeyDownEvent event) {
 
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                       tournamentHandler.addPlayer();
+                    tournamentHandler.addPlayer();
                 }
             }
         });
@@ -217,6 +217,15 @@ public class GUI {
         playerPanel.setHeight("100px");
         playerPanel.setWidth("100px");
         playerPanel.add(rosterTable);
+        assembleRosterTable();
+    }
+
+    private static void assembleRosterTable(){
+        // Start with 10 rows
+        for (int i = 0; i < 10; i++) {
+            rosterTable.insertRow(i);
+        }
+
     }
 
     private static void assembleHeaderPanel(){
@@ -255,8 +264,9 @@ public class GUI {
     private static void assembleDockLayoutPanel() {
         dockLayoutPanel.addNorth(headerPanel, 3);
         dockLayoutPanel.addSouth(footerPanel, 3);
-        dockLayoutPanel.addEast(middleMainPanel, 60);
+        dockLayoutPanel.addEast(eastPanel, 0);
         dockLayoutPanel.addWest(controlPanel, 20);
+        dockLayoutPanel.add(middleMainPanel);
     }
 
 
