@@ -24,9 +24,9 @@ public class GUI {
     private static Button addPlayerButton = new Button();
     private static Button resetRosterButton = new Button();
     private static Button createTeamsButton = new Button();
-    private static Button matchmakingBy3 = new Button();
-    private static Button matchmakingBy5 = new Button();
-    private static Button startTeamPicker = new Button();
+    public static Button matchmakingBy3 = new Button();
+    public static Button matchmakingBy5 = new Button();
+    //public static Button startTeamPicker = new Button();
     private static Label playerPanelHeader = new Label("Player Roster");
     private static Label addPlayerNameLabel = new Label();
     public static Label rosterListLabel = new Label();
@@ -145,6 +145,10 @@ public class GUI {
                 rosterTable.removeAllRows();
                 //rosterTable.clear();
                 Tournament.summonerNameList.clear();
+                matchmakingBy5.setVisible(false);
+                matchmakingBy3.setVisible(false);
+                final String resetAlert = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />The list of players has been reset.</div>";
+                GUI.setBootstrapAlert(resetAlert);
             }
         });
     }
@@ -154,7 +158,6 @@ public class GUI {
         addPanel.add(addPlayerNameLabel);
         addPanel.add(newPlayerNameTextBox);
         addPlayerButton.addStyleName("add-button");
-        resetRosterButton.addStyleName("reset-button");
         newPlayerNameTextBox.addStyleName("player-name-textbox");
         addPlayerButton.addStyleName("btn btn-default");
         resetRosterButton.addStyleName("btn btn-default");
@@ -163,9 +166,8 @@ public class GUI {
     }
 
     private static void assemblePlayerListPanelHeader(){
-        rosterListLabel.setText("Player List");
         rosterTableHeader.add(rosterListLabel);
-        rosterListLabel.addStyleName("control-panel-header");
+        rosterListLabel.setText("Welcome to the League of Legends Tournament System. Begin with adding players by in-game summoner name.");
     }
 
     private static void assembleFooterPanel(){
@@ -179,6 +181,7 @@ public class GUI {
     }
 
     private static void assembleControlPanel(){
+        controlPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         controlPanel.add(rosterTableHeader);
         controlPanel.add(bootstrapAlert);
         controlPanel.add(addPanel);
@@ -187,19 +190,19 @@ public class GUI {
         controlPanel.addStyleName("control-panel");
         //  controlPanel.setWidth("100%");
         controlPanel.add(matchmakingBy3);
-        matchmakingBy3.setText("Automatically create 3 player teams");
-        matchmakingBy3.setHTML("Random Twisted Treelined<span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>");
+        //  matchmakingBy3.setText("Automatically create 3 player teams");
+        matchmakingBy3.setHTML("Start Twisted Treeline<span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>");
         controlPanel.add(matchmakingBy5);
-        matchmakingBy5.setText("Automatically create 5 player teams");
-        matchmakingBy5.setHTML("Random Summoner's Rift<span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>");
-        controlPanel.add(startTeamPicker);
+        // matchmakingBy5.setText("Automatically create 5 player teams");
+        matchmakingBy5.setHTML("Start Summoner's Rift<span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>");
+   //     controlPanel.add(startTeamPicker);
         controlPanel.setHeight("100%");
-        startTeamPicker.setText("Create teams");
-        startTeamPicker.setHTML("Custom Team Builder<span class=\"glyphicon glyphicon-hand-right\" aria-hidden=\"true\"></span>");
-        startTeamPicker.addStyleName("startTeamPicker-btn");
+   //     startTeamPicker.setText("Create teams");
+  //      startTeamPicker.setHTML("Custom Team Builder<span class=\"glyphicon glyphicon-hand-right\" aria-hidden=\"true\"></span>");
+   //     startTeamPicker.addStyleName("startTeamPicker-btn");
         matchmakingBy3.setVisible(false);
         matchmakingBy5.setVisible(false);
-        startTeamPicker.setVisible(false);
+      //  startTeamPicker.setVisible(false);
     }
 
     public static void setBootstrapAlert(String s){
@@ -210,7 +213,7 @@ public class GUI {
         // Style the buttons
         matchmakingBy3.addStyleName("btn btn-default");
         matchmakingBy5.addStyleName("btn btn-default");
-        startTeamPicker.addStyleName("btn btn-default");
+ //       startTeamPicker.addStyleName("btn btn-default");
         playerPanel.addStyleName("list-group");
         rosterTable.addStyleName("table");
     }
@@ -256,7 +259,7 @@ public class GUI {
         middleMainPanel.addStyleName("middle-main");
     }
 
-    private static void assembleDockPanel(){
+    private static void assembleDockPanel() {
         // Assemble the dock panel
         dockPanel.add(headerPanel, DockPanel.NORTH);
         dockPanel.add(footerPanel, DockPanel.SOUTH);
@@ -268,9 +271,10 @@ public class GUI {
         dockLayoutPanel.addNorth(headerPanel, 3);
         dockLayoutPanel.addSouth(footerPanel, 3);
         dockLayoutPanel.addEast(eastPanel, 0);
-        dockLayoutPanel.addWest(controlPanel, 20);
+        dockLayoutPanel.addWest(controlPanel, 24);
         dockLayoutPanel.add(middleMainPanel);
     }
+
 
 
 

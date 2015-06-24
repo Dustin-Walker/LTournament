@@ -24,6 +24,7 @@ public class TournamentHandler {
     final String playerNotFoundWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>";
     final String rateLimitWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Slow down!</strong><br />You are sending too many requests.</div>";
     final String serverErrorWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />The remote server encountered an error.</div>";
+    final String successAlert = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Player added.</div>";
 
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
@@ -70,7 +71,6 @@ public class TournamentHandler {
                             GUI.setBootstrapAlert(serverErrorWarning);
                             break;
                         case 200: // Success
-
                             if(!GUI.playerPanel.isVisible())
                                 GUI.playerPanel.setVisible(true);
                             String responseText = response.getText();
@@ -89,20 +89,12 @@ public class TournamentHandler {
                                     int column = playerListSize%10;
                                     final Player localPlayer = playerDataList.get(playerListSize);
                                     localPlayer.setRank(response.getText());
-
                                     final HorizontalPanel playerPanel = new HorizontalPanel();
-
                                     playerPanel.add(new Label(localPlayer.getSummonerName()));
-
-                                    //GUI.rosterTable.setHTML(row, column, html);
-                                    //GUI.rosterTable.getFlexCellFormatter().setStyleName(row, column, localPlayer.getRank());
-
                                     final Button removePlayerButton = new Button();
                                     removePlayerButton.setStyleName("btn btn-default");
                                     removePlayerButton.setHTML("<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span>");
-
                                     playerPanel.add(removePlayerButton);
-
                                     removePlayerButton.addClickHandler(new ClickHandler() {
                                         @Override
                                         public void onClick(ClickEvent event) {
@@ -113,43 +105,47 @@ public class TournamentHandler {
                                             Tournament.summonerNameList.remove(playerName);
                                             if (Tournament.summonerNameList.isEmpty())
                                                 playerPanel.setVisible(false);
+                                            if (playerDataList.size() < 6 && GUI.matchmakingBy3.isVisible())
+                                                GUI.matchmakingBy3.setVisible(false);
+                                            if (playerDataList.size() < 10 && GUI.matchmakingBy5.isVisible())
+                                                GUI.matchmakingBy5.setVisible(false);
                                         }
                                     });
-
                                     GUI.rosterTable.setWidget(row, column, playerPanel);
+                                    GUI.setBootstrapAlert(successAlert);
 
+                                    // Display the matchmaking buttons if appropriate
+                                    if(playerDataList.size()>=6)
+                                        GUI.matchmakingBy3.setVisible(true);
+                                    if(playerDataList.size()>=10)
+                                        GUI.matchmakingBy5.setVisible(true);
                                 }
 
                                 @Override
                                 public void onError(Request request, Throwable exception) {
-
+                                    GUI.setBootstrapAlert(serverErrorWarning);
                                 }
-
                             });
                             try {
                                 builder1.send();
                             } catch (RequestException e) {
                                 e.printStackTrace();
+                                GUI.setBootstrapAlert(serverErrorWarning);
                             }
                     }
                 }
                 @Override
                 public void onError(Request request, Throwable exception) {
-                    GUI.rosterListLabel.setText("error");
+                    GUI.setBootstrapAlert(serverErrorWarning);
                 }
             });
             try {
                 builder.send();
             } catch (RequestException e) {
                 e.printStackTrace();
+                GUI.setBootstrapAlert(serverErrorWarning);
             }
         }
-    }
-
-
-    // TODO Create the reset button method
-    public boolean resetPlayerList(){
-        return true;
     }
 
     // TODO Create the method handler to move to the second phase
