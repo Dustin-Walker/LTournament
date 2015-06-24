@@ -17,11 +17,9 @@ import java.util.ArrayList;
  */
 public class TournamentHandler {
 
-    // URLs for REST calls
-    private static final String BY_NAME_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
-    private static final String BY_ID_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
+    private final String BY_ID_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
     //API Key goes here
-    private static final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
+    private final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
     // Bootstrap alerts
     final String playerNotFoundWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>";
     final String rateLimitWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Slow down!</strong><br />You are sending too many requests.</div>";
@@ -43,11 +41,16 @@ public class TournamentHandler {
         // Use the player name as the hash key
         final String playerName = GUI.getPlayerName();
 
+        // This lines prevents an error where the reset button was not clearing the playerDataList which was causing a bug
+        if (Tournament.summonerNameList.isEmpty())
+            playerDataList.clear();
+
         if (Tournament.summonerNameList.containsKey(playerName)){
             // This is a duplicate entry
             GUI.setBootstrapAlert("<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is<br />already in the game.</div>");
         } else {
-            String summonerNameURL = BY_NAME_URL+playerName+APIKEY;
+            String BY_NAME_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
+            String summonerNameURL = BY_NAME_URL +playerName+APIKEY;
             // Send request to the server
             RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, summonerNameURL);
             builder.setCallback(new RequestCallback() {
@@ -81,7 +84,7 @@ public class TournamentHandler {
                             builder1.setCallback(new RequestCallback() {
                                 @Override
                                 public void onResponseReceived(Request request, Response response) {
-                                    int playerListSize = (playerDataList.size()-1);
+                                    int playerListSize = playerDataList.size()-1;
                                     int row = playerListSize/10;
                                     int column = playerListSize%10;
                                     final Player localPlayer = playerDataList.get(playerListSize);
@@ -103,8 +106,8 @@ public class TournamentHandler {
                                     removePlayerButton.addClickHandler(new ClickHandler() {
                                         @Override
                                         public void onClick(ClickEvent event) {
-                                            final int rowIndex = playerDataList.indexOf(localPlayer)/10;
-                                            final int colIndex = playerDataList.indexOf(localPlayer)%10;
+                                            final int rowIndex = playerDataList.indexOf(localPlayer) / 10;
+                                            final int colIndex = playerDataList.indexOf(localPlayer) % 10;
                                             GUI.rosterTable.removeCell(rowIndex, colIndex);
                                             playerDataList.remove(localPlayer);
                                             Tournament.summonerNameList.remove(playerName);

@@ -25,7 +25,7 @@ public class Tournament {
      */
 
   /*          //Non-GWT objects
-    ArrayList playerDataList = new ArrayList();
+    ArrayList playerList = new ArrayList();
     ArrayList<String> summonerNameList = new ArrayList<String>();
     final private String[] teamNameArray = {"Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7",
             "Team 8", "Team 9", "Team 10", "Team 11", "Team 12", "Team 13", "Team 14", "Team 15", "Team 16",
@@ -66,7 +66,7 @@ public class Tournament {
                 int row = rosterTable.getRowCount();
                 String playerName = response.getText();
                 Player newPlayerData = new Player(playerName);
-                    playerDataList.add(newPlayerData);
+                    playerList.add(newPlayerData);
                     String leagueEntryURL = leagueEntries_URL+newPlayerData.getPlayerID()+"/entry"+APIKEY;
                     RequestBuilder builder2 =new RequestBuilder(RequestBuilder.GET, leagueEntryURL);
                     builder2.setCallback(new RequestCallback() {
@@ -74,7 +74,7 @@ public class Tournament {
                         public void onResponseReceived(Request request, Response response) {
                             final int row = rosterTable.getRowCount();
                             String getResponse = response.getText();
-                            final Player localPlayerData = playerDataList.get(playerDataList.size()-1);
+                            final Player localPlayerData = playerList.get(playerList.size()-1);
                             String playerRankIcon="";
                             // TODO Move this into its own method
                             if(getResponse.contains("CHALLENGER")){
@@ -100,7 +100,7 @@ public class Tournament {
                                 playerRankIcon = ("<img src=\"img/unranked_icon_24.png\" >");
                             }
                             rosterTable.setHTML(row-1,0,playerRankIcon );
-                            playerDataList.get(playerDataList.size() - 1).setRank(localPlayerData.getRank());
+                            playerList.get(playerList.size() - 1).setRank(localPlayerData.getRank());
                             final Button removePlayerButton = new Button();
                             removePlayerButton.addStyleName("remove-button");
                             rosterTable.setWidget(row-1, 2, removePlayerButton);
@@ -111,9 +111,9 @@ public class Tournament {
                                     setCreatorButtonVis();
                                     rosterTable.removeRow(rowIndex);
                                     summonerNameList.remove(localPlayerData.toString());
-                                    playerDataList.remove(localPlayerData);
+                                    playerList.remove(localPlayerData);
                                     //controlPanel.add(new Label(playerName));
-                                    if(playerDataList.isEmpty()){
+                                    if(playerList.isEmpty()){
                                         playerPanel.setVisible(false);
                                     }
                                 }

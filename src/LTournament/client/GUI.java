@@ -55,6 +55,7 @@ public class GUI {
         createTeamsClickHandler();
         addPlayerKeyHandler();
         addPlayerButtonHandler();
+        resetButtonHandler();
     }
 
     public static String getPlayerName(){
@@ -140,7 +141,9 @@ public class GUI {
             @Override
             public void onClick(ClickEvent event) {
                 playerPanel.setVisible(false);
+                //rosterTable.removeCell(0,0);
                 rosterTable.removeAllRows();
+                //rosterTable.clear();
                 Tournament.summonerNameList.clear();
             }
         });
