@@ -90,9 +90,11 @@ public class TournamentHandler {
                                     final Player localPlayer = playerDataList.get(playerListSize);
                                     localPlayer.setRank(response.getText());
                                     final HorizontalPanel playerPanel = new HorizontalPanel();
-                                    playerPanel.add(new Label(localPlayer.getSummonerName()));
+                                    final Label nameLabel = new Label(localPlayer.getSummonerName());
+                                    nameLabel.addStyleName("h4");
+                                    playerPanel.add(nameLabel);
                                     final Button removePlayerButton = new Button();
-                                    removePlayerButton.setStyleName("btn btn-default");
+                                    removePlayerButton.setStyleName("btn btn-default remove-btn");
                                     removePlayerButton.setHTML("<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span>");
                                     playerPanel.add(removePlayerButton);
                                     removePlayerButton.addClickHandler(new ClickHandler() {
@@ -112,6 +114,7 @@ public class TournamentHandler {
                                         }
                                     });
                                     GUI.rosterTable.setWidget(row, column, playerPanel);
+                                    GUI.rosterTable.getCellFormatter().setStyleName(row, column, localPlayer.getRank());
                                     GUI.setBootstrapAlert(successAlert);
 
                                     // Display the matchmaking buttons if appropriate

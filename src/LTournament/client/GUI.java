@@ -75,44 +75,6 @@ public class GUI {
             }
         });
 
-
-        /*
-        createTeamsButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-           int numTeams = playerList.size() / 5;
-           //     int leftoverPlayers = playerList.size() % 5;
-                VerticalPanel teamStackPanel = new VerticalPanel();
-                if (numTeams < 2) {
-                    if (!teamWarning.isAttached())
-                        teamListPanel.add(teamWarning);
-                } else {
-                    teamWarning.setVisible(false);
-                    createTeamsButton.setVisible(false);
-                    ArrayList<ArrayList<Player>> teamList = generateRandomTeams();
-                    for (ArrayList<Player> team : teamList) {
-                        VerticalPanel teamPanel = new VerticalPanel();
-                        for (Player player : team) {
-                            Label playerLabel = new Label(player.getSummonerName());
-                            playerLabel.addStyleName("team-player");
-                            teamPanel.add(playerLabel);
-                        }
-                        Label teamLabel = new Label();
-                       // teamLabel.setText(randomTeamName());
-                        teamLabel.addStyleName("team-name");
-                        teamStackPanel.add(teamLabel);
-                        teamStackPanel.add(teamPanel);
-                    }
-                    teamListPanel.add(teamStackPanel);
-                    addPlayerButton.setEnabled(false);
-                    resetRosterButton.setEnabled(false);
-                    newPlayerNameTextBox.setEnabled(false);
-                    for (int i = 0; i < rosterTable.getRowCount(); i++)
-                        rosterTable.getCellFormatter().setVisible(i, 2, false);
-                }
-            }
-        });*/
-
     }
 
     public static void addPlayerKeyHandler(){
@@ -185,6 +147,7 @@ public class GUI {
         controlPanel.add(rosterTableHeader);
         controlPanel.add(bootstrapAlert);
         controlPanel.add(addPanel);
+        addPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         addPanel.add(addPlayerButton);
         controlPanel.add(resetRosterButton);
         controlPanel.addStyleName("control-panel");

@@ -88,12 +88,7 @@ body{
 }
 
 .add-button{
-    margin-left: 20%;
     margin-top: 5%;
-}
-
-.reset-button{
-    margin-left: 20%;
 }
 
 .gwt-PopupPanel{
@@ -198,4 +193,8 @@ body{
 .UNRANKED{
     background-color: lightpink !important;
 
+}
+
+.remove-btn{
+    margin-left: 4px;
 }
