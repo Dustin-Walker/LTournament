@@ -30,6 +30,7 @@ public class TournamentHandler {
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
 
+
     /**
      * This method makes two calls to the league of legends API. The first call uses the summoner name to gather
      * more information, specifically the summoner ID number. The second call uses the summoner ID number to obtain
@@ -40,11 +41,11 @@ public class TournamentHandler {
 
 
         // Use the player name as the hash key
-        String playerName = GUI.getPlayerName();
+        final String playerName = GUI.getPlayerName();
 
         if (Tournament.summonerNameList.containsKey(playerName)){
             // This is a duplicate entry
-            GUI.setBootstrapAlert("<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is already in the game.</div>");
+            GUI.setBootstrapAlert("<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is<br />already in the game.</div>");
         } else {
             String summonerNameURL = BY_NAME_URL+playerName+APIKEY;
             // Send request to the server
@@ -73,6 +74,7 @@ public class TournamentHandler {
                             // Create new player object using response
                             Player player = new Player(responseText);
                             playerDataList.add(player);
+                            Tournament.summonerNameList.put(playerName, player);
                             String summonerByIDURL = BY_ID_URL +player.getPlayerID()+"/entry"+APIKEY;
                             // Continue to build the player data with the next call
                             RequestBuilder builder1 = new RequestBuilder(RequestBuilder.GET, summonerByIDURL);
@@ -105,7 +107,8 @@ public class TournamentHandler {
                                             final int colIndex = playerDataList.indexOf(localPlayer)%10;
                                             GUI.rosterTable.removeCell(rowIndex, colIndex);
                                             playerDataList.remove(localPlayer);
-                                            if (playerDataList.isEmpty())
+                                            Tournament.summonerNameList.remove(playerName);
+                                            if (Tournament.summonerNameList.isEmpty())
                                                 playerPanel.setVisible(false);
                                         }
                                     });
