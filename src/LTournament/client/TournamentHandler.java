@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Stack;
 
 /**
  * Created by user on 6/4/15.
@@ -28,6 +31,7 @@ public class TournamentHandler {
 
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
+    ArrayList<Team> teamArrayList = new ArrayList<Team>();
 
 
     /**
@@ -114,7 +118,7 @@ public class TournamentHandler {
                                         }
                                     });
                                     GUI.rosterTable.setWidget(row, column, playerPanel);
-                                    GUI.rosterTable.getCellFormatter().setStyleName(row, column, localPlayer.getRank());
+                                    GUI.rosterTable.getCellFormatter().setStyleName(row, column, localPlayer.getRank().name());
                                     GUI.setBootstrapAlert(successAlert);
 
                                     // Display the matchmaking buttons if appropriate
@@ -151,15 +155,46 @@ public class TournamentHandler {
         }
     }
 
-    // TODO Create the method handler to move to the second phase
-    public boolean startTeamPhase(){
-        return true;
-    }
+    /**
+     * This method creates teams of players.
+     * @param playersPerTeam Number of players on each team
+     */
+    public void createTeams(int playersPerTeam){
+        assert !(playerDataList.isEmpty());
 
-    // TODO Create method handler to move to the final phase
-    public boolean startTournamentPhase(){
-        return true;
-    }
+        // Sort players by rank, pop off stack onto teams
+        Collections.sort(playerDataList);
 
+        // Set up player stack
+        Stack<Player> playerStack = new Stack<Player>();
+        for (Player player : playerDataList) { playerStack.push(player); }
+
+        // Set up teams
+        for (int i = 0; i < playerStack.size(); i+=playersPerTeam) {
+            Team team = new Team();
+            for (int j = 0; j < playersPerTeam; j++) {
+                Player localPlayer = playerStack.pop();
+                team.put(localPlayer.getSummonerName(), localPlayer);
+            }
+            team.teamName = team.randomTeamName();
+            teamArrayList.add(team);
+        }
+
+        // Reserve player team
+        if (!(playerStack.isEmpty())){
+            Team team = new Team();
+            for (int i = 0; i < playerStack.size(); i++) {
+                Player localPlayer = playerStack.pop();
+                team.put(localPlayer.getSummonerName(), localPlayer);
+            }
+            team.teamName = "Surplus Players";
+            teamArrayList.add(team);
+        }
+
+
+        GUI.setBootstrapAlert(teamArrayList.get(teamArrayList.size()-1).teamName);
+
+
+    }
 
 }

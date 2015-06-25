@@ -56,6 +56,8 @@ public class GUI {
         addPlayerKeyHandler();
         addPlayerButtonHandler();
         resetButtonHandler();
+        matchmakingBy3ClickHandler();
+        matchmakingBy5ClickHandler();
     }
 
     public static String getPlayerName(){
@@ -85,6 +87,24 @@ public class GUI {
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                     tournamentHandler.addPlayer();
                 }
+            }
+        });
+    }
+
+    public static void matchmakingBy3ClickHandler(){
+        matchmakingBy3.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                tournamentHandler.createTeams(3);
+            }
+        });
+    }
+
+    public static void matchmakingBy5ClickHandler(){
+        matchmakingBy5.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                tournamentHandler.createTeams(5);
             }
         });
     }
@@ -194,7 +214,6 @@ public class GUI {
         for (int i = 0; i < 10; i++) {
             rosterTable.insertRow(i);
         }
-
     }
 
     private static void assembleHeaderPanel(){
