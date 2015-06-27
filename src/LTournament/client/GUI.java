@@ -16,14 +16,13 @@ public class GUI {
     private static HorizontalPanel footerPanel = new HorizontalPanel();
     private static HorizontalPanel headerPanel = new HorizontalPanel();
     private static HorizontalPanel rosterTableHeader = new HorizontalPanel();
-    private static VerticalPanel middleMainPanel = new VerticalPanel();
+    public static VerticalPanel middleMainPanel = new VerticalPanel();
     private static VerticalPanel teamListPanel = new VerticalPanel();
     private static VerticalPanel controlPanel = new VerticalPanel();
     public static FlexTable rosterTable = new FlexTable();
     private static TextBox newPlayerNameTextBox = new TextBox();
     private static Button addPlayerButton = new Button();
     private static Button resetRosterButton = new Button();
-    private static Button createTeamsButton = new Button();
     public static Button matchmakingBy3 = new Button();
     public static Button matchmakingBy5 = new Button();
     //public static Button startTeamPicker = new Button();
@@ -46,13 +45,12 @@ public class GUI {
         assembleControlPanel();
         assemblePlayerPanel();
         assembleHeaderPanel();
-        assembleTeamListPanel();
+      //  assembleTeamListPanel();
         assembleBracketPanel();
         assembleMiddlePanel();
      //   assembleDockPanel();
         assembleDockLayoutPanel();
         styleForStartup();
-        createTeamsClickHandler();
         addPlayerKeyHandler();
         addPlayerButtonHandler();
         resetButtonHandler();
@@ -68,16 +66,6 @@ public class GUI {
         return rosterTable.getRowCount();
     }
 
-    private static void createTeamsClickHandler(){
-        createTeamsButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-
-
-            }
-        });
-
-    }
 
     public static void addPlayerKeyHandler(){
         newPlayerNameTextBox.addKeyDownHandler(new KeyDownHandler() {
@@ -96,6 +84,7 @@ public class GUI {
             @Override
             public void onClick(ClickEvent event) {
                 tournamentHandler.createTeams(3);
+                tournamentHandler.createTeamsOnGUI();
             }
         });
     }
@@ -105,6 +94,7 @@ public class GUI {
             @Override
             public void onClick(ClickEvent event) {
                 tournamentHandler.createTeams(5);
+                tournamentHandler.createTeamsOnGUI();
             }
         });
     }
@@ -221,12 +211,12 @@ public class GUI {
         headerPanel.addStyleName("header");
         headerPanel.setWidth("100%");
     }
-
+/*
     private static void assembleTeamListPanel(){
         teamListPanel.add(createTeamsButton);
         createTeamsButton.setText("Create Teams");
         createTeamsButton.addStyleName("create-teams-button");
-    }
+    }*/
 
     private static void assembleBracketPanel(){
         bracketPanel.add(new Label("Bracket Panel"));

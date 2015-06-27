@@ -3,15 +3,10 @@ package LTournament.client;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.*;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Stack;
 
 /**
@@ -31,7 +26,7 @@ public class TournamentHandler {
 
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
-    ArrayList<Team> teamArrayList = new ArrayList<Team>();
+    ArrayList<Team> teams = new ArrayList<Team>();
 
 
     /**
@@ -170,14 +165,14 @@ public class TournamentHandler {
         for (Player player : playerDataList) { playerStack.push(player); }
 
         // Set up teams
-        for (int i = 0; i < playerStack.size(); i+=playersPerTeam) {
+        for (int i = 0; i <= playerStack.size(); i+=playersPerTeam) {
             Team team = new Team();
             for (int j = 0; j < playersPerTeam; j++) {
                 Player localPlayer = playerStack.pop();
                 team.put(localPlayer.getSummonerName(), localPlayer);
             }
             team.teamName = team.randomTeamName();
-            teamArrayList.add(team);
+            teams.add(team);
         }
 
         // Reserve player team
@@ -188,13 +183,46 @@ public class TournamentHandler {
                 team.put(localPlayer.getSummonerName(), localPlayer);
             }
             team.teamName = "Surplus Players";
-            teamArrayList.add(team);
+            teams.add(team);
         }
 
 
-        GUI.setBootstrapAlert(teamArrayList.get(teamArrayList.size()-1).teamName);
+        GUI.setBootstrapAlert(teams.get(teams.size()-1).teamName);
 
 
+    }
+
+    // TODO Create method to swap players on teams
+    /**
+     * This method sets up the team panels on the display.
+     */
+    public void createTeamsOnGUI(){
+
+        // Convert flow panel to grid?
+        FlowPanel flowPanel = new FlowPanel();
+        for(Team team : teams){
+            VerticalPanel teamPanel = new VerticalPanel();
+            Label teamNameLabel = new Label(team.teamName);
+            HTML teamListHTML = new HTML();
+            final String listOpener = "<ul class=\"list-group\">";
+            final String listCloser = "</ul>";
+            final String listItemOpener = "<li class=\"list-group-item\">";
+            final String listItemCloser = "</li>";
+            String teamListString = listOpener;
+            for(Player player : team.values()){
+                teamListString = teamListString.concat(listItemOpener);
+                teamListString = teamListString.concat(player.getSummonerName());
+                teamListString = teamListString.concat(listItemCloser);
+            }
+            teamListString = teamListString.concat(listCloser);
+            teamListHTML.setHTML(teamListString);
+            teamPanel.add(teamNameLabel);
+            teamPanel.add(teamListHTML);
+            flowPanel.add(teamPanel);
+        }
+        GUI.middleMainPanel.remove(GUI.playerPanel);
+        GUI.middleMainPanel.setWidth("100%");
+        GUI.middleMainPanel.add(flowPanel);
     }
 
 }
