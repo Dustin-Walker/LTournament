@@ -30,6 +30,10 @@ public class Player implements Comparable<Player>{
         this.summonerName = response.split("[:]")[3].split("[,]")[0].replace("\"", "");
     }
 
+    public void setSummonerNameSample(String name){
+        this.summonerName = name;
+    }
+
     public String getPlayerID() {
         return playerID;
     }

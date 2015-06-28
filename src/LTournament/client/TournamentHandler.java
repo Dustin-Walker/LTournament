@@ -23,10 +23,14 @@ public class TournamentHandler {
     final String rateLimitWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Slow down!</strong><br />You are sending too many requests.</div>";
     final String serverErrorWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />The remote server encountered an error.</div>";
     final String successAlert = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Player added.</div>";
+    final String duplicatePlayerWarning = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is<br />already in the game.</div>";
+    final String maxPlayersWarning = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nYou have reached<br />the maximum number of<br />supported players..</div>";
+    final String successfulTeamCreation = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Teams created.</div>";;
 
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
     ArrayList<Team> teams = new ArrayList<Team>();
+
 
 
     /**
@@ -47,7 +51,10 @@ public class TournamentHandler {
 
         if (Tournament.summonerNameList.containsKey(playerName)){
             // This is a duplicate entry
-            GUI.setBootstrapAlert("<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is<br />already in the game.</div>");
+            GUI.setBootstrapAlert(duplicatePlayerWarning);
+        } else if (playerDataList.size()>=100){
+            // This system supports 100 players at most.
+            GUI.setBootstrapAlert(maxPlayersWarning);
         } else {
             String BY_NAME_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
             String summonerNameURL = BY_NAME_URL +playerName+APIKEY;
@@ -165,7 +172,7 @@ public class TournamentHandler {
         for (Player player : playerDataList) { playerStack.push(player); }
 
         // Set up teams
-        for (int i = 0; i <= playerStack.size(); i+=playersPerTeam) {
+        for (int i = 0; i <= playerStack.size()/playersPerTeam; i++) {
             Team team = new Team();
             for (int j = 0; j < playersPerTeam; j++) {
                 Player localPlayer = playerStack.pop();
@@ -187,7 +194,7 @@ public class TournamentHandler {
         }
 
 
-        GUI.setBootstrapAlert(teams.get(teams.size()-1).teamName);
+        GUI.setBootstrapAlert("Number of teams: "+String.valueOf(teams.size()));
 
 
     }
@@ -197,32 +204,51 @@ public class TournamentHandler {
      * This method sets up the team panels on the display.
      */
     public void createTeamsOnGUI(){
-
-        // Convert flow panel to grid?
-        FlowPanel flowPanel = new FlowPanel();
-        for(Team team : teams){
+        FlexTable teamTable = new FlexTable();
+        for (int index = 0, teamsSize = teams.size(), column = 0, row = 0; index < teamsSize; index++, column++) {
+            Team team = teams.get(index);
+            if (column >= 9) {
+                column = 0;
+               // teamTable.insertRow(row);
+                row++;
+            }
             VerticalPanel teamPanel = new VerticalPanel();
             Label teamNameLabel = new Label(team.teamName);
-            HTML teamListHTML = new HTML();
+            HTML teamHTML = new HTML();
             final String listOpener = "<ul class=\"list-group\">";
             final String listCloser = "</ul>";
-            final String listItemOpener = "<li class=\"list-group-item\">";
+            final String listItemOpener = "<li class=\"list-group-item ";
+         //   final String listColorStyleOpener = "style=\"background-color:";
+        //    final String listColorStyleCloser = "\">";
             final String listItemCloser = "</li>";
-            String teamListString = listOpener;
-            for(Player player : team.values()){
-                teamListString = teamListString.concat(listItemOpener);
-                teamListString = teamListString.concat(player.getSummonerName());
-                teamListString = teamListString.concat(listItemCloser);
+            String teamHTMLString = listOpener;
+            for (Player player : team.values()) {
+                teamHTMLString = teamHTMLString.concat(listItemOpener);
+           //     teamHTMLString = teamHTMLString.concat(listColorStyleOpener);
+                teamHTMLString = teamHTMLString.concat(player.getRank().name()+"\">");
+            //    teamHTMLString = teamHTMLString.concat(listColorStyleCloser);
+                teamHTMLString = teamHTMLString.concat(player.getSummonerName());
+                teamHTMLString = teamHTMLString.concat(listItemCloser);
             }
-            teamListString = teamListString.concat(listCloser);
-            teamListHTML.setHTML(teamListString);
+            teamHTMLString = teamHTMLString.concat(listCloser);
+            teamHTML.setHTML(teamHTMLString);
             teamPanel.add(teamNameLabel);
-            teamPanel.add(teamListHTML);
-            flowPanel.add(teamPanel);
+            teamPanel.add(teamHTML);
+            teamTable.setWidget(row, column, teamPanel);
         }
         GUI.middleMainPanel.remove(GUI.playerPanel);
         GUI.middleMainPanel.setWidth("100%");
-        GUI.middleMainPanel.add(flowPanel);
+        GUI.middleMainPanel.add(teamTable);
+    //    GUI.setBootstrapAlert(successfulTeamCreation);
+
+    }
+
+    private void createSamplePlayerData(){
+        for (int i = 0; i < 50; i++) {
+            Player player = new Player("gold");
+            player.setSummonerNameSample("Player"+i);
+            playerDataList.add(player);
+        }
     }
 
 }
