@@ -6,6 +6,7 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -158,44 +159,46 @@ public class TournamentHandler {
     }
 
     /**
-     * This method creates teams of players.
+     * This method sets up the teams of players
      * @param playersPerTeam Number of players on each team
      */
     public void createTeams(int playersPerTeam){
         assert !(playerDataList.isEmpty());
 
-        // Sort players by rank, pop off stack onto teams
-        Collections.sort(playerDataList);
+        int numberOfTeams = playerDataList.size() / playersPerTeam;
 
-        // Set up player stack
+        // Sort players by rank and set up a stack
+        Collections.sort(playerDataList);
         Stack<Player> playerStack = new Stack<Player>();
         for (Player player : playerDataList) { playerStack.push(player); }
 
-        // Set up teams
-        for (int i = 0; i <= playerStack.size()/playersPerTeam; i++) {
+        // Set up the teams
+        for (int i = 0; i < numberOfTeams; i++) {
             Team team = new Team();
-            for (int j = 0; j < playersPerTeam; j++) {
-                Player localPlayer = playerStack.pop();
-                team.put(localPlayer.getSummonerName(), localPlayer);
-            }
             team.teamName = team.randomTeamName();
             teams.add(team);
         }
 
-        // Reserve player team
+        for (int i = 0, teamIndex=0; i < numberOfTeams*playersPerTeam; i++, teamIndex++){
+            // Reset the teamIndex
+            if (teamIndex>=numberOfTeams)   teamIndex=0;
+
+            Player player = playerStack.pop();
+
+            teams.get(teamIndex).put(player.getSummonerName(), player);
+
+        }
+
+        // Reserve team
         if (!(playerStack.isEmpty())){
             Team team = new Team();
-            for (int i = 0; i < playerStack.size(); i++) {
-                Player localPlayer = playerStack.pop();
-                team.put(localPlayer.getSummonerName(), localPlayer);
-            }
             team.teamName = "Surplus Players";
+            for (Player player : playerStack)
+                team.put(player.getSummonerName(), player);
             teams.add(team);
         }
 
-
         GUI.setBootstrapAlert("Number of teams: "+String.valueOf(teams.size()));
-
 
     }
 
@@ -245,7 +248,7 @@ public class TournamentHandler {
 
     private void createSamplePlayerData(){
         for (int i = 0; i < 50; i++) {
-            Player player = new Player("gold");
+            Player player = new Player("GOLD");
             player.setSummonerNameSample("Player"+i);
             playerDataList.add(player);
         }
