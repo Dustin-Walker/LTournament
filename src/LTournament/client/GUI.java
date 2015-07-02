@@ -15,7 +15,8 @@ public class GUI {
     public static VerticalPanel addPanel = new VerticalPanel();
     private static HorizontalPanel footerPanel = new HorizontalPanel();
     private static HorizontalPanel headerPanel = new HorizontalPanel();
-    private static HorizontalPanel rosterTableHeader = new HorizontalPanel();
+    private static HorizontalPanel controlPanelHeader = new HorizontalPanel();
+    private static HTML controlPanelHeaderHTML = new HTML();
     public static VerticalPanel middleMainPanel = new VerticalPanel();
     private static VerticalPanel teamListPanel = new VerticalPanel();
     private static VerticalPanel controlPanel = new VerticalPanel();
@@ -25,13 +26,11 @@ public class GUI {
     private static Button resetRosterButton = new Button();
     public static Button matchmakingBy3 = new Button();
     public static Button matchmakingBy5 = new Button();
-    //public static Button startTeamPicker = new Button();
     private static Label playerPanelHeader = new Label("Player Roster");
     private static Label addPlayerNameLabel = new Label();
-    public static Label rosterListLabel = new Label();
+    public static Label controlPanelHeaderLabel = new Label();
     private static DockPanel dockPanel = new DockPanel();
     private static HorizontalPanel bracketPanel = new HorizontalPanel();
-    final static Label teamWarning = new Label("Not enough players for two teams. Add more players.");
     public static VerticalPanel playerPanel = new VerticalPanel();
     public static DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
     private static TournamentHandler tournamentHandler = new TournamentHandler();
@@ -40,15 +39,12 @@ public class GUI {
 
     public static void assembleStartUp(){
         assembleAddPanel();
-        assemblePlayerListPanelHeader();
         assembleFooterPanel();
         assembleControlPanel();
         assemblePlayerPanel();
         assembleHeaderPanel();
-      //  assembleTeamListPanel();
         assembleBracketPanel();
         assembleMiddlePanel();
-     //   assembleDockPanel();
         assembleDockLayoutPanel();
         styleForStartup();
         addPlayerKeyHandler();
@@ -85,6 +81,7 @@ public class GUI {
             public void onClick(ClickEvent event) {
                 tournamentHandler.createTeams(3);
                 tournamentHandler.createTeamsOnGUI();
+                phase2stateChange();
             }
         });
     }
@@ -95,6 +92,7 @@ public class GUI {
             public void onClick(ClickEvent event) {
                 tournamentHandler.createTeams(5);
                 tournamentHandler.createTeamsOnGUI();
+                phase2stateChange();
             }
         });
     }
@@ -113,9 +111,7 @@ public class GUI {
             @Override
             public void onClick(ClickEvent event) {
                 playerPanel.setVisible(false);
-                //rosterTable.removeCell(0,0);
                 rosterTable.removeAllRows();
-                //rosterTable.clear();
                 Tournament.summonerNameList.clear();
                 matchmakingBy5.setVisible(false);
                 matchmakingBy3.setVisible(false);
@@ -137,11 +133,6 @@ public class GUI {
         resetRosterButton.setHTML("<span class=\"glyphicon glyphicon-repeat\" aria-hidden=\"true\"></span>Reset All");
     }
 
-    private static void assemblePlayerListPanelHeader(){
-        rosterTableHeader.add(rosterListLabel);
-        rosterListLabel.setText("Welcome to the League of Legends Tournament System. Begin with adding players by in-game summoner name.");
-    }
-
     private static void assembleFooterPanel(){
         Grid footGrid = new Grid(1,1);
         final String leagueCopyright = "League of Legends Tournament System isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.";
@@ -154,28 +145,22 @@ public class GUI {
 
     private static void assembleControlPanel(){
         controlPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        controlPanel.add(rosterTableHeader);
+        final String phase1HeaderHTML = "<div class=\"panel panel-info\"><div class=\"panel-heading\"><h4>LTournament Information</h4></div><div class=\"panel-body\">Welcome to the League of Legends Tournament System. Begin with adding players by in-game summoner name.</div></div>";
+        controlPanelHeaderHTML.setHTML(phase1HeaderHTML);
+        controlPanel.add(controlPanelHeaderHTML);
         controlPanel.add(bootstrapAlert);
         controlPanel.add(addPanel);
         addPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         addPanel.add(addPlayerButton);
         controlPanel.add(resetRosterButton);
         controlPanel.addStyleName("control-panel");
-        //  controlPanel.setWidth("100%");
         controlPanel.add(matchmakingBy3);
-        //  matchmakingBy3.setText("Automatically create 3 player teams");
         matchmakingBy3.setHTML("Start Twisted Treeline<span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>");
         controlPanel.add(matchmakingBy5);
-        // matchmakingBy5.setText("Automatically create 5 player teams");
         matchmakingBy5.setHTML("Start Summoner's Rift<span class=\"glyphicon glyphicon-play\" aria-hidden=\"true\"></span>");
-   //     controlPanel.add(startTeamPicker);
         controlPanel.setHeight("100%");
-   //     startTeamPicker.setText("Create teams");
-  //      startTeamPicker.setHTML("Custom Team Builder<span class=\"glyphicon glyphicon-hand-right\" aria-hidden=\"true\"></span>");
-   //     startTeamPicker.addStyleName("startTeamPicker-btn");
         matchmakingBy3.setVisible(false);
         matchmakingBy5.setVisible(false);
-      //  startTeamPicker.setVisible(false);
     }
 
     public static void setBootstrapAlert(String s){
@@ -186,7 +171,6 @@ public class GUI {
         // Style the buttons
         matchmakingBy3.addStyleName("btn btn-default");
         matchmakingBy5.addStyleName("btn btn-default");
- //       startTeamPicker.addStyleName("btn btn-default");
         playerPanel.addStyleName("list-group");
         rosterTable.addStyleName("table");
     }
@@ -211,12 +195,6 @@ public class GUI {
         headerPanel.addStyleName("header");
         headerPanel.setWidth("100%");
     }
-/*
-    private static void assembleTeamListPanel(){
-        teamListPanel.add(createTeamsButton);
-        createTeamsButton.setText("Create Teams");
-        createTeamsButton.addStyleName("create-teams-button");
-    }*/
 
     private static void assembleBracketPanel(){
         bracketPanel.add(new Label("Bracket Panel"));
@@ -245,6 +223,23 @@ public class GUI {
         dockLayoutPanel.addEast(eastPanel, 0);
         dockLayoutPanel.addWest(controlPanel, 24);
         dockLayoutPanel.add(middleMainPanel);
+    }
+
+    private static void phase2stateChange(){
+        addPanel.removeFromParent();
+        addPlayerButton.removeFromParent();
+        resetRosterButton.removeFromParent();
+        matchmakingBy5.removeFromParent();
+        matchmakingBy3.removeFromParent();
+        String phase2HeaderHTML = "<div class=\"panel panel-info\"><div class=\"panel-heading\"><h4>LTournament Information</h4></div><div class=\"panel-body\">This is the team selection phase. <strong>Click on two players to swap them.</strong> When you are ready, click the proceed button to begin the tournament.</div></div>";
+        controlPanelHeaderHTML.setHTML(phase2HeaderHTML);
+        GUI.middleMainPanel.remove(GUI.playerPanel);
+        GUI.middleMainPanel.setWidth("100%");
+        setBootstrapAlert(bootstrapAlerts.successfulTeamCreation);
+    }
+
+    public static void highlightPlayerForTrade(){
+
     }
 
 

@@ -13,7 +13,7 @@ import java.util.Random;
 
 /**
  * Created by user on 5/28/15.
- * This class contains methods for generating the tournament.
+ * This class contains methods for handling the tournament bracket.
  */
 public class Tournament {
 

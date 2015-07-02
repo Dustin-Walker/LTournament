@@ -6,7 +6,6 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
@@ -16,23 +15,11 @@ import java.util.Stack;
  */
 public class TournamentHandler {
 
-    private final String BY_ID_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
-    //API Key goes here
     private final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
-    // Bootstrap alerts
-    final String playerNotFoundWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>";
-    final String rateLimitWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Slow down!</strong><br />You are sending too many requests.</div>";
-    final String serverErrorWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />The remote server encountered an error.</div>";
-    final String successAlert = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Player added.</div>";
-    final String duplicatePlayerWarning = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is<br />already in the game.</div>";
-    final String maxPlayersWarning = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nYou have reached<br />the maximum number of<br />supported players..</div>";
-    final String successfulTeamCreation = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Teams created.</div>";;
 
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
     ArrayList<Team> teams = new ArrayList<Team>();
-
-
 
     /**
      * This method makes two calls to the league of legends API. The first call uses the summoner name to gather
@@ -40,9 +27,6 @@ public class TournamentHandler {
      * the rest of the information used to build the player object.
      */
     public void addPlayer(){
-        // TODO This method should make the API call to League's servers
-
-
         // Use the player name as the hash key
         final String playerName = GUI.getPlayerName();
 
@@ -52,10 +36,10 @@ public class TournamentHandler {
 
         if (Tournament.summonerNameList.containsKey(playerName)){
             // This is a duplicate entry
-            GUI.setBootstrapAlert(duplicatePlayerWarning);
+            GUI.setBootstrapAlert(bootstrapAlerts.duplicatePlayerWarning);
         } else if (playerDataList.size()>=100){
             // This system supports 100 players at most.
-            GUI.setBootstrapAlert(maxPlayersWarning);
+            GUI.setBootstrapAlert(bootstrapAlerts.maxPlayersWarning);
         } else {
             String BY_NAME_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
             String summonerNameURL = BY_NAME_URL +playerName+APIKEY;
@@ -66,16 +50,16 @@ public class TournamentHandler {
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){
                         case 404: // Player not found
-                            GUI.setBootstrapAlert(playerNotFoundWarning);
+                            GUI.setBootstrapAlert(bootstrapAlerts.playerNotFoundWarning);
                             break;
                         case 429: // Rate limit exceeded
-                            GUI.setBootstrapAlert(rateLimitWarning);
+                            GUI.setBootstrapAlert(bootstrapAlerts.rateLimitWarning);
                             break;
                         case 500: // Server error
-                            GUI.setBootstrapAlert(serverErrorWarning);
+                            GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
                             break;
                         case 503: // Server error
-                            GUI.setBootstrapAlert(serverErrorWarning);
+                            GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
                             break;
                         case 200: // Success
                             if(!GUI.playerPanel.isVisible())
@@ -85,6 +69,7 @@ public class TournamentHandler {
                             Player player = new Player(responseText);
                             playerDataList.add(player);
                             Tournament.summonerNameList.put(playerName, player);
+                            final String BY_ID_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
                             String summonerByIDURL = BY_ID_URL +player.getPlayerID()+"/entry"+APIKEY;
                             // Continue to build the player data with the next call
                             RequestBuilder builder1 = new RequestBuilder(RequestBuilder.GET, summonerByIDURL);
@@ -122,7 +107,7 @@ public class TournamentHandler {
                                     });
                                     GUI.rosterTable.setWidget(row, column, playerPanel);
                                     GUI.rosterTable.getCellFormatter().setStyleName(row, column, localPlayer.getRank().name());
-                                    GUI.setBootstrapAlert(successAlert);
+                                    GUI.setBootstrapAlert(bootstrapAlerts.successAlert);
 
                                     // Display the matchmaking buttons if appropriate
                                     if(playerDataList.size()>=6)
@@ -133,27 +118,27 @@ public class TournamentHandler {
 
                                 @Override
                                 public void onError(Request request, Throwable exception) {
-                                    GUI.setBootstrapAlert(serverErrorWarning);
+                                    GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
                                 }
                             });
                             try {
                                 builder1.send();
                             } catch (RequestException e) {
                                 e.printStackTrace();
-                                GUI.setBootstrapAlert(serverErrorWarning);
+                                GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
                             }
                     }
                 }
                 @Override
                 public void onError(Request request, Throwable exception) {
-                    GUI.setBootstrapAlert(serverErrorWarning);
+                    GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
                 }
             });
             try {
                 builder.send();
             } catch (RequestException e) {
                 e.printStackTrace();
-                GUI.setBootstrapAlert(serverErrorWarning);
+                GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
             }
         }
     }
@@ -212,7 +197,6 @@ public class TournamentHandler {
             Team team = teams.get(index);
             if (column >= 9) {
                 column = 0;
-               // teamTable.insertRow(row);
                 row++;
             }
             VerticalPanel teamPanel = new VerticalPanel();
@@ -221,15 +205,11 @@ public class TournamentHandler {
             final String listOpener = "<ul class=\"list-group\">";
             final String listCloser = "</ul>";
             final String listItemOpener = "<li class=\"list-group-item ";
-         //   final String listColorStyleOpener = "style=\"background-color:";
-        //    final String listColorStyleCloser = "\">";
             final String listItemCloser = "</li>";
             String teamHTMLString = listOpener;
             for (Player player : team.values()) {
                 teamHTMLString = teamHTMLString.concat(listItemOpener);
-           //     teamHTMLString = teamHTMLString.concat(listColorStyleOpener);
                 teamHTMLString = teamHTMLString.concat(player.getRank().name()+"\">");
-            //    teamHTMLString = teamHTMLString.concat(listColorStyleCloser);
                 teamHTMLString = teamHTMLString.concat(player.getSummonerName());
                 teamHTMLString = teamHTMLString.concat(listItemCloser);
             }
@@ -239,11 +219,7 @@ public class TournamentHandler {
             teamPanel.add(teamHTML);
             teamTable.setWidget(row, column, teamPanel);
         }
-        GUI.middleMainPanel.remove(GUI.playerPanel);
-        GUI.middleMainPanel.setWidth("100%");
         GUI.middleMainPanel.add(teamTable);
-    //    GUI.setBootstrapAlert(successfulTeamCreation);
-
     }
 
     private void createSamplePlayerData(){
@@ -252,6 +228,21 @@ public class TournamentHandler {
             player.setSummonerNameSample("Player"+i);
             playerDataList.add(player);
         }
+    }
+
+    /**
+     * This method swaps two players from team to team.
+     * @param team1 Original team of player1, destination team of player2
+     * @param team2 Original team of player2, destination team of player1
+     * @param player1 Player to swap
+     * @param player2 Player to swap
+     */
+    public void swapPlayers(Team team1, Team team2, Player player1, Player player2){
+        team2.put(player1.getSummonerName(), player1);
+        team1.remove(player1.getSummonerName());
+
+        team1.put(player2.getSummonerName(), player2);
+        team2.remove(player2.getSummonerName());
     }
 
 }
