@@ -1,5 +1,7 @@
 package LTournament.client;
 
+import com.google.gwt.dom.client.ButtonElement;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.*;
@@ -183,7 +185,7 @@ public class TournamentHandler {
             teams.add(team);
         }
 
-        GUI.setBootstrapAlert("Number of teams: "+String.valueOf(teams.size()));
+        GUI.setBootstrapAlert("Number of teams: " + String.valueOf(teams.size()));
 
     }
 
@@ -192,7 +194,6 @@ public class TournamentHandler {
      * This method sets up the team panels on the display.
      */
     public void createTeamsOnGUI(){
-        FlexTable teamTable = new FlexTable();
         for (int index = 0, teamsSize = teams.size(), column = 0, row = 0; index < teamsSize; index++, column++) {
             Team team = teams.get(index);
             if (column >= 9) {
@@ -200,49 +201,46 @@ public class TournamentHandler {
                 row++;
             }
             VerticalPanel teamPanel = new VerticalPanel();
-            Label teamNameLabel = new Label(team.teamName);
-            HTML teamHTML = new HTML();
-            final String listOpener = "<ul class=\"list-group\">";
-            final String listCloser = "</ul>";
-            final String listItemOpener = "<li class=\"list-group-item ";
-            final String listItemCloser = "</li>";
-            String teamHTMLString = listOpener;
-            for (Player player : team.values()) {
-                teamHTMLString = teamHTMLString.concat(listItemOpener);
-                teamHTMLString = teamHTMLString.concat(player.getRank().name()+"\">");
-                teamHTMLString = teamHTMLString.concat(player.getSummonerName());
-                teamHTMLString = teamHTMLString.concat(listItemCloser);
+            // Team panel will now include a header and a button for each player
+            teamPanel.add(new Label(team.teamName));
+            for(Player player : team.values()){
+                // Label for each player
+                Button playerButton = new Button();
+                playerButton.setHTML("<h4>" + player.getSummonerName() + "</h4>");
+                playerButton.setTitle(player.getSummonerName());
+                playerButton.setStyleName("btn btn-default btn-block active " + player.getRank().name());
+                playerButton.addClickHandler(swapHandler);
+
+                teamPanel.add(playerButton);
             }
-            teamHTMLString = teamHTMLString.concat(listCloser);
-            teamHTML.setHTML(teamHTMLString);
-            teamPanel.add(teamNameLabel);
-            teamPanel.add(teamHTML);
-            teamTable.setWidget(row, column, teamPanel);
+            GUI.teamTable.setWidget(row, column, teamPanel);
         }
-        GUI.middleMainPanel.add(teamTable);
+        if (!(GUI.teamTable.isAttached())){ GUI.middleMainPanel.add(GUI.teamTable); }
     }
 
-    private void createSamplePlayerData(){
-        for (int i = 0; i < 50; i++) {
-            Player player = new Player("GOLD");
-            player.setSummonerNameSample("Player"+i);
-            playerDataList.add(player);
+    private ClickHandler swapHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            // Set the player as active in teh swap
+            setActiveSwapPlayerNames(event.getRelativeElement().getTitle());
+            createTeamsOnGUI();
         }
+    };
+
+    public void setActiveSwapPlayerNames(String activeSwapPlayerName) {
+        if(this.activeSwapPlayerNames[0]==null){
+            this.activeSwapPlayerNames[0] = activeSwapPlayerName;
+        } else {
+            if (this.activeSwapPlayerNames[1]==null) {
+                this.activeSwapPlayerNames[1] = activeSwapPlayerName;
+            } else {
+                this.activeSwapPlayerNames[0] = activeSwapPlayerName;
+            }
+        }
+        GUI.setBootstrapAlert(bootstrapAlerts.setPlayerSwap(activeSwapPlayerName));
     }
 
-    /**
-     * This method swaps two players from team to team.
-     * @param team1 Original team of player1, destination team of player2
-     * @param team2 Original team of player2, destination team of player1
-     * @param player1 Player to swap
-     * @param player2 Player to swap
-     */
-    public void swapPlayers(Team team1, Team team2, Player player1, Player player2){
-        team2.put(player1.getSummonerName(), player1);
-        team1.remove(player1.getSummonerName());
+    private String[] activeSwapPlayerNames = new String[2];
 
-        team1.put(player2.getSummonerName(), player2);
-        team2.remove(player2.getSummonerName());
-    }
 
 }

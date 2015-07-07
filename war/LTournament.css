@@ -162,39 +162,36 @@ body{
 
 .SILVER{
     background-color: rgba(163, 163, 163, 0.43) !important;
-
 }
 
 .GOLD{
     background-color: rgba(255, 223, 40, 0.75) !important;
-
 }
 
 .PLATINUM{
     background-color: rgb(235, 235, 235) !important;
-
 }
 
 .DIAMOND{
     background-color: rgba(163, 247, 255, 0.33) !important;
-
 }
 
 .MASTER{
     background-color: rgba(68, 211, 57, 0.56) !important;
-
 }
 
 .CHALLENGER{
     background-color: rgba(255, 16, 14, 0.66) !important;
-
 }
 
 .UNRANKED{
     background-color: lightpink !important;
-
 }
 
 .remove-btn{
     margin-left: 4px;
+}
+
+.highlight {
+    background-color: #5677fc !important;
 }

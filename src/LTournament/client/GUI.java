@@ -15,7 +15,7 @@ public class GUI {
     public static VerticalPanel addPanel = new VerticalPanel();
     private static HorizontalPanel footerPanel = new HorizontalPanel();
     private static HorizontalPanel headerPanel = new HorizontalPanel();
-    private static HorizontalPanel controlPanelHeader = new HorizontalPanel();
+  //  private static HorizontalPanel controlPanelHeader = new HorizontalPanel();
     private static HTML controlPanelHeaderHTML = new HTML();
     public static VerticalPanel middleMainPanel = new VerticalPanel();
     private static VerticalPanel teamListPanel = new VerticalPanel();
@@ -28,7 +28,7 @@ public class GUI {
     public static Button matchmakingBy5 = new Button();
     private static Label playerPanelHeader = new Label("Player Roster");
     private static Label addPlayerNameLabel = new Label();
-    public static Label controlPanelHeaderLabel = new Label();
+  //  public static Label controlPanelHeaderLabel = new Label();
     private static DockPanel dockPanel = new DockPanel();
     private static HorizontalPanel bracketPanel = new HorizontalPanel();
     public static VerticalPanel playerPanel = new VerticalPanel();
@@ -36,6 +36,8 @@ public class GUI {
     private static TournamentHandler tournamentHandler = new TournamentHandler();
     private static HTML bootstrapAlert = new HTML("");
     private static VerticalPanel eastPanel = new VerticalPanel();
+    private static ScrollPanel middleScrollPanel = new ScrollPanel();
+    public static FlexTable teamTable = new FlexTable();
 
     public static void assembleStartUp(){
         assembleAddPanel();
@@ -201,19 +203,25 @@ public class GUI {
         bracketPanel.addStyleName("team-list");
     }
 
+    // TODO Set up scroll panel wrapper for the middle main panel
+
     private static void assembleMiddlePanel(){
         middleMainPanel.add(playerPanel);
         playerPanel.setVisible(false);
         teamListPanel.addStyleName("team-list");
         middleMainPanel.addStyleName("seam");
         middleMainPanel.addStyleName("middle-main");
+    //    middleScrollPanel.add(middleMainPanel);
+
+     //   middleScrollPanel.setSize("400px", "400px");
+
     }
 
     private static void assembleDockPanel() {
         // Assemble the dock panel
         dockPanel.add(headerPanel, DockPanel.NORTH);
         dockPanel.add(footerPanel, DockPanel.SOUTH);
-        dockPanel.add(middleMainPanel, DockPanel.EAST);
+        dockPanel.add(middleScrollPanel, DockPanel.EAST);
         dockPanel.add(controlPanel, DockPanel.WEST);
     }
 
@@ -223,6 +231,7 @@ public class GUI {
         dockLayoutPanel.addEast(eastPanel, 0);
         dockLayoutPanel.addWest(controlPanel, 24);
         dockLayoutPanel.add(middleMainPanel);
+       // dockLayoutPanel.add(middleScrollPanel);
     }
 
     private static void phase2stateChange(){
@@ -241,6 +250,8 @@ public class GUI {
     public static void highlightPlayerForTrade(){
 
     }
+
+
 
 
 
