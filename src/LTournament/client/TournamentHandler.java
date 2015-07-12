@@ -172,6 +172,8 @@ public class TournamentHandler {
 
             Player player = playerStack.pop();
 
+            player.setTeam(teams.get(teamIndex));
+
             teams.get(teamIndex).put(player.getSummonerName(), player);
 
         }
@@ -180,8 +182,10 @@ public class TournamentHandler {
         if (!(playerStack.isEmpty())){
             Team team = new Team();
             team.teamName = "Surplus Players";
-            for (Player player : playerStack)
+            for (Player player : playerStack){
+                player.setTeam(team);
                 team.put(player.getSummonerName(), player);
+            }
             teams.add(team);
         }
 
@@ -228,19 +232,41 @@ public class TournamentHandler {
     };
 
     public void setActiveSwapPlayerNames(String activeSwapPlayerName) {
-        if(this.activeSwapPlayerNames[0]==null){
+        // If the player player is not set
+        if(!isFirstPlayerSet()){
             this.activeSwapPlayerNames[0] = activeSwapPlayerName;
         } else {
-            if (this.activeSwapPlayerNames[1]==null) {
+            // If the first player is set but the second player is not set
+            if (!isSecondPlayerSet()) {
                 this.activeSwapPlayerNames[1] = activeSwapPlayerName;
-            } else {
-                this.activeSwapPlayerNames[0] = activeSwapPlayerName;
             }
         }
         GUI.setBootstrapAlert(bootstrapAlerts.setPlayerSwap(activeSwapPlayerName));
     }
 
     private String[] activeSwapPlayerNames = new String[2];
+
+    private boolean isFirstPlayerSet(){ return activeSwapPlayerNames[0]!=null; }
+    private boolean isSecondPlayerSet(){ return activeSwapPlayerNames[0]!=null; }
+
+    public void resetPlayerSwap(){
+        activeSwapPlayerNames[0]=null;
+        activeSwapPlayerNames[1]=null;
+    }
+
+
+    public void swapPlayers(){
+
+        if(activeSwapPlayerNames[0]==null || activeSwapPlayerNames[1]==null)
+            return;
+
+        // Find the teams
+
+        // Move the players from team to team
+
+        // Delete the players from the original teams
+
+    }
 
 
 }

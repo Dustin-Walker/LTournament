@@ -39,6 +39,7 @@ public class GUI {
     private static ScrollPanel middleScrollPanel = new ScrollPanel();
     public static FlexTable teamTable = new FlexTable();
 
+
     public static void assembleStartUp(){
         assembleAddPanel();
         assembleFooterPanel();
@@ -59,6 +60,9 @@ public class GUI {
     public static String getPlayerName(){
         return newPlayerNameTextBox.getText().trim().toLowerCase();
     }
+    public static void emptyPlayerNameInputBox(){
+        newPlayerNameTextBox.setText("");
+    }
 
     public static int rosterTableRowCount(){
         return rosterTable.getRowCount();
@@ -72,6 +76,7 @@ public class GUI {
 
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                     tournamentHandler.addPlayer();
+                    emptyPlayerNameInputBox();
                 }
             }
         });
@@ -245,13 +250,52 @@ public class GUI {
         GUI.middleMainPanel.remove(GUI.playerPanel);
         GUI.middleMainPanel.setWidth("100%");
         setBootstrapAlert(bootstrapAlerts.successfulTeamCreation);
+
+        Button resetTradeButton = new Button("Reset trade");
+        resetTradeButton.addClickHandler(tradeResetButtonHandler);
+        controlPanel.add(resetTradeButton);
+
+        Button tradeButton = new Button("Swap players");
+        tradeButton.addClickHandler(tradeClickHandler);
+        controlPanel.add(tradeButton);
+    }
+
+    private static ClickHandler tradeClickHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            // Handle the bootstrap alert system
+            setBootstrapAlert(bootstrapAlerts.tradeButtonAlert());
+
+            // Handle the tournamentHandler system
+            tournamentHandler.swapPlayers();
+
+            // Re-draw the GUI
+            drawTeamTables();
+
+            tournamentHandler.resetPlayerSwap();
+        }
+    };
+
+    private static void drawTeamTables() {
+        teamTable.removeFromParent();
+        tournamentHandler.createTeamsOnGUI();
     }
 
     public static void highlightPlayerForTrade(){
 
     }
 
+    public static ClickHandler tradeResetButtonHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            // Handle the bootstrap alert system
+            bootstrapAlerts.resetTradeStatus();
+            setBootstrapAlert(bootstrapAlerts.tradeResetAlert);
 
+            // Handle the tournamentHandler system
+            tournamentHandler.resetPlayerSwap();
+        }
+    };
 
 
 

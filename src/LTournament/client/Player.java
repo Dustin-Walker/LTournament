@@ -21,6 +21,7 @@ public class Player implements Comparable<Player>{
     private String playerID;
     private String summonerName;
     private Rank rank;
+    private Team team;
 
     public void setPlayerID(String response){
         this.playerID = response.split("[:]")[2].split("[,]")[0];
@@ -68,5 +69,13 @@ public class Player implements Comparable<Player>{
     @Override
     public int compareTo(Player o) {
         return rank.compareTo(o.getRank());
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

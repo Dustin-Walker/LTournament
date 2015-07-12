@@ -14,34 +14,59 @@ public class bootstrapAlerts {
     public final static String maxPlayersWarning = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nYou have reached<br />the maximum number of<br />supported players..</div>";
     public final static String successfulTeamCreation = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Teams created.</div>";
 
+    public final static String tradeResetAlert = "<div class=\"alert alert-info\" role=\"alert\"><strong>Trade reset.</strong></div>";
+
     private static String[] swapPlayerName = new String[2];
 
     private static boolean isFirstPlayerSetForTrade = false;
+    private static boolean isSecondPlayerSetForTrade = false;
+
+    public static void resetTradeStatus(){
+        isFirstPlayerSetForTrade=false;
+        isSecondPlayerSetForTrade=false;
+
+    }
+
+    // TODO Method to wrap things in HTML tags
+
+    public static String tradeButtonAlert(){
+        final String htmlOpener = "<div class=\"alert alert-success text-center\" role=\"alert\">";
+        final String boldTagOpen = "<strong>";
+        final String boldTagClose = "</strong>";
+        final String contentMiddle = " and ";
+        final String htmlCloser = "</div>";
+
+        return htmlOpener + makeBold("Success! ") + "\n" + makeBold(swapPlayerName[0]) + contentMiddle
+                + makeBold(swapPlayerName[1]) + " have been traded." + htmlCloser;
+    }
 
     public static String setPlayerSwap(String activeSwapPlayerName) {
+        final String htmlOpener = "<div class=\"alert alert-success text-center\" role=\"alert\">";
+        final String contentMiddle = " and ";
+        final String htmlCloser = "</div>";
+
         // If the first player has not been set to be traded, use this string
-        if (!(isFirstPlayerSetForTrade)){
-            final String htmlOpener = "<div class=\"alert alert-success text-center\" role=\"alert\">";
-            final String contentOpener = "<strong>";
+        if (!isFirstPlayerSetForTrade){
             final String contentCloser = " is ready to be traded.";
-            final String htmlCloser = "</div>";
             isFirstPlayerSetForTrade = true;
             swapPlayerName[0] = activeSwapPlayerName;
-            return htmlOpener + contentOpener + activeSwapPlayerName + contentCloser + htmlCloser;
+            return htmlOpener + makeBold(swapPlayerName[0]) + contentCloser + htmlCloser;
         }
 
-        if (isFirstPlayerSetForTrade){
-            final String htmlOpener = "<div class=\"alert alert-success text-center\" role=\"alert\">";
-            final String contentOpener = "<strong>";
-            final String contentMiddle = " and ";
+        // If the first player is set and the second player is not set
+        if (!isSecondPlayerSetForTrade){
             final String contentCloser = " are ready to be traded.";
-            final String htmlCloser = "</div>";
-            isFirstPlayerSetForTrade = false;
+            isSecondPlayerSetForTrade = true;
             swapPlayerName[1] = activeSwapPlayerName;
-            return htmlOpener + contentOpener + swapPlayerName[0] + contentMiddle + swapPlayerName[1] + contentCloser + htmlCloser;
+            return htmlOpener + makeBold(swapPlayerName[0]) + contentMiddle + makeBold(swapPlayerName[1]) + contentCloser + htmlCloser;
         }
 
-        return "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Something went wrong!</strong>.</div>";
+        // If both players are set
+        final String contentCloser = " are already set to be traded.\nUse the swap button or reset button\nto continue.";
+        return htmlOpener + makeBold(swapPlayerName[0]) + contentMiddle + makeBold(swapPlayerName[1]) + contentCloser + htmlCloser;
+    }
 
+    private static String makeBold(String s){
+        return "<strong>" + s + "</strong>";
     }
 }
