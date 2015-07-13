@@ -1,7 +1,5 @@
 package LTournament.client;
 
-import com.google.gwt.dom.client.ButtonElement;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.*;
@@ -9,6 +7,7 @@ import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Stack;
 
 /**
@@ -22,6 +21,7 @@ public class TournamentHandler {
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
     ArrayList<Team> teams = new ArrayList<Team>();
+    HashMap<String, Player> playerHashMap = new HashMap<String, Player>();
 
     /**
      * This method makes two calls to the league of legends API. The first call uses the summoner name to gather
@@ -226,45 +226,74 @@ public class TournamentHandler {
         @Override
         public void onClick(ClickEvent event) {
             // Set the player as active in teh swap
-            setActiveSwapPlayerNames(event.getRelativeElement().getTitle());
+            setPlayersToSwap(event.getRelativeElement().getTitle());
             createTeamsOnGUI();
         }
     };
 
-    public void setActiveSwapPlayerNames(String activeSwapPlayerName) {
+    public void setPlayersToSwap(String activeSwapPlayerName) {
         // If the player player is not set
         if(!isFirstPlayerSet()){
-            this.activeSwapPlayerNames[0] = activeSwapPlayerName;
+            this.playersToSwap[0] = activeSwapPlayerName;
         } else {
             // If the first player is set but the second player is not set
             if (!isSecondPlayerSet()) {
-                this.activeSwapPlayerNames[1] = activeSwapPlayerName;
+                this.playersToSwap[1] = activeSwapPlayerName;
             }
         }
         GUI.setBootstrapAlert(bootstrapAlerts.setPlayerSwap(activeSwapPlayerName));
     }
 
-    private String[] activeSwapPlayerNames = new String[2];
+    private String[] playersToSwap = new String[2];
 
-    private boolean isFirstPlayerSet(){ return activeSwapPlayerNames[0]!=null; }
-    private boolean isSecondPlayerSet(){ return activeSwapPlayerNames[0]!=null; }
+    private boolean isFirstPlayerSet(){ return playersToSwap[0]!=null; }
+    private boolean isSecondPlayerSet(){ return playersToSwap[1]!=null; }
 
     public void resetPlayerSwap(){
-        activeSwapPlayerNames[0]=null;
-        activeSwapPlayerNames[1]=null;
+        playersToSwap[0]=null;
+        playersToSwap[1]=null;
     }
 
+    private String firstPlayerToSwap(){ return playersToSwap[0];}
+    private String secondPlayerToSwap(){ return playersToSwap[1];}
 
+
+    // TODO Prevent players on the same team from being swapped
+    // TODO Look into bug where players were disappearing
+    // TODO Look into why the swap button could be pressed again after a successful trade
     public void swapPlayers(){
 
-        if(activeSwapPlayerNames[0]==null || activeSwapPlayerNames[1]==null)
+        if(!isFirstPlayerSet() || !isSecondPlayerSet())
             return;
 
         // Find the teams
+        Team team0 = null;
+        Team team1 = null;
+        Player player0 = null;
+        Player player1 = null;
+        for (Team team : teams){
+            if (team.containsKey(firstPlayerToSwap())){
+                team0 = team;
+                player0 = team.get(firstPlayerToSwap());
+            }
+            if (team.containsKey(secondPlayerToSwap())){
+                team1 = team;
+                player1 = team.get(secondPlayerToSwap());
+            }
+            if (team0 != null && team1 != null)
+                break;
+        }
+        assert team0 != null && team1 != null && player0 != null && player1 != null;
 
         // Move the players from team to team
+        team0.put(secondPlayerToSwap(), player1);
+        team1.put(firstPlayerToSwap(), player0);
 
         // Delete the players from the original teams
+        team0.remove(firstPlayerToSwap());
+        team1.remove(secondPlayerToSwap());
+
+        resetPlayerSwap();
 
     }
 

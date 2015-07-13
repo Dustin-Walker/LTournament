@@ -272,7 +272,7 @@ public class GUI {
             // Re-draw the GUI
             drawTeamTables();
 
-            tournamentHandler.resetPlayerSwap();
+          //  tournamentHandler.resetPlayerSwap();
         }
     };
 
