@@ -20,19 +20,26 @@ public class bootstrapAlerts {
 
     private static boolean isFirstPlayerSetForTrade = false;
     private static boolean isSecondPlayerSetForTrade = false;
+    public static String swapNotReady = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nTrade not completed. One of the players is not set or you tried to trade players that are on the same team.</div>";
+
+    public static String sameTeamAlert(String playerName){
+        isSecondPlayerSetForTrade = true;
+        swapPlayerName[1] = playerName;
+        return  "<div class=\"alert alert-warning text-center\" role=\"alert\">"+
+                makeBold(swapPlayerName[0])+" and "+makeBold(swapPlayerName[1])+" are already on the same team.";
+    }
+
 
     public static void resetTradeStatus(){
         isFirstPlayerSetForTrade=false;
         isSecondPlayerSetForTrade=false;
-
+        swapPlayerName[0]=null; swapPlayerName[1]=null;
     }
 
     // TODO Method to wrap things in HTML tags
 
     public static String tradeButtonAlert(){
         final String htmlOpener = "<div class=\"alert alert-success text-center\" role=\"alert\">";
-        final String boldTagOpen = "<strong>";
-        final String boldTagClose = "</strong>";
         final String contentMiddle = " and ";
         final String htmlCloser = "</div>";
 
@@ -40,7 +47,7 @@ public class bootstrapAlerts {
                 + makeBold(swapPlayerName[1]) + " have been traded." + htmlCloser;
     }
 
-    public static String setPlayerSwap(String activeSwapPlayerName) {
+    public static String setPlayerSwap(String playerName) {
         final String htmlOpener = "<div class=\"alert alert-success text-center\" role=\"alert\">";
         final String contentMiddle = " and ";
         final String htmlCloser = "</div>";
@@ -49,7 +56,7 @@ public class bootstrapAlerts {
         if (!isFirstPlayerSetForTrade){
             final String contentCloser = " is ready to be traded.";
             isFirstPlayerSetForTrade = true;
-            swapPlayerName[0] = activeSwapPlayerName;
+            swapPlayerName[0] = playerName;
             return htmlOpener + makeBold(swapPlayerName[0]) + contentCloser + htmlCloser;
         }
 
@@ -57,7 +64,7 @@ public class bootstrapAlerts {
         if (!isSecondPlayerSetForTrade){
             final String contentCloser = " are ready to be traded.";
             isSecondPlayerSetForTrade = true;
-            swapPlayerName[1] = activeSwapPlayerName;
+            swapPlayerName[1] = playerName;
             return htmlOpener + makeBold(swapPlayerName[0]) + contentMiddle + makeBold(swapPlayerName[1]) + contentCloser + htmlCloser;
         }
 

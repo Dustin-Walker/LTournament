@@ -263,15 +263,20 @@ public class GUI {
     private static ClickHandler tradeClickHandler = new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            // Handle the bootstrap alert system
-            setBootstrapAlert(bootstrapAlerts.tradeButtonAlert());
 
-            // Handle the tournamentHandler system
-            tournamentHandler.swapPlayers();
+            if (tournamentHandler.playerTradeStatus()) {
 
-            // Re-draw the GUI
-            drawTeamTables();
+                // Handle the bootstrap alert system
+                setBootstrapAlert(bootstrapAlerts.tradeButtonAlert());
 
+                // Handle the tournamentHandler system
+                tournamentHandler.swapPlayers();
+
+                // Re-draw the GUI
+                drawTeamTables();
+            } else {
+                setBootstrapAlert(bootstrapAlerts.swapNotReady);
+            }
           //  tournamentHandler.resetPlayerSwap();
         }
     };

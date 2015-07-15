@@ -23,6 +23,11 @@ public class TournamentHandler {
     ArrayList<Team> teams = new ArrayList<Team>();
     HashMap<String, Player> playerHashMap = new HashMap<String, Player>();
 
+
+    public boolean sameTeam(){
+        return playerHashMap.get(firstPlayerToSwap()).getTeam().equals(playerHashMap.get(secondPlayerToSwap()).getTeam());
+    }
+
     /**
      * This method makes two calls to the league of legends API. The first call uses the summoner name to gather
      * more information, specifically the summoner ID number. The second call uses the summoner ID number to obtain
@@ -70,6 +75,7 @@ public class TournamentHandler {
                             // Create new player object using response
                             Player player = new Player(responseText);
                             playerDataList.add(player);
+                            playerHashMap.put(player.getSummonerName(), player);
                             Tournament.summonerNameList.put(playerName, player);
                             final String BY_ID_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
                             String summonerByIDURL = BY_ID_URL +player.getPlayerID()+"/entry"+APIKEY;
@@ -231,17 +237,22 @@ public class TournamentHandler {
         }
     };
 
-    public void setPlayersToSwap(String activeSwapPlayerName) {
+    public void setPlayersToSwap(String playerToSwap) {
         // If the player player is not set
         if(!isFirstPlayerSet()){
-            this.playersToSwap[0] = activeSwapPlayerName;
+            this.playersToSwap[0] = playerToSwap;
         } else {
             // If the first player is set but the second player is not set
             if (!isSecondPlayerSet()) {
-                this.playersToSwap[1] = activeSwapPlayerName;
+                this.playersToSwap[1] = playerToSwap;
+                if (sameTeam()){
+                    GUI.setBootstrapAlert(bootstrapAlerts.sameTeamAlert(playerToSwap));
+                    resetPlayerSwap();
+                    return;
+                }
             }
         }
-        GUI.setBootstrapAlert(bootstrapAlerts.setPlayerSwap(activeSwapPlayerName));
+        GUI.setBootstrapAlert(bootstrapAlerts.setPlayerSwap(playerToSwap));
     }
 
     private String[] playersToSwap = new String[2];
@@ -252,10 +263,16 @@ public class TournamentHandler {
     public void resetPlayerSwap(){
         playersToSwap[0]=null;
         playersToSwap[1]=null;
+        bootstrapAlerts.resetTradeStatus();
+        // Catch error where after a trade is reset, the trade button can still be pressed.
     }
 
     private String firstPlayerToSwap(){ return playersToSwap[0];}
     private String secondPlayerToSwap(){ return playersToSwap[1];}
+
+    public boolean playerTradeStatus(){
+        return playersToSwap[0]!=null && playersToSwap[1]!=null;
+    }
 
 
     // TODO Prevent players on the same team from being swapped
@@ -263,35 +280,42 @@ public class TournamentHandler {
     // TODO Look into why the swap button could be pressed again after a successful trade
     public void swapPlayers(){
 
+        if (sameTeam())
+            return;
+
         if(!isFirstPlayerSet() || !isSecondPlayerSet())
             return;
 
         // Find the teams
-        Team team0 = null;
-        Team team1 = null;
-        Player player0 = null;
-        Player player1 = null;
+        Team firstTeam = null;
+        Team secondTeam = null;
+        Player firstPlayer = null;
+        Player secondPlayer = null;
         for (Team team : teams){
             if (team.containsKey(firstPlayerToSwap())){
-                team0 = team;
-                player0 = team.get(firstPlayerToSwap());
+                firstTeam = team;
+                firstPlayer = team.get(firstPlayerToSwap());
             }
             if (team.containsKey(secondPlayerToSwap())){
-                team1 = team;
-                player1 = team.get(secondPlayerToSwap());
+                secondTeam = team;
+                secondPlayer = team.get(secondPlayerToSwap());
             }
-            if (team0 != null && team1 != null)
+            if (firstTeam != null && secondTeam != null)
                 break;
         }
-        assert team0 != null && team1 != null && player0 != null && player1 != null;
+        assert firstTeam != null && secondTeam != null && firstPlayer != null && secondPlayer != null;
 
         // Move the players from team to team
-        team0.put(secondPlayerToSwap(), player1);
-        team1.put(firstPlayerToSwap(), player0);
+        firstTeam.put(secondPlayerToSwap(), secondPlayer);
+        secondTeam.put(firstPlayerToSwap(), firstPlayer);
 
         // Delete the players from the original teams
-        team0.remove(firstPlayerToSwap());
-        team1.remove(secondPlayerToSwap());
+        firstTeam.remove(firstPlayerToSwap());
+        secondTeam.remove(secondPlayerToSwap());
+
+        // Update player team status
+        firstPlayer.setTeam(secondTeam);
+        secondPlayer.setTeam(firstTeam);
 
         resetPlayerSwap();
 
