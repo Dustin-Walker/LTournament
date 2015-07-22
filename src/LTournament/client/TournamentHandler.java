@@ -24,7 +24,7 @@ public class TournamentHandler {
     HashMap<String, Player> playerHashMap = new HashMap<String, Player>();
 
 
-    public boolean sameTeam(){
+    public boolean playersAreOnSameTeam(){
         return playerHashMap.get(firstPlayerToSwap()).getTeam().equals(playerHashMap.get(secondPlayerToSwap()).getTeam());
     }
 
@@ -199,7 +199,6 @@ public class TournamentHandler {
 
     }
 
-    // TODO Create method to swap players on teams
     /**
      * This method sets up the team panels on the display.
      */
@@ -245,7 +244,7 @@ public class TournamentHandler {
             // If the first player is set but the second player is not set
             if (!isSecondPlayerSet()) {
                 this.playersToSwap[1] = playerToSwap;
-                if (sameTeam()){
+                if (playersAreOnSameTeam()){
                     GUI.setBootstrapAlert(bootstrapAlerts.sameTeamAlert(playerToSwap));
                     resetPlayerSwap();
                     return;
@@ -268,19 +267,17 @@ public class TournamentHandler {
     }
 
     private String firstPlayerToSwap(){ return playersToSwap[0];}
+
     private String secondPlayerToSwap(){ return playersToSwap[1];}
 
     public boolean playerTradeStatus(){
         return playersToSwap[0]!=null && playersToSwap[1]!=null;
     }
 
-
-    // TODO Prevent players on the same team from being swapped
-    // TODO Look into bug where players were disappearing
     // TODO Look into why the swap button could be pressed again after a successful trade
     public void swapPlayers(){
 
-        if (sameTeam())
+        if (playersAreOnSameTeam())
             return;
 
         if(!isFirstPlayerSet() || !isSecondPlayerSet())

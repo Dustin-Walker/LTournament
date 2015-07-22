@@ -15,9 +15,7 @@ public class Player implements Comparable<Player>{
         this.setSummonerName(response);
     }
 
-    // Members
-    // TODO Change default value for tier
-    public String tier = "BRONZE";
+    public String tier;
     private String playerID;
     private String summonerName;
     private Rank rank;

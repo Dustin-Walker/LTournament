@@ -36,8 +36,6 @@ public class bootstrapAlerts {
         swapPlayerName[0]=null; swapPlayerName[1]=null;
     }
 
-    // TODO Method to wrap things in HTML tags
-
     public static String tradeButtonAlert(){
         final String htmlOpener = "<div class=\"alert alert-success text-center\" role=\"alert\">";
         final String contentMiddle = " and ";

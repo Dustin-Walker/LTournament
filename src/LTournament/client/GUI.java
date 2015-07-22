@@ -10,12 +10,9 @@ import com.google.gwt.user.client.ui.*;
  */
 public class GUI {
 
-    // TODO change position of roster table
-
     public static VerticalPanel addPanel = new VerticalPanel();
     private static HorizontalPanel footerPanel = new HorizontalPanel();
     private static HorizontalPanel headerPanel = new HorizontalPanel();
-  //  private static HorizontalPanel controlPanelHeader = new HorizontalPanel();
     private static HTML controlPanelHeaderHTML = new HTML();
     public static VerticalPanel middleMainPanel = new VerticalPanel();
     private static VerticalPanel teamListPanel = new VerticalPanel();
@@ -28,7 +25,6 @@ public class GUI {
     public static Button matchmakingBy5 = new Button();
     private static Label playerPanelHeader = new Label("Player Roster");
     private static Label addPlayerNameLabel = new Label();
-  //  public static Label controlPanelHeaderLabel = new Label();
     private static DockPanel dockPanel = new DockPanel();
     private static HorizontalPanel bracketPanel = new HorizontalPanel();
     public static VerticalPanel playerPanel = new VerticalPanel();
@@ -38,7 +34,9 @@ public class GUI {
     private static VerticalPanel eastPanel = new VerticalPanel();
     private static ScrollPanel middleScrollPanel = new ScrollPanel();
     public static FlexTable teamTable = new FlexTable();
-
+    private static Button resetTradeButton = new Button("Reset trade");
+    private static Button tradeButton = new Button("Swap players");
+    private static Button moveToBracketPhaseButton = new Button("Begin the tournament");
 
     public static void assembleStartUp(){
         assembleAddPanel();
@@ -88,7 +86,7 @@ public class GUI {
             public void onClick(ClickEvent event) {
                 tournamentHandler.createTeams(3);
                 tournamentHandler.createTeamsOnGUI();
-                phase2stateChange();
+                phase2StateChange();
             }
         });
     }
@@ -99,7 +97,7 @@ public class GUI {
             public void onClick(ClickEvent event) {
                 tournamentHandler.createTeams(5);
                 tournamentHandler.createTeamsOnGUI();
-                phase2stateChange();
+                phase2StateChange();
             }
         });
     }
@@ -239,7 +237,8 @@ public class GUI {
        // dockLayoutPanel.add(middleScrollPanel);
     }
 
-    private static void phase2stateChange(){
+    // TODO Implement a state design pattern to handle GUI state changes
+    private static void phase2StateChange(){
         addPanel.removeFromParent();
         addPlayerButton.removeFromParent();
         resetRosterButton.removeFromParent();
@@ -251,27 +250,52 @@ public class GUI {
         GUI.middleMainPanel.setWidth("100%");
         setBootstrapAlert(bootstrapAlerts.successfulTeamCreation);
 
-        Button resetTradeButton = new Button("Reset trade");
         resetTradeButton.addClickHandler(tradeResetButtonHandler);
         controlPanel.add(resetTradeButton);
 
-        Button tradeButton = new Button("Swap players");
         tradeButton.addClickHandler(tradeClickHandler);
         controlPanel.add(tradeButton);
+
+        moveToBracketPhaseButton.addClickHandler(moveToPhase3Handler);
+        controlPanel.add(moveToBracketPhaseButton);
+    }
+
+    private static ClickHandler moveToPhase3Handler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+
+
+
+
+            phase3StateChange();
+        }
+    };
+
+    private static void phase3StateChange(){
+        // Clear the values from phase 2
+        bootstrapAlerts.resetTradeStatus();
+        tournamentHandler.resetPlayerSwap();
+        resetTradeButton.removeFromParent();
+        tradeButton.removeFromParent();
+        moveToBracketPhaseButton.removeFromParent();
+
+        // Set up phase 3 interface
+        String phase3HeaderHTML = ""; // TODO Write this header
+        controlPanelHeaderHTML.setHTML(phase3HeaderHTML);
+
+
+
+
     }
 
     private static ClickHandler tradeClickHandler = new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-
             if (tournamentHandler.playerTradeStatus()) {
-
                 // Handle the bootstrap alert system
                 setBootstrapAlert(bootstrapAlerts.tradeButtonAlert());
-
                 // Handle the tournamentHandler system
                 tournamentHandler.swapPlayers();
-
                 // Re-draw the GUI
                 drawTeamTables();
             } else {
