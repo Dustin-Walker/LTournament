@@ -16,10 +16,16 @@ import java.util.Stack;
  */
 public class TournamentHandler {
 
+    static HashMap<String, Player> summonerNameList = new HashMap<String, Player>();
     private final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
 
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
+
+    public ArrayList<Team> getTeams() {
+        return teams;
+    }
+
     ArrayList<Team> teams = new ArrayList<Team>();
     HashMap<String, Player> playerHashMap = new HashMap<String, Player>();
 
@@ -38,15 +44,15 @@ public class TournamentHandler {
         final String playerName = GUI.getPlayerName();
 
         // This lines prevents an error where the reset button was not clearing the playerDataList which was causing a bug
-        if (Tournament.summonerNameList.isEmpty())
+        if (summonerNameList.isEmpty())
             playerDataList.clear();
 
-        if (Tournament.summonerNameList.containsKey(playerName)){
+        if (summonerNameList.containsKey(playerName)){
             // This is a duplicate entry
-            GUI.setBootstrapAlert(bootstrapAlerts.duplicatePlayerWarning);
+            GUI.setBootstrapAlert(bootstrapAlerts.DUPLICATE_PLAYER_WARNING);
         } else if (playerDataList.size()>=100){
             // This system supports 100 players at most.
-            GUI.setBootstrapAlert(bootstrapAlerts.maxPlayersWarning);
+            GUI.setBootstrapAlert(bootstrapAlerts.MAX_PLAYERS_WARNING);
         } else {
             String BY_NAME_URL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/";
             String summonerNameURL = BY_NAME_URL +playerName+APIKEY;
@@ -57,16 +63,16 @@ public class TournamentHandler {
                 public void onResponseReceived(Request request, Response response) {
                     switch (response.getStatusCode()){
                         case 404: // Player not found
-                            GUI.setBootstrapAlert(bootstrapAlerts.playerNotFoundWarning);
+                            GUI.setBootstrapAlert(bootstrapAlerts.PLAYER_NOT_FOUND_WARNING);
                             break;
                         case 429: // Rate limit exceeded
-                            GUI.setBootstrapAlert(bootstrapAlerts.rateLimitWarning);
+                            GUI.setBootstrapAlert(bootstrapAlerts.RATE_LIMIT_WARNING);
                             break;
                         case 500: // Server error
-                            GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
+                            GUI.setBootstrapAlert(bootstrapAlerts.SERVER_ERROR_WARNING);
                             break;
                         case 503: // Server error
-                            GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
+                            GUI.setBootstrapAlert(bootstrapAlerts.SERVER_ERROR_WARNING);
                             break;
                         case 200: // Success
                             if(!GUI.playerPanel.isVisible())
@@ -76,7 +82,7 @@ public class TournamentHandler {
                             Player player = new Player(responseText);
                             playerDataList.add(player);
                             playerHashMap.put(player.getSummonerName(), player);
-                            Tournament.summonerNameList.put(playerName, player);
+                            summonerNameList.put(playerName, player);
                             final String BY_ID_URL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/";
                             String summonerByIDURL = BY_ID_URL +player.getPlayerID()+"/entry"+APIKEY;
                             // Continue to build the player data with the next call
@@ -104,8 +110,8 @@ public class TournamentHandler {
                                             final int colIndex = playerDataList.indexOf(localPlayer) % 10;
                                             GUI.rosterTable.removeCell(rowIndex, colIndex);
                                             playerDataList.remove(localPlayer);
-                                            Tournament.summonerNameList.remove(playerName);
-                                            if (Tournament.summonerNameList.isEmpty())
+                                            summonerNameList.remove(playerName);
+                                            if (summonerNameList.isEmpty())
                                                 playerPanel.setVisible(false);
                                             if (playerDataList.size() < 6 && GUI.matchmakingBy3.isVisible())
                                                 GUI.matchmakingBy3.setVisible(false);
@@ -115,7 +121,7 @@ public class TournamentHandler {
                                     });
                                     GUI.rosterTable.setWidget(row, column, playerPanel);
                                     GUI.rosterTable.getCellFormatter().setStyleName(row, column, localPlayer.getRank().name());
-                                    GUI.setBootstrapAlert(bootstrapAlerts.successAlert);
+                                    GUI.setBootstrapAlert(bootstrapAlerts.PLAYER_ADDED_SUCCESSFULLY);
 
                                     // Display the matchmaking buttons if appropriate
                                     if(playerDataList.size()>=6)
@@ -126,27 +132,27 @@ public class TournamentHandler {
 
                                 @Override
                                 public void onError(Request request, Throwable exception) {
-                                    GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
+                                    GUI.setBootstrapAlert(bootstrapAlerts.SERVER_ERROR_WARNING);
                                 }
                             });
                             try {
                                 builder1.send();
                             } catch (RequestException e) {
                                 e.printStackTrace();
-                                GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
+                                GUI.setBootstrapAlert(bootstrapAlerts.SERVER_ERROR_WARNING);
                             }
                     }
                 }
                 @Override
                 public void onError(Request request, Throwable exception) {
-                    GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
+                    GUI.setBootstrapAlert(bootstrapAlerts.SERVER_ERROR_WARNING);
                 }
             });
             try {
                 builder.send();
             } catch (RequestException e) {
                 e.printStackTrace();
-                GUI.setBootstrapAlert(bootstrapAlerts.serverErrorWarning);
+                GUI.setBootstrapAlert(bootstrapAlerts.SERVER_ERROR_WARNING);
             }
         }
     }

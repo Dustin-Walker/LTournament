@@ -29,7 +29,7 @@ public class GUI {
     private static HorizontalPanel bracketPanel = new HorizontalPanel();
     public static VerticalPanel playerPanel = new VerticalPanel();
     public static DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
-    private static TournamentHandler tournamentHandler = new TournamentHandler();
+    public static TournamentHandler tournamentHandler = new TournamentHandler();
     private static HTML bootstrapAlert = new HTML("");
     private static VerticalPanel eastPanel = new VerticalPanel();
     private static ScrollPanel middleScrollPanel = new ScrollPanel();
@@ -37,6 +37,8 @@ public class GUI {
     private static Button resetTradeButton = new Button("Reset trade");
     private static Button tradeButton = new Button("Swap players");
     private static Button moveToBracketPhaseButton = new Button("Begin the tournament");
+    private static Button undoBracketActionButton = new Button("Undo last action");
+    private static Tournament tournament = new Tournament();
 
     public static void assembleStartUp(){
         assembleAddPanel();
@@ -117,7 +119,7 @@ public class GUI {
             public void onClick(ClickEvent event) {
                 playerPanel.setVisible(false);
                 rosterTable.removeAllRows();
-                Tournament.summonerNameList.clear();
+                TournamentHandler.summonerNameList.clear();
                 matchmakingBy5.setVisible(false);
                 matchmakingBy3.setVisible(false);
                 final String resetAlert = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />The list of players has been reset.</div>";
@@ -214,27 +216,17 @@ public class GUI {
         teamListPanel.addStyleName("team-list");
         middleMainPanel.addStyleName("seam");
         middleMainPanel.addStyleName("middle-main");
-    //    middleScrollPanel.add(middleMainPanel);
-
-     //   middleScrollPanel.setSize("400px", "400px");
-
     }
 
-    private static void assembleDockPanel() {
-        // Assemble the dock panel
-        dockPanel.add(headerPanel, DockPanel.NORTH);
-        dockPanel.add(footerPanel, DockPanel.SOUTH);
-        dockPanel.add(middleScrollPanel, DockPanel.EAST);
-        dockPanel.add(controlPanel, DockPanel.WEST);
-    }
-
+    /**
+     * The dock layout panel is the fundamental panel
+     */
     private static void assembleDockLayoutPanel() {
         dockLayoutPanel.addNorth(headerPanel, 3);
         dockLayoutPanel.addSouth(footerPanel, 3);
         dockLayoutPanel.addEast(eastPanel, 0);
         dockLayoutPanel.addWest(controlPanel, 24);
         dockLayoutPanel.add(middleMainPanel);
-       // dockLayoutPanel.add(middleScrollPanel);
     }
 
     // TODO Implement a state design pattern to handle GUI state changes
@@ -248,7 +240,7 @@ public class GUI {
         controlPanelHeaderHTML.setHTML(phase2HeaderHTML);
         GUI.middleMainPanel.remove(GUI.playerPanel);
         GUI.middleMainPanel.setWidth("100%");
-        setBootstrapAlert(bootstrapAlerts.successfulTeamCreation);
+        setBootstrapAlert(bootstrapAlerts.SUCCESSFUL_TEAM_CREATION);
 
         resetTradeButton.addClickHandler(tradeResetButtonHandler);
         controlPanel.add(resetTradeButton);
@@ -263,10 +255,6 @@ public class GUI {
     private static ClickHandler moveToPhase3Handler = new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-
-
-
-
             phase3StateChange();
         }
     };
@@ -278,12 +266,18 @@ public class GUI {
         resetTradeButton.removeFromParent();
         tradeButton.removeFromParent();
         moveToBracketPhaseButton.removeFromParent();
+        teamTable.removeFromParent();
 
         // Set up phase 3 interface
         String phase3HeaderHTML = ""; // TODO Write this header
         controlPanelHeaderHTML.setHTML(phase3HeaderHTML);
 
+        // TODO Create a default bootstrap state and other bootstrap states
+        setBootstrapAlert(bootstrapAlerts.BEGIN_TOURNAMENT);
 
+        // TODO Implement an UNDO button
+        undoBracketActionButton.addClickHandler(tournament.undoLastAction);
+        controlPanel.add(undoBracketActionButton);
 
 
     }
@@ -299,7 +293,7 @@ public class GUI {
                 // Re-draw the GUI
                 drawTeamTables();
             } else {
-                setBootstrapAlert(bootstrapAlerts.swapNotReady);
+                setBootstrapAlert(bootstrapAlerts.SWAP_NOT_READY);
             }
           //  tournamentHandler.resetPlayerSwap();
         }
@@ -319,7 +313,7 @@ public class GUI {
         public void onClick(ClickEvent event) {
             // Handle the bootstrap alert system
             bootstrapAlerts.resetTradeStatus();
-            setBootstrapAlert(bootstrapAlerts.tradeResetAlert);
+            setBootstrapAlert(bootstrapAlerts.TRADE_RESET_ALERT);
 
             // Handle the tournamentHandler system
             tournamentHandler.resetPlayerSwap();

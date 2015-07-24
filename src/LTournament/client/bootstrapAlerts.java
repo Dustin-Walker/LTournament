@@ -5,22 +5,21 @@ package LTournament.client;
  */
 public class bootstrapAlerts {
 
-    // Bootstrap alerts
-    public final static String playerNotFoundWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>";
-    public final static String rateLimitWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Slow down!</strong><br />You are sending too many requests.</div>";
-    public final static String serverErrorWarning = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />The remote server encountered an error.</div>";
-    public final static String successAlert = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Player added.</div>";
-    public final static String duplicatePlayerWarning = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is<br />already in the game.</div>";
-    public final static String maxPlayersWarning = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nYou have reached<br />the maximum number of<br />supported players..</div>";
-    public final static String successfulTeamCreation = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Teams created.</div>";
+    // Phase 1
+    public final static String PLAYER_NOT_FOUND_WARNING = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />Player not found.</div>";
+    public final static String RATE_LIMIT_WARNING = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Slow down!</strong><br />You are sending too many requests.</div>";
+    public final static String SERVER_ERROR_WARNING = "<div class=\"alert alert-danger text-center\" role=\"alert\"><strong>Warning!</strong><br />The remote server encountered an error.</div>";
+    public final static String PLAYER_ADDED_SUCCESSFULLY = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Player added.</div>";
+    public final static String DUPLICATE_PLAYER_WARNING = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThis player is<br />already in the game.</div>";
+    public final static String MAX_PLAYERS_WARNING = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nYou have reached<br />the maximum number of<br />supported players..</div>";
 
-    public final static String tradeResetAlert = "<div class=\"alert alert-info\" role=\"alert\"><strong>Trade reset.</strong></div>";
-
+    // Phase 2
+    public final static String SUCCESSFUL_TEAM_CREATION = "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Teams created.</div>";
+    public final static String TRADE_RESET_ALERT = "<div class=\"alert alert-info\" role=\"alert\"><strong>Trade reset.</strong></div>";
     private static String[] swapPlayerName = new String[2];
-
     private static boolean isFirstPlayerSetForTrade = false;
     private static boolean isSecondPlayerSetForTrade = false;
-    public static String swapNotReady = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nTrade not completed. One of the players is not set or you tried to trade players that are on the same team.</div>";
+    public final static String SWAP_NOT_READY = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nTrade not completed. One of the players is not set or you tried to trade players that are on the same team.</div>";
 
     public static String sameTeamAlert(String playerName){
         isSecondPlayerSetForTrade = true;
@@ -28,7 +27,6 @@ public class bootstrapAlerts {
         return  "<div class=\"alert alert-warning text-center\" role=\"alert\">"+
                 makeBold(swapPlayerName[0])+" and "+makeBold(swapPlayerName[1])+" are already on the same team.";
     }
-
 
     public static void resetTradeStatus(){
         isFirstPlayerSetForTrade=false;
@@ -71,6 +69,17 @@ public class bootstrapAlerts {
         return htmlOpener + makeBold(swapPlayerName[0]) + contentMiddle + makeBold(swapPlayerName[1]) + contentCloser + htmlCloser;
     }
 
+    // Phase 3
+    public final static String BEGIN_TOURNAMENT = "<div class=\"alert alert-info\" role=\"alert\">You can now begin the tournament.</div>";
+    public final static String MATCH_ONGOING = "<div class=\"alert alert-info\" role=\"alert\">Once the match is over, select a winner by clicking on the team name and then clicking confirm.</div>";
+    public final static String TOURNAMENT_FINISHED =  "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Player added.</div>";
+
+    public static String matchWinner(Team team){
+        return "<div class=\"alert alert-warning text-center\" role=\"alert\">" + makeBold(team.teamName) + " has been selected as the winner. Click the confirm button to continue.</div>";
+    }
+
+    // HTML helper methods
+    // TODO Make wrappers for danger, alert, info, and success div containers
     private static String makeBold(String s){
         return "<strong>" + s + "</strong>";
     }

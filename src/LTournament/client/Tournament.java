@@ -17,16 +17,18 @@ import java.util.Random;
  */
 public class Tournament {
 
-    static HashMap<String, Player> summonerNameList = new HashMap<String, Player>();
+    public ClickHandler undoLastAction = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            // TODO Implement undo action handler
 
-    /**
-     * This method generates teams based on a randomization algorithm. These teams are teams of 5 to be used
-     * for the Summoner's Rift map and any other 5 player per team map. Teams of 3 for the other map.
-     * @param players Collection of all the players to put into teams
-     * @return List of teams containing players
-     */
-    private HashMap generateTeams(HashMap players){
-        return new HashMap();
+        }
+    };
+
+    // TODO Draw brackets
+    public void drawBrackets(){
+        GUI.tournamentHandler.getTeams();
+        // Use CanvasElement, Canvas and Context2D to connect things
     }
 
 }
