@@ -3,12 +3,10 @@ package LTournament.client;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.*;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by user on 6/4/15.
@@ -26,9 +24,10 @@ public class TournamentHandler {
         return teams;
     }
 
+    private final int MAX_NUMBER_OF_TEAMS = 20;
+
     ArrayList<Team> teams = new ArrayList<Team>();
     HashMap<String, Player> playerHashMap = new HashMap<String, Player>();
-
 
     public boolean playersAreOnSameTeam(){
         return playerHashMap.get(firstPlayerToSwap()).getTeam().equals(playerHashMap.get(secondPlayerToSwap()).getTeam());
@@ -169,25 +168,23 @@ public class TournamentHandler {
         // Sort players by rank and set up a stack
         Collections.sort(playerDataList);
         Stack<Player> playerStack = new Stack<Player>();
-        for (Player player : playerDataList) { playerStack.push(player); }
+        for (Player player : playerDataList) playerStack.push(player);
 
         // Set up the teams
         for (int i = 0; i < numberOfTeams; i++) {
             Team team = new Team();
-            team.teamName = team.randomTeamName();
+            //team.teamName = team.randomTeamName();
+            team.teamName = randomTeamName();
             teams.add(team);
         }
 
         for (int i = 0, teamIndex=0; i < numberOfTeams*playersPerTeam; i++, teamIndex++){
             // Reset the teamIndex
             if (teamIndex>=numberOfTeams)   teamIndex=0;
-
             Player player = playerStack.pop();
-
             player.setTeam(teams.get(teamIndex));
-
             teams.get(teamIndex).put(player.getSummonerName(), player);
-
+            player.setTeam(teams.get(teamIndex));
         }
 
         // Reserve team
@@ -200,10 +197,20 @@ public class TournamentHandler {
             }
             teams.add(team);
         }
-
         GUI.setBootstrapAlert("Number of teams: " + String.valueOf(teams.size()));
-
     }
+
+    private String randomTeamName() {
+        return teamNameArray[Random.nextInt(teamNameArray.length)];
+    }
+
+    // TODO Move this array of team names into a seperate file so users can change it
+    final private String[] teamNameArray = {
+            "Team 1", "Team 2", "Team 3", "Team 4", "Team 5",
+            "Team 6", "Team 7", "Team 8", "Team 9", "Team 10",
+            "Team 11", "Team 12", "Team 13", "Team 14", "Team 15",
+            "Team 16", "Team 17", "Team 18", "Team 19", "Team 20"
+    };
 
     /**
      * This method sets up the team panels on the display.
@@ -211,6 +218,7 @@ public class TournamentHandler {
     public void createTeamsOnGUI(){
         for (int index = 0, teamsSize = teams.size(), column = 0, row = 0; index < teamsSize; index++, column++) {
             Team team = teams.get(index);
+            // There are 10 columns per row
             if (column >= 9) {
                 column = 0;
                 row++;
@@ -269,7 +277,6 @@ public class TournamentHandler {
         playersToSwap[0]=null;
         playersToSwap[1]=null;
         bootstrapAlerts.resetTradeStatus();
-        // Catch error where after a trade is reset, the trade button can still be pressed.
     }
 
     private String firstPlayerToSwap(){ return playersToSwap[0];}
@@ -280,7 +287,6 @@ public class TournamentHandler {
         return playersToSwap[0]!=null && playersToSwap[1]!=null;
     }
 
-    // TODO Look into why the swap button could be pressed again after a successful trade
     public void swapPlayers(){
 
         if (playersAreOnSameTeam())
@@ -321,8 +327,5 @@ public class TournamentHandler {
         secondPlayer.setTeam(firstTeam);
 
         resetPlayerSwap();
-
     }
-
-
 }
