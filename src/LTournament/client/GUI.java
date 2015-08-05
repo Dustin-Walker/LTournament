@@ -25,20 +25,20 @@ public class GUI {
     public static Button matchmakingBy5 = new Button();
     private static Label playerPanelHeader = new Label("Player Roster");
     private static Label addPlayerNameLabel = new Label();
-    private static DockPanel dockPanel = new DockPanel();
-    private static HorizontalPanel bracketPanel = new HorizontalPanel();
+    private static VerticalPanel bracketPanel = new VerticalPanel();
     public static VerticalPanel playerPanel = new VerticalPanel();
     public static DockLayoutPanel dockLayoutPanel = new DockLayoutPanel(Style.Unit.EM);
     public static TournamentHandler tournamentHandler = new TournamentHandler();
     private static HTML bootstrapAlert = new HTML("");
     private static VerticalPanel eastPanel = new VerticalPanel();
-    private static ScrollPanel middleScrollPanel = new ScrollPanel();
     public static FlexTable teamTable = new FlexTable();
     private static Button resetTradeButton = new Button("Reset trade");
     private static Button tradeButton = new Button("Swap players");
     private static Button moveToBracketPhaseButton = new Button("Begin the tournament");
     private static Button undoBracketActionButton = new Button("Undo last action");
     private static Tournament tournament = new Tournament();
+    private static HorizontalPanel bracketHolderPanel = new HorizontalPanel();
+    private static VerticalPanel pickWinnerPanel = new VerticalPanel();
 
     public static void assembleStartUp(){
         assembleAddPanel();
@@ -205,7 +205,7 @@ public class GUI {
 
     private static void assembleBracketPanel(){
         bracketPanel.add(new Label("Bracket Panel"));
-        bracketPanel.addStyleName("team-list");
+
     }
 
     // TODO Set up scroll panel wrapper for the middle main panel
@@ -269,16 +269,29 @@ public class GUI {
         teamTable.removeFromParent();
 
         // Set up phase 3 interface
-        String phase3HeaderHTML = ""; // TODO Write this header
+        String phase3HeaderHTML = "Begin the tournament by having the teams shown on the right play against each other.";
         controlPanelHeaderHTML.setHTML(phase3HeaderHTML);
-
-        // TODO Create a default bootstrap state and other bootstrap states
         setBootstrapAlert(bootstrapAlerts.BEGIN_TOURNAMENT);
 
-        // TODO Implement an UNDO button
-        undoBracketActionButton.addClickHandler(tournament.undoLastAction);
+        // Set up GUI panels
+        bracketHolderPanel.add(bracketPanel);
+        assemblePickWinnerPanel();
+        bracketHolderPanel.add(pickWinnerPanel);
+        middleMainPanel.add(bracketHolderPanel);
+
+        undoBracketActionButton.addClickHandler(undoLastAction);
         controlPanel.add(undoBracketActionButton);
 
+
+    }
+
+    public static HorizontalPanel teamDisplayPanel = new HorizontalPanel();
+    private static Button confirmWinnerButton = new Button("Confirm?");
+
+    private static void assemblePickWinnerPanel(){
+        pickWinnerPanel.add(new Label("Pick a winner when the match is over."));
+        pickWinnerPanel.add(teamDisplayPanel);
+        pickWinnerPanel.add(confirmWinnerButton);
 
     }
 
@@ -295,7 +308,6 @@ public class GUI {
             } else {
                 setBootstrapAlert(bootstrapAlerts.SWAP_NOT_READY);
             }
-          //  tournamentHandler.resetPlayerSwap();
         }
     };
 
@@ -321,6 +333,17 @@ public class GUI {
     };
 
 
+    // TODO Draw brackets
+    public static void drawBrackets(){
+        tournamentHandler.getTeams();
+        // Use CanvasElement, Canvas and Context2D to connect things
+    }
 
+    // TODO Implement an UNDO button
+    public static ClickHandler undoLastAction = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
 
+        }
+    };
 }

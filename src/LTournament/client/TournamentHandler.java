@@ -19,13 +19,10 @@ public class TournamentHandler {
 
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
-
     public ArrayList<Team> getTeams() {
         return teams;
     }
-
     private final int MAX_NUMBER_OF_TEAMS = 20;
-
     ArrayList<Team> teams = new ArrayList<Team>();
     HashMap<String, Player> playerHashMap = new HashMap<String, Player>();
 
