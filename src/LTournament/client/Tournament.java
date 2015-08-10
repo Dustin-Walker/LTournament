@@ -5,12 +5,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.sun.org.apache.xpath.internal.operations.*;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
+import java.math.MathContext;
+import java.util.*;
 
 /**
  * Created by user on 5/28/15.
@@ -24,17 +23,13 @@ public class Tournament {
     private ArrayList<Team> getTeams(){
         return GUI.tournamentHandler.getTeams();
     }
-    private Bracket root = new Bracket(0, null);
-
+    private Bracket root;
     private ArrayList<Team> teams = getTeams();
+    private int size = teams.size();
+    private Team pendingMatchWinner = null;
 
-    public int size(){
-        return size(root);
-    }
-
-    private int size(Bracket node){
-        if (node==null) return 0;
-        else return node.getSubtreeSize();
+    private int size(){
+        return this.size;
     }
 
     public void preorderTraversal(){
@@ -57,11 +52,59 @@ public class Tournament {
 
         /*
             Every node should be empty except for the final level
-            Use a random number generator to match teams
             All teams go on the final level as leaf nodes
         */
 
+        int treeHeight = (int) Math.ceil(Math.log(teams.size())/Math.log(2))+1;
+
+        ArrayList<Stack<Bracket>> treeNodesByHeight = new ArrayList<Stack<Bracket>>(treeHeight);
+
+        // Bottom-up tree population
+
+        // Set up leaf nodes
+        for (Team team : teams) treeNodesByHeight.get(treeHeight-1).push(new Bracket(team));
+
+
+        // Connect child nodes to parent node
+        for (int i = treeHeight-1; i > 0; i--){
+            // Calculate row for bracket and add that as well
+            for (int j = treeHeight-1; j < treeNodesByHeight.get(i).size()/2; j--){
+                if (i==1){
+                    Bracket bracket = new Bracket(null, treeNodesByHeight.get(i).pop(), treeNodesByHeight.get(i).pop());
+                    root = bracket;
+                    treeNodesByHeight.get(i-1).push(bracket);
+                    continue;
+                }
+                treeNodesByHeight.get(i-1).push(new Bracket(null, treeNodesByHeight.get(i).pop(), treeNodesByHeight.get(i).pop()));
+            }
+            if (!treeNodesByHeight.get(i).isEmpty()){
+                treeNodesByHeight.get(i-1).push(new Bracket(null, treeNodesByHeight.get(i).pop(), null));
+            }
+        }
+
+
     }
+
+    private void getMatch(Bracket bracket){
+        assert bracket.getLeft()!=null;
+        if (bracket.getRight()==null){
+            // Dont display to the GUI
+            bracket.setTeam(bracket.getLeft().getTeam());
+        } else {
+            // Create GUI interaction panel
+
+            // Attach click handlers
+
+            // Update bootstrap
+        }
+   }
+
+    private ClickHandler teamPanelClickHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            // Obtain team and set team to active state
+        }
+    };
 
     private void getNextMatch(){
         // TODO Create getNextMatch method
@@ -84,6 +127,13 @@ public class Tournament {
         // TODO Create getWinner method
         // Throw exception if the tournament is not finished
         return null;
+    }
+
+    /**
+     * Method handles interaction with the GUI display of the tree
+     */
+    public void updateGrid(){
+
     }
 
 

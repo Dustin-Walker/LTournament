@@ -11,24 +11,27 @@ public class Bracket {
     private Bracket right;
     private Bracket parent;
     private Team team;
-    private int subtreeSize;
     private String teamName;
     private boolean visited;
     private boolean knockedOut = false;
     // TODO Create background color and other fields for HTML display
 
-    public Bracket(Team team, int N, Bracket parent){
+    public Bracket(Team team, Bracket parent){
         this.team = team;
-        this.subtreeSize = N;
         this.teamName = team.teamName;
         this.parent = parent;
     }
 
-    public Bracket(int N, Bracket parent){
-        this.subtreeSize = N;
+    public Bracket(Bracket parent){
         this.parent = parent;
         this.team = null;
         this.teamName = null;
+    }
+
+    public Bracket(Team team, Bracket left, Bracket right){
+        this.team = team;
+        this.left = left;
+        this.right = right;
     }
 
     public void setKnockedOut(boolean knockedOut) {
@@ -36,6 +39,14 @@ public class Bracket {
         if (knockedOut){
             // Change background color to knocked out color
         }
+    }
+
+    public Bracket(Team team){
+        this.parent = null;
+        this.left = null;
+        this.right = null;
+        this.team = team;
+        this.teamName = team.teamName;
     }
 
     public Bracket getParent() {
@@ -52,14 +63,6 @@ public class Bracket {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
-    }
-
-    public void setSubtreeSize(int subtreeSize) {
-        this.subtreeSize = subtreeSize;
-    }
-
-    public int getSubtreeSize() {
-        return subtreeSize;
     }
 
     public String getTeamName() {
@@ -97,15 +100,6 @@ public class Bracket {
                 parent.right = null;
             this.parent = null;
         }
-    }
-
-    /**
-     * Method draws the lines on the grid to connect the graph.
-     * @param column Column of cell to draw
-     * @param row Row of cell to draw
-     */
-    public void drawBracketLines(int column, int row){
-        return; // TODO Create drawBracketLines method
     }
 
     public boolean isVisited() {

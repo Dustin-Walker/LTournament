@@ -205,6 +205,10 @@ public class GUI {
 
     private static void assembleBracketPanel(){
         bracketPanel.add(new Label("Bracket Panel"));
+        int numberOfTeams = tournamentHandler.teams.size();
+        int rows = 2*numberOfTeams - 1;
+        int columns = 2*(int) Math.ceil(Math.log(numberOfTeams)/Math.log(2))+1;
+        bracketPanel.add(new Grid(rows, columns));
 
     }
 
