@@ -187,7 +187,7 @@ public class TournamentHandler {
         // Reserve team
         if (!(playerStack.isEmpty())){
             Team team = new Team();
-            team.teamName = "Surplus Players";
+            team.teamName = surplusTeamName;
             for (Player player : playerStack){
                 player.setTeam(team);
                 team.put(player.getSummonerName(), player);
@@ -202,8 +202,9 @@ public class TournamentHandler {
     }
 
     // TODO Move this array of team names into a seperate file so users can change it
+    // TODO Change these names to something more relavent to LoL
     final private String[] teamNameArray = {
-            "Team 1", "Team 2", "Team 3", "Team 4", "Team 5",
+            "Garen's Defenders", "Team 2", "Team 3", "Team 4", "Team 5",
             "Team 6", "Team 7", "Team 8", "Team 9", "Team 10",
             "Team 11", "Team 12", "Team 13", "Team 14", "Team 15",
             "Team 16", "Team 17", "Team 18", "Team 19", "Team 20"
@@ -325,4 +326,27 @@ public class TournamentHandler {
 
         resetPlayerSwap();
     }
+
+    private String surplusTeamName = "Surplus Players";
+
+    public void removeSurplusTeam(){
+        if (Objects.equals(teams.get(teams.size()-1).teamName, surplusTeamName))
+            teams.remove(teams.size()-1);
+    }
+
+    public ClickHandler winningTeamSelector = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            
+        }
+    };
+
+    public ClickHandler confirmButtonHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+
+        }
+    };
+
+    private Team pendingWinningTeam = null;
 }

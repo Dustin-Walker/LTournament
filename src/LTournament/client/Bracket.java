@@ -14,24 +14,43 @@ public class Bracket {
     private String teamName;
     private boolean visited;
     private boolean knockedOut = false;
-    // TODO Create background color and other fields for HTML display
+    private int row;
+    private int column;
+
+    public int getColumn(){
+        return column;
+    }
+
+    public Bracket(Team team, int column, int row){
+        this.team = team;
+        this.column = column;
+        this.row = row;
+        this.teamName = this.team.teamName;
+    }
 
     public Bracket(Team team, Bracket parent){
         this.team = team;
         this.teamName = team.teamName;
         this.parent = parent;
     }
-
+/*
     public Bracket(Bracket parent){
         this.parent = parent;
         this.team = null;
         this.teamName = null;
-    }
+    }*/
 
     public Bracket(Team team, Bracket left, Bracket right){
         this.team = team;
         this.left = left;
         this.right = right;
+    }
+
+    public Bracket(Team team, Bracket left, Bracket right, int row){
+        this.team = team;
+        this.left = left;
+        this.right = right;
+        this.row = row;
     }
 
     public void setKnockedOut(boolean knockedOut) {
@@ -41,12 +60,13 @@ public class Bracket {
         }
     }
 
-    public Bracket(Team team){
+    public Bracket(Team team, int row){
         this.parent = null;
         this.left = null;
         this.right = null;
         this.team = team;
         this.teamName = team.teamName;
+        this.row = row;
     }
 
     public Bracket getParent() {
@@ -89,6 +109,7 @@ public class Bracket {
         this.right = right;
     }
 
+
     /**
      * This method removes this node and children from the tree.
      */
@@ -110,4 +131,16 @@ public class Bracket {
         this.visited = visited;
     }
 
+    public int getRow() {
+        return row;
+    }
+
+    public boolean isKnockedOut() {
+        return knockedOut;
+    }
+
+    public void updateGUI() {
+        int column = 1;
+        GUI.bracketGrid.setHTML(getRow(), column, "TEST");
+    }
 }

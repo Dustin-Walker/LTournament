@@ -6,8 +6,6 @@ import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.sun.org.apache.xpath.internal.operations.*;
-
-import java.lang.reflect.Array;
 import java.math.MathContext;
 import java.util.*;
 
@@ -27,6 +25,7 @@ public class Tournament {
     private ArrayList<Team> teams = getTeams();
     private int size = teams.size();
     private Team pendingMatchWinner = null;
+    public Stack<Team> activeTeamStack = new Stack<>();
 
     private int size(){
         return this.size;
@@ -47,57 +46,39 @@ public class Tournament {
     /**
      * This method populates the tournament tree with bracket nodes
      */
-    private void populateTree(){
-        // TODO Create populateTree method
-
-        /*
-            Every node should be empty except for the final level
-            All teams go on the final level as leaf nodes
-        */
-
-        int treeHeight = (int) Math.ceil(Math.log(teams.size())/Math.log(2))+1;
-
-        ArrayList<Stack<Bracket>> treeNodesByHeight = new ArrayList<Stack<Bracket>>(treeHeight);
-
-        // Bottom-up tree population
-
-        // Set up leaf nodes
-        for (Team team : teams) treeNodesByHeight.get(treeHeight-1).push(new Bracket(team));
-
-
-        // Connect child nodes to parent node
-        for (int i = treeHeight-1; i > 0; i--){
-            // Calculate row for bracket and add that as well
-            for (int j = treeHeight-1; j < treeNodesByHeight.get(i).size()/2; j--){
-                if (i==1){
-                    Bracket bracket = new Bracket(null, treeNodesByHeight.get(i).pop(), treeNodesByHeight.get(i).pop());
-                    root = bracket;
-                    treeNodesByHeight.get(i-1).push(bracket);
-                    continue;
-                }
-                treeNodesByHeight.get(i-1).push(new Bracket(null, treeNodesByHeight.get(i).pop(), treeNodesByHeight.get(i).pop()));
-            }
-            if (!treeNodesByHeight.get(i).isEmpty()){
-                treeNodesByHeight.get(i-1).push(new Bracket(null, treeNodesByHeight.get(i).pop(), null));
-            }
+    public void populateTree(){
+        // Create the initial column and call a recursive function on the set
+        ArrayList<Team> teams = getTeams();
+        int treeHeight = (int) Math.ceil(Math.log(teams.size())/Math.log(2))+1; // +1 is for the root node
+        int numberOfColumns = treeHeight*2-1;
+        ArrayList<Bracket> bracketList = new ArrayList<>();
+        for (int i = 0, j = 0; i < numberOfColumns; i+=2, j++) {
+            Bracket bracket = new Bracket(teams.get(j), 1, i);
+            bracketList.add(bracket);
+           // GUI.bracketGrid.setHTML(i, 1, teams.get(j).teamName);
         }
 
+        for (Bracket bracket : bracketList){
+            GUI.bracketGrid.setHTML(bracket.getRow(), bracket.getColumn(), bracket.getTeamName());
+        }
+
+        activeTeamStack.addAll(teams);
 
     }
 
     private void getMatch(Bracket bracket){
         assert bracket.getLeft()!=null;
-        if (bracket.getRight()==null){
-            // Dont display to the GUI
-            bracket.setTeam(bracket.getLeft().getTeam());
-        } else {
+        if (bracket.getRight() != null) {
             // Create GUI interaction panel
 
             // Attach click handlers
 
             // Update bootstrap
+        } else {
+            // Dont display to the GUI
+            bracket.setTeam(bracket.getLeft().getTeam());
         }
-   }
+    }
 
     private ClickHandler teamPanelClickHandler = new ClickHandler() {
         @Override
@@ -115,7 +96,7 @@ public class Tournament {
     private boolean isTournamentOver(){
         // TODO Create isTournamentOver method
         // Method determines when the tournament is over
-        // Sets a team as the winner
+        // Include a method to set a team as the winner
         return true;
     }
 
@@ -132,8 +113,12 @@ public class Tournament {
     /**
      * Method handles interaction with the GUI display of the tree
      */
-    public void updateGrid(){
-
+    public void updateGrid(ArrayList<Stack<Bracket>> treeNodesByHeight){
+        for (Stack<Bracket> bracketStack : treeNodesByHeight){
+            for (Bracket bracket : bracketStack){
+                bracket.updateGUI();
+            }
+        }
     }
 
 

@@ -46,7 +46,7 @@ public class GUI {
         assembleControlPanel();
         assemblePlayerPanel();
         assembleHeaderPanel();
-        assembleBracketPanel();
+
         assembleMiddlePanel();
         assembleDockLayoutPanel();
         styleForStartup();
@@ -203,12 +203,17 @@ public class GUI {
         headerPanel.setWidth("100%");
     }
 
+    public static Grid bracketGrid;
+
     private static void assembleBracketPanel(){
         bracketPanel.add(new Label("Bracket Panel"));
         int numberOfTeams = tournamentHandler.teams.size();
         int rows = 2*numberOfTeams - 1;
         int columns = 2*(int) Math.ceil(Math.log(numberOfTeams)/Math.log(2))+1;
-        bracketPanel.add(new Grid(rows, columns));
+        bracketGrid = new Grid(rows, columns);
+        //bracketGrid = new Grid(10, 10);
+        tournament.populateTree();
+        bracketPanel.add(bracketGrid);
 
     }
 
@@ -271,6 +276,7 @@ public class GUI {
         tradeButton.removeFromParent();
         moveToBracketPhaseButton.removeFromParent();
         teamTable.removeFromParent();
+        tournamentHandler.removeSurplusTeam();
 
         // Set up phase 3 interface
         String phase3HeaderHTML = "Begin the tournament by having the teams shown on the right play against each other.";
@@ -278,24 +284,49 @@ public class GUI {
         setBootstrapAlert(bootstrapAlerts.BEGIN_TOURNAMENT);
 
         // Set up GUI panels
+        assembleBracketPanel();
         bracketHolderPanel.add(bracketPanel);
         assemblePickWinnerPanel();
         bracketHolderPanel.add(pickWinnerPanel);
         middleMainPanel.add(bracketHolderPanel);
 
-        undoBracketActionButton.addClickHandler(undoLastAction);
-        controlPanel.add(undoBracketActionButton);
+        //undoBracketActionButton.addClickHandler(undoLastAction);
+        //controlPanel.add(undoBracketActionButton);
 
 
     }
 
     public static HorizontalPanel teamDisplayPanel = new HorizontalPanel();
     private static Button confirmWinnerButton = new Button("Confirm?");
+    private static VerticalPanel team1Panel = new VerticalPanel();
+    private static VerticalPanel team2Panel = new VerticalPanel();
 
     private static void assemblePickWinnerPanel(){
         pickWinnerPanel.add(new Label("Pick a winner when the match is over."));
+        teamDisplayPanel.add(team1Panel);
+        teamDisplayPanel.add(team2Panel);
         pickWinnerPanel.add(teamDisplayPanel);
         pickWinnerPanel.add(confirmWinnerButton);
+        team2Panel.addStyleName("team2Style");
+        updateTeamPanels(tournament.activeTeamStack.pop(), tournament.activeTeamStack.pop());
+    }
+
+    public static void updateTeamPanels(Team team1, Team team2){
+        // Assemble both panels simultaneously in parts
+        team1Panel.clear();
+        team2Panel.clear();
+
+        // Start with team name
+        team1Panel.add(new Label(team1.teamName));
+        team2Panel.add(new Label(team2.teamName));
+
+        // Iterate through players on each team and list them below the team name
+        for (Player player : team1.values()){
+            team1Panel.add(new Label(player.getSummonerName()));
+        }
+        for (Player player : team2.values()){
+            team2Panel.add(new Label(player.getSummonerName()));
+        }
 
     }
 
@@ -341,6 +372,7 @@ public class GUI {
     public static void drawBrackets(){
         tournamentHandler.getTeams();
         // Use CanvasElement, Canvas and Context2D to connect things
+        //tournamentHandler.
     }
 
     // TODO Implement an UNDO button
