@@ -72,10 +72,11 @@ public class bootstrapAlerts {
     // Phase 3
     public final static String BEGIN_TOURNAMENT = "<div class=\"alert alert-info\" role=\"alert\">You can now begin the tournament.</div>";
     public final static String MATCH_ONGOING = "<div class=\"alert alert-info\" role=\"alert\">Once the match is over, select a winner by clicking on the team name and then clicking confirm.</div>";
-    public final static String TOURNAMENT_FINISHED =  "<div class=\"alert alert-success\" role=\"alert\">Success!<br />Player added.</div>";
+    public final static String TOURNAMENT_FINISHED =  "<div class=\"alert alert-success\" role=\"alert\">The tournament is finished!</div>";
+    public final static String NO_PENDING_WINNING_TEAM = "<div class=\"alert alert-info\" role=\"alert\">No team has been selected as a winner. Please click the appropriate button for the team that won the match before clicking the confirm button.</div>";
 
-    public static String matchWinner(Team team){
-        return "<div class=\"alert alert-warning text-center\" role=\"alert\">" + makeBold(team.teamName) + " has been selected as the winner. Click the confirm button to continue.</div>";
+    public static String matchWinner(String teamName){
+        return "<div class=\"alert alert-warning text-center\" role=\"alert\">" + makeBold(teamName) + " has been selected as the winner. Click the confirm button to continue.</div>";
     }
 
     // HTML helper methods

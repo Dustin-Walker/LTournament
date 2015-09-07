@@ -333,20 +333,4 @@ public class TournamentHandler {
         if (Objects.equals(teams.get(teams.size()-1).teamName, surplusTeamName))
             teams.remove(teams.size()-1);
     }
-
-    public ClickHandler winningTeamSelector = new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-            
-        }
-    };
-
-    public ClickHandler confirmButtonHandler = new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-
-        }
-    };
-
-    private Team pendingWinningTeam = null;
 }

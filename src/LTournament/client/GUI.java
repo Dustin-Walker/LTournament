@@ -2,6 +2,7 @@ package LTournament.client;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.*;
 
 /**
@@ -297,7 +298,7 @@ public class GUI {
     }
 
     public static HorizontalPanel teamDisplayPanel = new HorizontalPanel();
-    private static Button confirmWinnerButton = new Button("Confirm?");
+
     private static VerticalPanel team1Panel = new VerticalPanel();
     private static VerticalPanel team2Panel = new VerticalPanel();
 
@@ -315,6 +316,11 @@ public class GUI {
         // Assemble both panels simultaneously in parts
         team1Panel.clear();
         team2Panel.clear();
+        tournament.clearPendingWinningTeam();
+
+        // Set titles equal to team names
+        team1Panel.setTitle(team1.teamName);
+        team2Panel.setTitle(team2.teamName);
 
         // Start with team name
         team1Panel.add(new Label(team1.teamName));
@@ -328,7 +334,71 @@ public class GUI {
             team2Panel.add(new Label(player.getSummonerName()));
         }
 
+        Button team1button = new Button("Select team as winner", team1SelectorHandler);
+        Button team2button = new Button("Select team as winner", team2SelectorHandler);
+
+        team1Panel.add(team1button);
+        team2Panel.add(team2button);
+
     }
+
+    private static ClickHandler team1SelectorHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            tournament.setPendingWinningTeam(team1Panel.getTitle());
+            setBootstrapAlert(bootstrapAlerts.matchWinner(team1Panel.getTitle()));
+        }
+    };
+
+    private static ClickHandler team2SelectorHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            tournament.setPendingWinningTeam(team2Panel.getTitle());
+            setBootstrapAlert(bootstrapAlerts.matchWinner(team2Panel.getTitle()));
+        }
+    };
+
+    private static ClickHandler confirmWinnerHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            if (tournament.getPendingWinningTeam() == null)
+                setBootstrapAlert(bootstrapAlerts.NO_PENDING_WINNING_TEAM);
+            else {
+                tournament.nextRoundStack.push(tournament.getPendingWinningTeam());
+                tournament.matchPending = false;
+                // TODO Set up new bracket for grid
+
+
+
+                if (tournament.activeTeamStack.size() == 1){
+                    tournament.nextRoundStack.push(tournament.activeTeamStack.pop());
+                } else if (tournament.activeTeamStack.size() >= 2){
+                    updateTeamPanels(tournament.activeTeamStack.pop(), tournament.activeTeamStack.pop());
+                    tournament.matchPending = true;
+                }
+                // Check for win state
+                if (tournament.activeTeamStack.size() == 0 && tournament.nextRoundStack.size() == 1 && !tournament.matchPending){
+                    setWinState();
+                }
+                if (tournament.activeTeamStack.size() == 0){
+                    // Move to next column of teams
+                    tournament.activeTeamStack.clear();
+                    tournament.activeTeamStack.addAll(tournament.nextRoundStack);
+                    tournament.nextRoundStack.clear();
+                    updateTeamPanels(tournament.activeTeamStack.pop(), tournament.activeTeamStack.pop());
+                }
+            }
+        }
+    };
+
+    private static void setWinState(){
+        setBootstrapAlert(bootstrapAlerts.TOURNAMENT_FINISHED);
+        team1Panel.getWidget(team1Panel.getWidgetCount()-1).setVisible(false);
+        team2Panel.getWidget(team2Panel.getWidgetCount()-1).setVisible(false);
+        confirmWinnerButton.setVisible(false);
+    }
+
+    private static Button confirmWinnerButton = new Button("Confirm?", confirmWinnerHandler);
 
     private static ClickHandler tradeClickHandler = new ClickHandler() {
         @Override
@@ -351,10 +421,6 @@ public class GUI {
         tournamentHandler.createTeamsOnGUI();
     }
 
-    public static void highlightPlayerForTrade(){
-
-    }
-
     public static ClickHandler tradeResetButtonHandler = new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
@@ -364,22 +430,6 @@ public class GUI {
 
             // Handle the tournamentHandler system
             tournamentHandler.resetPlayerSwap();
-        }
-    };
-
-
-    // TODO Draw brackets
-    public static void drawBrackets(){
-        tournamentHandler.getTeams();
-        // Use CanvasElement, Canvas and Context2D to connect things
-        //tournamentHandler.
-    }
-
-    // TODO Implement an UNDO button
-    public static ClickHandler undoLastAction = new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-
         }
     };
 }
