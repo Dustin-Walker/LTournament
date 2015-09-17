@@ -311,6 +311,8 @@ public class GUI {
         pickWinnerPanel.add(confirmWinnerButton);
         team2Panel.addStyleName("team2Style");
         updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
+
+        setBootstrapAlert("Number of beginning brackets: " + tournament.activeBracketStack.size());
     }
 
     public static void updateTeamPanels(Team team1, Team team2){
@@ -322,6 +324,9 @@ public class GUI {
         // Set titles equal to team names
          team1Panel.setTitle(team1.teamName);
          team2Panel.setTitle(team2.teamName);
+
+        // what
+        setBootstrapAlert("private updateTeamPanels->team names are : " + team1.teamName + " and " + team2.teamName);
 
         // Start with team name
         team1Panel.add(new Label(team1.teamName));
@@ -344,8 +349,13 @@ public class GUI {
     }
 
     public static void updateTeamPanels(Bracket bracket1, Bracket bracket2){
+
+        setBootstrapAlert("public updateTeamPanels->team names are : " + bracket1.getTeam().teamName + " and " + bracket2.getTeamName());
+
         tournament.setPendingMatchBrackets(bracket1, bracket2);
+
         updateTeamPanels(bracket1.getTeam(), bracket2.getTeam());
+
         tournament.setPendingColumn(bracket1.getColumn() + 2);
         tournament.setPendingRow((bracket1.getRow() + bracket2.getRow()) / 2);
     }
@@ -378,12 +388,6 @@ public class GUI {
 
                 tournament.nextRoundBracketStack.push(bracket);
                 tournament.matchPending = false;
-                // TODO Set up new bracket for grid
-
-
-
-                // bracketGrid.setHTML(i++, 3, "TEST");
-
 
                 // Check for win state
                 if (tournament.activeBracketStack.size() == 0 && tournament.nextRoundBracketStack.size() == 1 && !tournament.matchPending){
@@ -391,26 +395,66 @@ public class GUI {
                     return;
                 }
 
-                // Allow one team to skip if there is an odd number of teams on the stack
-                if (tournament.activeBracketStack.size() == 1){
-                    // TODO Create new bracket
+                // Check is activeStack is empty
+                /*
+                if (tournament.activeBracketStack.size() == 0){
+                    // Move to next column of teams
+                    // tournament.activeBracketStack.clear();
+                    // tournament.activeBracketStack.addAll(tournament.nextRoundBracketStack);
+                    while(!tournament.nextRoundBracketStack.isEmpty())
+                        tournament.activeBracketStack.push(tournament.nextRoundBracketStack.pop());
+                    // tournament.nextRoundBracketStack.clear();
+                    setBootstrapAlert("active round stack size: " + tournament.activeBracketStack.size());
+                    if (tournament.activeBracketStack.size() == 1){
+                        // setWinState();
+                        return;
+                    }
+                    Bracket bracket1 = tournament.activeBracketStack.pop();
+                    Bracket bracket2 = tournament.activeBracketStack.pop();
+                    setBootstrapAlert("team names are : " + bracket1.getTeamName() + " and " + bracket2.getTeamName());
+                    team1Panel.clear();
+                    team2Panel.clear();
+                    updateTeamPanels(bracket1, bracket2);
+                }*/
 
-                    // TODO Fill in GUI
-                    // tournament.nextRoundBracketStack.push(tournament.activeBracketStack.pop());
-                    tournament.clearPendingMatchBrackets();
+                // Allow one team to skip if there is an odd number of teams on the stack
+                if (tournament.activeBracketStack.size() == 1) {
+                    Bracket lastBracket = tournament.activeBracketStack.pop();
+                    Bracket bracket1 = new Bracket(lastBracket.getTeam(), lastBracket.getColumn() + 2, lastBracket.getRow() + 1);
+                    bracketGrid.setHTML(bracket1.getRow(), bracket1.getColumn(), bracket1.getTeamName());
+                    tournament.nextRoundBracketStack.push(bracket1);
+                    assert tournament.activeBracketStack.size() == 0;
+                    // tournament.clearPendingMatchBrackets();
+                    // setBootstrapAlert("next round stack size: " + tournament.nextRoundBracketStack.size());
+                    // setBootstrapAlert("active round stack size: " + tournament.activeBracketStack.size());
+                }
+                if (tournament.activeBracketStack.size() == 0){
+                    // Move to next column of teams
+                    // tournament.activeBracketStack.clear();
+                    // tournament.activeBracketStack.addAll(tournament.nextRoundBracketStack);
+                    while(!tournament.nextRoundBracketStack.isEmpty())
+                        tournament.activeBracketStack.push(tournament.nextRoundBracketStack.pop());
+                    // tournament.nextRoundBracketStack.clear();
+                    setBootstrapAlert("active round stack size: " + tournament.activeBracketStack.size());
+                  //  if (tournament.activeBracketStack.size() == 1){
+                        // setWinState();
+                //        return;
+                //    }
+                    Bracket bracket1 = tournament.activeBracketStack.pop();
+                    Bracket bracket2 = tournament.activeBracketStack.pop();
+                    setBootstrapAlert("team names are : " + bracket1.getTeamName() + " and " + bracket2.getTeamName());
+                 //   team1Panel.clear();
+                 //   team2Panel.clear();
+                    updateTeamPanels(bracket1, bracket2);
+                    tournament.matchPending = true;
+                   // updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
                 } else if (tournament.activeBracketStack.size() >= 2){
                     // Otherwise, pop two teams off the stack
                     updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
                     tournament.matchPending = true;
                 }
 
-                if (tournament.activeBracketStack.size() == 0){
-                    // Move to next column of teams
-                    tournament.activeBracketStack.clear();
-                    tournament.activeBracketStack.addAll(tournament.nextRoundBracketStack);
-                    tournament.nextRoundBracketStack.clear();
-                    updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
-                }
+
             }
         }
     };

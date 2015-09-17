@@ -79,8 +79,6 @@ public class bootstrapAlerts {
         return "<div class=\"alert alert-warning text-center\" role=\"alert\">" + makeBold(teamName) + " has been selected as the winner. Click the confirm button to continue.</div>";
     }
 
-    // HTML helper methods
-    // TODO Make wrappers for danger, alert, info, and success div containers
     private static String makeBold(String s){
         return "<strong>" + s + "</strong>";
     }
