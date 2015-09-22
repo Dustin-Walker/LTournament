@@ -29,6 +29,8 @@ public class Tournament {
     public Stack<Bracket> activeBracketStack = new Stack<>();
     public Stack<Bracket> nextRoundBracketStack = new Stack<>();
 
+    // TODO Final winner bracket needs to be highlighted
+
     private int size(){
         return this.size;
     }

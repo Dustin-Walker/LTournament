@@ -2,7 +2,6 @@ package LTournament.client;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.*;
 
 /**
@@ -236,6 +235,7 @@ public class GUI {
     }
 
     // TODO Implement a state design pattern to handle GUI state changes
+    // TODO Make team name label more noticeable
     private static void phase2StateChange(){
         addPanel.removeFromParent();
         addPlayerButton.removeFromParent();
@@ -265,6 +265,10 @@ public class GUI {
         }
     };
 
+    // TODO Separate bracket panel from winner-selection panel to emphasize they are 2 different panels
+    // TODO Style winner-selection panel
+    // TODO Write content for control-panel in phase3
+    // TODO Style bracket panel
     private static void phase3StateChange(){
         // Clear the values from phase 2
         bootstrapAlerts.resetTradeStatus();
@@ -418,15 +422,15 @@ public class GUI {
     };
 
     private static void setWinnerBracket(int row, int column, String bracketContents){
-        bracketGrid.setHTML(row, column, colorizeBracketBackground(bracketContents, "lime"));
+        bracketGrid.setHTML(row, column, setBracketStyle(bracketContents, "lime"));
     }
 
     private static void setLoserBracket(int row, int column, String bracketContents){
-        bracketGrid.setHTML(row, column, colorizeBracketBackground(bracketContents, "deepskyblue"));
+        bracketGrid.setHTML(row, column, setBracketStyle(bracketContents, "deepskyblue"));
     }
 
-    private static String colorizeBracketBackground(String bracketContents, String color){
-        return "<span style=\"background-color: " + color + "\">" + bracketContents + "</span>";
+    private static String setBracketStyle(String bracketContents, String color){
+        return "<span style=\"background-color: " + color + "; border: solid thin black; font-size 1.2 em\">" + bracketContents + "</span>";
     }
 
     private static void setWinState(){
