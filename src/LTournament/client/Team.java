@@ -11,5 +11,14 @@ import java.util.Random;
  * The key should be the player name and the value should be the corresponding player object.
  */
 public class Team extends HashMap<String, Player> {
+
+    public Team(String name){
+        this.teamName = name;
+    }
+
     public String teamName;
+
+    public Team() {
+
+    }
 }

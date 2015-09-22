@@ -174,11 +174,12 @@ public class TournamentHandler {
         Stack<Player> playerStack = new Stack<Player>();
         for (Player player : playerDataList) playerStack.push(player);
 
-        // Set up the teams
+        // Set up the team names
+        for (String name : teamNameArray)
+            teamNameList.add(name);
+
         for (int i = 0; i < numberOfTeams; i++) {
-            Team team = new Team();
-            // TODO Prevent teams from having the same name, use a stack
-            team.teamName = randomTeamName();
+            Team team = new Team(randomTeamName());
             teams.add(team);
         }
 
@@ -204,17 +205,18 @@ public class TournamentHandler {
         GUI.setBootstrapAlert("Number of teams: " + String.valueOf(teams.size()));
     }
 
+    private List<String> teamNameList = new ArrayList<>(20);
+
     private String randomTeamName() {
-        return teamNameArray[Random.nextInt(teamNameArray.length)];
+        return teamNameList.remove(Random.nextInt(teamNameList.size()));
     }
 
     // TODO Allow users to change team names during phase 2, click on box to change
-    // TODO Change these names to something more relavent to LoL
     final private String[] teamNameArray = {
-            "Garen's Defenders", "Team 2", "Team 3", "Team 4", "Team 5",
-            "Team 6", "Team 7", "Team 8", "Team 9", "Team 10",
-            "Team 11", "Team 12", "Team 13", "Team 14", "Team 15",
-            "Team 16", "Team 17", "Team 18", "Team 19", "Team 20"
+            "Garen's Defenders", "Gangplank's Sailors", "Corki's Aces", "Dr Mundo's Patients", "Galio's Sentinels",
+            "Gragas's Drinking Buddies", "Karthus's Legion", "Miss Fortune's Heart Breakers", "Ryze's Scholars", "Shen's Ninjas",
+            "Teemo's Squirrels", "Udyr's Nomads", "Veigar's Mages", "Twitch's Rat Pack", "Swain's Murder",
+            "Jinx's Partners In Crime", "LeBlanc's Circus Clowns", "Elise's Web", "Anivia's Flock", "Urgot's Experiment"
     };
 
     /**
