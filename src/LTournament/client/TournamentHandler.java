@@ -177,7 +177,7 @@ public class TournamentHandler {
         // Set up the teams
         for (int i = 0; i < numberOfTeams; i++) {
             Team team = new Team();
-            //team.teamName = team.randomTeamName();
+            // TODO Prevent teams from having the same name, use a stack
             team.teamName = randomTeamName();
             teams.add(team);
         }
@@ -208,7 +208,7 @@ public class TournamentHandler {
         return teamNameArray[Random.nextInt(teamNameArray.length)];
     }
 
-    // TODO Move this array of team names into a seperate file so users can change it
+    // TODO Allow users to change team names during phase 2, click on box to change
     // TODO Change these names to something more relavent to LoL
     final private String[] teamNameArray = {
             "Garen's Defenders", "Team 2", "Team 3", "Team 4", "Team 5",

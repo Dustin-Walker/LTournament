@@ -20,16 +20,11 @@ public class Tournament {
 
     private int pendingRow;
     private int pendingColumn;
-
-    // Parent nodes draw lines to children
-
     private ArrayList<Team> getTeams(){
         return GUI.tournamentHandler.getTeams();
     }
     private ArrayList<Team> teams = getTeams();
     private int size = teams.size();
- //   public Stack<Team> activeTeamStack = new Stack<>();
- //   public Stack<Team> nextRoundStack = new Stack<>();
     public boolean matchPending = false;
     public Stack<Bracket> activeBracketStack = new Stack<>();
     public Stack<Bracket> nextRoundBracketStack = new Stack<>();
@@ -54,14 +49,12 @@ public class Tournament {
         for (int i = 0, j = 0; i < numberOfRows; i+=2, j++) {
             Bracket bracket = new Bracket(teams.get(j), 1, i);
             initialBracketList.add(bracket);
-           // GUI.bracketGrid.setHTML(i, 1, teams.get(j).teamName);
         }
 
         for (Bracket bracket : initialBracketList){
             GUI.bracketGrid.setHTML(bracket.getRow(), bracket.getColumn(), bracket.getTeamName());
         }
 
-     //   activeTeamStack.addAll(teams);
         activeBracketStack.addAll(initialBracketList);
 
     }
@@ -82,17 +75,6 @@ public class Tournament {
     }
 
     public void setPendingWinningTeam(String pendingWinningTeam) {
-        /*for (Team team : teams)
-            if (team.teamName.equals(pendingWinningTeam)){
-                this.pendingWinningBracket.setTeam(team);
-                break;
-            }*/
-        /*for (Bracket bracket : activeBracketStack){
-            if (bracket.getTeam().teamName.equals(pendingWinningTeam)){
-                this.pendingWinningBracket = bracket;
-                break;
-            }
-        }*/
         if (pendingWinningTeam.equals(pendingMatchBrackets[0].getTeamName()))
             pendingWinningBracket = pendingMatchBrackets[0];
 

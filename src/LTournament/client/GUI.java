@@ -40,6 +40,9 @@ public class GUI {
     private static Tournament tournament = new Tournament();
     private static HorizontalPanel bracketHolderPanel = new HorizontalPanel();
     private static VerticalPanel pickWinnerPanel = new VerticalPanel();
+    public static HorizontalPanel teamDisplayPanel = new HorizontalPanel();
+    private static VerticalPanel team1Panel = new VerticalPanel();
+    private static VerticalPanel team2Panel = new VerticalPanel();
 
     public static void assembleStartUp(){
         assembleAddPanel();
@@ -47,7 +50,6 @@ public class GUI {
         assembleControlPanel();
         assemblePlayerPanel();
         assembleHeaderPanel();
-
         assembleMiddlePanel();
         assembleDockLayoutPanel();
         styleForStartup();
@@ -61,14 +63,10 @@ public class GUI {
     public static String getPlayerName(){
         return newPlayerNameTextBox.getText().trim().toLowerCase();
     }
+
     public static void emptyPlayerNameInputBox(){
         newPlayerNameTextBox.setText("");
     }
-
-    public static int rosterTableRowCount(){
-        return rosterTable.getRowCount();
-    }
-
 
     public static void addPlayerKeyHandler(){
         newPlayerNameTextBox.addKeyDownHandler(new KeyDownHandler() {
@@ -211,12 +209,9 @@ public class GUI {
         int numberOfTeams = tournamentHandler.teams.size();
         int rows = 2*numberOfTeams - 1;
         int columns = 2*((int) Math.ceil(Math.log(numberOfTeams)/Math.log(2)))+2;
-        //int columns = 4;
         bracketGrid = new Grid(rows, columns);
-        //bracketGrid = new Grid(10, 10);
         tournament.populateTree();
         bracketPanel.add(bracketGrid);
-
     }
 
     // TODO Set up scroll panel wrapper for the middle main panel
@@ -291,17 +286,7 @@ public class GUI {
         assemblePickWinnerPanel();
         bracketHolderPanel.add(pickWinnerPanel);
         middleMainPanel.add(bracketHolderPanel);
-
-        //undoBracketActionButton.addClickHandler(undoLastAction);
-        //controlPanel.add(undoBracketActionButton);
-
-
     }
-
-    public static HorizontalPanel teamDisplayPanel = new HorizontalPanel();
-
-    private static VerticalPanel team1Panel = new VerticalPanel();
-    private static VerticalPanel team2Panel = new VerticalPanel();
 
     private static void assemblePickWinnerPanel(){
         pickWinnerPanel.add(new Label("Pick a winner when the match is over."));
@@ -311,7 +296,6 @@ public class GUI {
         pickWinnerPanel.add(confirmWinnerButton);
         team2Panel.addStyleName("team2Style");
         updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
-
         setBootstrapAlert("Number of beginning brackets: " + tournament.activeBracketStack.size());
     }
 
@@ -382,13 +366,8 @@ public class GUI {
             if (tournament.getPendingWinningTeam() == null)
                 setBootstrapAlert(bootstrapAlerts.NO_PENDING_WINNING_TEAM);
             else {
-                // tournament.nextRoundBracketStack.push(tournament.getPendingWinningTeam());
                 Bracket bracket = new Bracket(tournament.getPendingWinningTeam().getTeam(), tournament.getPendingColumn(), tournament.getPendingRow());
                 bracketGrid.setHTML(bracket.getRow(), bracket.getColumn(), bracket.getTeamName());
-
-               // setWinnerBracket(tournament.getPendingRow(), tournament.getPendingColumn(), tournament.getPendingWinningTeam().getTeamName());
-
-
                 if (tournament.getPendingMatchBrackets()[0] == tournament.getPendingWinningTeam()){
                     // if team[0] won
                     setWinnerBracket(tournament.getPendingMatchBrackets()[0].getRow(), tournament.getPendingMatchBrackets()[0].getColumn(), tournament.getPendingMatchBrackets()[0].getTeamName());
@@ -399,7 +378,6 @@ public class GUI {
                     setLoserBracket(tournament.getPendingMatchBrackets()[0].getRow(), tournament.getPendingMatchBrackets()[0].getColumn(), tournament.getPendingMatchBrackets()[0].getTeamName());
                 }
 
-
                 tournament.nextRoundBracketStack.push(bracket);
                 tournament.matchPending = false;
 
@@ -409,31 +387,6 @@ public class GUI {
                     return;
                 }
 
-                // Check is activeStack is empty
-                /*
-                if (tournament.activeBracketStack.size() == 0){
-                    // Move to next column of teams
-                    // tournament.activeBracketStack.clear();
-                    // tournament.activeBracketStack.addAll(tournament.nextRoundBracketStack);
-                    while(!tournament.nextRoundBracketStack.isEmpty())
-                        tournament.activeBracketStack.push(tournament.nextRoundBracketStack.pop());
-                    // tournament.nextRoundBracketStack.clear();
-                    setBootstrapAlert("active round stack size: " + tournament.activeBracketStack.size());
-                    if (tournament.activeBracketStack.size() == 1){
-                        // setWinState();
-                        return;
-                    }
-                    Bracket bracket1 = tournament.activeBracketStack.pop();
-                    Bracket bracket2 = tournament.activeBracketStack.pop();
-                    setBootstrapAlert("team names are : " + bracket1.getTeamName() + " and " + bracket2.getTeamName());
-                    team1Panel.clear();
-                    team2Panel.clear();
-                    updateTeamPanels(bracket1, bracket2);
-                }*/
-
-                // TODO Green background for winner team bracket, red background for loser team bracket
-
-
                 // Allow one team to skip if there is an odd number of teams on the stack
                 if (tournament.activeBracketStack.size() == 1) {
                     Bracket lastBracket = tournament.activeBracketStack.pop();
@@ -442,37 +395,24 @@ public class GUI {
                     setWinnerBracket(lastBracket.getRow(), lastBracket.getColumn(), lastBracket.getTeamName());
                     tournament.nextRoundBracketStack.push(bracket1);
                     assert tournament.activeBracketStack.size() == 0;
-                    // tournament.clearPendingMatchBrackets();
-                    // setBootstrapAlert("next round stack size: " + tournament.nextRoundBracketStack.size());
-                    // setBootstrapAlert("active round stack size: " + tournament.activeBracketStack.size());
                 }
                 if (tournament.activeBracketStack.size() == 0){
-                    // Move to next column of teams
-                    // tournament.activeBracketStack.clear();
-                    // tournament.activeBracketStack.addAll(tournament.nextRoundBracketStack);
                     while(!tournament.nextRoundBracketStack.isEmpty())
                         tournament.activeBracketStack.push(tournament.nextRoundBracketStack.pop());
-                    // tournament.nextRoundBracketStack.clear();
+
                     setBootstrapAlert("active round stack size: " + tournament.activeBracketStack.size());
-                  //  if (tournament.activeBracketStack.size() == 1){
-                        // setWinState();
-                //        return;
-                //    }
+
                     Bracket bracket1 = tournament.activeBracketStack.pop();
                     Bracket bracket2 = tournament.activeBracketStack.pop();
+
                     setBootstrapAlert("team names are : " + bracket1.getTeamName() + " and " + bracket2.getTeamName());
-                 //   team1Panel.clear();
-                 //   team2Panel.clear();
                     updateTeamPanels(bracket1, bracket2);
                     tournament.matchPending = true;
-                   // updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
                 } else if (tournament.activeBracketStack.size() >= 2){
                     // Otherwise, pop two teams off the stack
                     updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
                     tournament.matchPending = true;
                 }
-
-
             }
         }
     };
