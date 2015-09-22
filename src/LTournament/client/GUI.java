@@ -386,6 +386,20 @@ public class GUI {
                 Bracket bracket = new Bracket(tournament.getPendingWinningTeam().getTeam(), tournament.getPendingColumn(), tournament.getPendingRow());
                 bracketGrid.setHTML(bracket.getRow(), bracket.getColumn(), bracket.getTeamName());
 
+               // setWinnerBracket(tournament.getPendingRow(), tournament.getPendingColumn(), tournament.getPendingWinningTeam().getTeamName());
+
+
+                if (tournament.getPendingMatchBrackets()[0] == tournament.getPendingWinningTeam()){
+                    // if team[0] won
+                    setWinnerBracket(tournament.getPendingMatchBrackets()[0].getRow(), tournament.getPendingMatchBrackets()[0].getColumn(), tournament.getPendingMatchBrackets()[0].getTeamName());
+                    setLoserBracket(tournament.getPendingMatchBrackets()[1].getRow(), tournament.getPendingMatchBrackets()[1].getColumn(), tournament.getPendingMatchBrackets()[1].getTeamName());
+                } else {
+                    // if team[1] won
+                    setWinnerBracket(tournament.getPendingMatchBrackets()[1].getRow(), tournament.getPendingMatchBrackets()[1].getColumn(), tournament.getPendingMatchBrackets()[1].getTeamName());
+                    setLoserBracket(tournament.getPendingMatchBrackets()[0].getRow(), tournament.getPendingMatchBrackets()[0].getColumn(), tournament.getPendingMatchBrackets()[0].getTeamName());
+                }
+
+
                 tournament.nextRoundBracketStack.push(bracket);
                 tournament.matchPending = false;
 
@@ -417,11 +431,15 @@ public class GUI {
                     updateTeamPanels(bracket1, bracket2);
                 }*/
 
+                // TODO Green background for winner team bracket, red background for loser team bracket
+
+
                 // Allow one team to skip if there is an odd number of teams on the stack
                 if (tournament.activeBracketStack.size() == 1) {
                     Bracket lastBracket = tournament.activeBracketStack.pop();
                     Bracket bracket1 = new Bracket(lastBracket.getTeam(), lastBracket.getColumn() + 2, lastBracket.getRow() + 1);
                     bracketGrid.setHTML(bracket1.getRow(), bracket1.getColumn(), bracket1.getTeamName());
+                    setWinnerBracket(lastBracket.getRow(), lastBracket.getColumn(), lastBracket.getTeamName());
                     tournament.nextRoundBracketStack.push(bracket1);
                     assert tournament.activeBracketStack.size() == 0;
                     // tournament.clearPendingMatchBrackets();
@@ -458,6 +476,18 @@ public class GUI {
             }
         }
     };
+
+    private static void setWinnerBracket(int row, int column, String bracketContents){
+        bracketGrid.setHTML(row, column, colorizeBracketBackground(bracketContents, "lime"));
+    }
+
+    private static void setLoserBracket(int row, int column, String bracketContents){
+        bracketGrid.setHTML(row, column, colorizeBracketBackground(bracketContents, "deepskyblue"));
+    }
+
+    private static String colorizeBracketBackground(String bracketContents, String color){
+        return "<span style=\"background-color: " + color + "\">" + bracketContents + "</span>";
+    }
 
     private static void setWinState(){
         setBootstrapAlert(bootstrapAlerts.TOURNAMENT_FINISHED);

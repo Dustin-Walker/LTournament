@@ -129,7 +129,6 @@ public class Tournament {
         return pendingColumn;
     }
 
-
     public void setPendingColumn(int pendingColumn) {
         this.pendingColumn = pendingColumn;
     }

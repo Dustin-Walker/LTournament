@@ -20,6 +20,7 @@ public class bootstrapAlerts {
     private static boolean isFirstPlayerSetForTrade = false;
     private static boolean isSecondPlayerSetForTrade = false;
     public final static String SWAP_NOT_READY = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nTrade not completed. One of the players is not set or you tried to trade players that are on the same team.</div>";
+    public static String PLAYER_NAME_LENGTH = "<div class=\"alert alert-danger\" role=\"alert\"><strong>Warning!</strong>\nThe name you entered is too long. The maximum size for a player name is 16 characters.</div>";
 
     public static String sameTeamAlert(String playerName){
         isSecondPlayerSetForTrade = true;

@@ -17,6 +17,7 @@ public class TournamentHandler {
     static HashMap<String, Player> summonerNameList = new HashMap<String, Player>();
     private final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
 
+
     // Non-GWT objects
     ArrayList<Player> playerDataList = new ArrayList<Player>();
     public ArrayList<Team> getTeams() {
@@ -42,6 +43,12 @@ public class TournamentHandler {
         // This lines prevents an error where the reset button was not clearing the playerDataList which was causing a bug
         if (summonerNameList.isEmpty())
             playerDataList.clear();
+
+        int MAX_NAME_LENGTH = 16;
+        if (playerName.length() > MAX_NAME_LENGTH){
+            GUI.setBootstrapAlert(bootstrapAlerts.PLAYER_NAME_LENGTH);
+            return;
+        }
 
         if (summonerNameList.containsKey(playerName)){
             // This is a duplicate entry
