@@ -387,6 +387,7 @@ public class GUI {
 
                 // Check for win state
                 if (tournament.activeBracketStack.size() == 0 && tournament.nextRoundBracketStack.size() == 1 && !tournament.matchPending){
+                    setWinnerBracket(bracket.getRow(), bracket.getColumn(), bracket.getTeamName());
                     setWinState();
                     return;
                 }
