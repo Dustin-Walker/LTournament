@@ -153,6 +153,13 @@ public class GUI {
         final String phase1HeaderHTML = "<div class=\"panel panel-info\"><div class=\"panel-heading\"><h4>LTournament Information</h4></div><div class=\"panel-body\">Welcome to the League of Legends Tournament System. Begin with adding players by in-game summoner name.</div></div>";
         controlPanelHeaderHTML.setHTML(phase1HeaderHTML);
         controlPanel.add(controlPanelHeaderHTML);
+
+
+        String colorLegendHTML = "<ul class=\"list-group\"><li class=\"list-group-item\">Player Ranking by Color</li><li class=\"list-group-item CHALLENGER\">CHALLENGER</li><li class=\"list-group-item MASTER\">MASTER</li><li class=\"list-group-item DIAMOND\">DIAMOND</li><li class=\"list-group-item PLATINUM\">PLATINUM</li><li class=\"list-group-item GOLD\">GOLD</li><li class=\"list-group-item SILVER\">SILVER</li><li class=\"list-group-item BRONZE\">BRONZE</li><li class=\"list-group-item UNRANKED\">UNRANKED</li> </ul>";
+        HTMLPanel colorLegend = new HTMLPanel(colorLegendHTML);
+        controlPanel.add(colorLegend);
+
+
         controlPanel.add(bootstrapAlert);
         controlPanel.add(addPanel);
         addPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -195,7 +202,7 @@ public class GUI {
         }
     }
 
-    private static void assembleHeaderPanel(){
+    private static void assembleHeaderPanel() {
         headerPanel.add(new Label("League of Legends Tournament System"));
         headerPanel.addStyleName("header");
         headerPanel.setWidth("100%");
@@ -256,6 +263,10 @@ public class GUI {
 
         moveToBracketPhaseButton.addClickHandler(moveToPhase3Handler);
         controlPanel.add(moveToBracketPhaseButton);
+
+        resetTradeButton.addStyleName("btn btn-default");
+        tradeButton.addStyleName("btn btn-default");
+        moveToBracketPhaseButton.addStyleName("btn btn-default");
     }
 
     private static ClickHandler moveToPhase3Handler = new ClickHandler() {
@@ -278,6 +289,7 @@ public class GUI {
         moveToBracketPhaseButton.removeFromParent();
         teamTable.removeFromParent();
         tournamentHandler.removeSurplusTeam();
+        controlPanel.remove(1);
 
         // Set up phase 3 interface
         String phase3HeaderHTML = "Begin the tournament by having the teams shown on the right play against each other.";
@@ -298,6 +310,7 @@ public class GUI {
         teamDisplayPanel.add(team2Panel);
         pickWinnerPanel.add(teamDisplayPanel);
         pickWinnerPanel.add(confirmWinnerButton);
+        confirmWinnerButton.addStyleName("btn btn-default");
         team2Panel.addStyleName("team2Style");
         updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
         setBootstrapAlert("Number of beginning brackets: " + tournament.activeBracketStack.size());
@@ -330,6 +343,9 @@ public class GUI {
 
         Button team1button = new Button("Select team as winner", team1SelectorHandler);
         Button team2button = new Button("Select team as winner", team2SelectorHandler);
+
+        team1button.addStyleName("btn btn-default");
+        team2button.addStyleName("btn btn-default");
 
         team1Panel.add(team1button);
         team2Panel.add(team2button);
@@ -372,6 +388,7 @@ public class GUI {
             else {
                 Bracket bracket = new Bracket(tournament.getPendingWinningTeam().getTeam(), tournament.getPendingColumn(), tournament.getPendingRow());
                 bracketGrid.setHTML(bracket.getRow(), bracket.getColumn(), bracket.getTeamName());
+                bracketGrid.getCellFormatter().addStyleName(bracket.getRow(), bracket.getColumn(), "bracket-default");
                 if (tournament.getPendingMatchBrackets()[0] == tournament.getPendingWinningTeam()){
                     // if team[0] won
                     setWinnerBracket(tournament.getPendingMatchBrackets()[0].getRow(), tournament.getPendingMatchBrackets()[0].getColumn(), tournament.getPendingMatchBrackets()[0].getTeamName());
@@ -423,16 +440,18 @@ public class GUI {
     };
 
     private static void setWinnerBracket(int row, int column, String bracketContents){
-        bracketGrid.setHTML(row, column, setBracketStyle(bracketContents, "lime"));
+       // bracketGrid.setHTML(row, column, setBracketStyle(bracketContents, "lime"));
+        bracketGrid.getCellFormatter().addStyleName(row, column, "bracket-winner");
     }
 
     private static void setLoserBracket(int row, int column, String bracketContents){
-        bracketGrid.setHTML(row, column, setBracketStyle(bracketContents, "deepskyblue"));
+       // bracketGrid.setHTML(row, column, setBracketStyle(bracketContents, "deepskyblue"));
+        bracketGrid.getCellFormatter().addStyleName(row, column, "bracket-loser");
     }
 
-    private static String setBracketStyle(String bracketContents, String color){
-        return "<span style=\"background-color: " + color + "; border: solid thin black; font-size 1.2 em\">" + bracketContents + "</span>";
-    }
+   // private static String setBracketStyle(String bracketContents, String color){
+    //    return "<span style=\"background-color: " + color + "; border: solid thin black; padding: 5px; font-size 1.2 em\">" + bracketContents + "</span>";
+  //  }
 
     private static void setWinState(){
         setBootstrapAlert(bootstrapAlerts.TOURNAMENT_FINISHED);

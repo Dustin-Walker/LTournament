@@ -43,8 +43,4 @@ public class Bracket {
         return row;
     }
 
-    public void updateGUI() {
-        int column = 1;
-        GUI.bracketGrid.setHTML(getRow(), column, "TEST");
-    }
 }

@@ -231,8 +231,11 @@ public class TournamentHandler {
                 row++;
             }
             VerticalPanel teamPanel = new VerticalPanel();
+            teamPanel.addStyleName("team-table-padding");
             // Team panel will now include a header and a button for each player
-            teamPanel.add(new Label(team.teamName));
+            Label label = new Label(team.teamName);
+            label.addStyleName("label label-primary");
+            teamPanel.add(label);
             for(Player player : team.values()){
                 // Label for each player
                 Button playerButton = new Button();

@@ -195,3 +195,24 @@ body{
 .highlight {
     background-color: #5677fc !important;
 }
+
+.team2Style {
+    margin-left: 20px;
+}
+
+.team-table-padding {
+    margin: 10px !important;
+}
+
+.bracket-default {
+    background-color: white !important;
+    padding: 5px;
+}
+
+.bracket-winner {
+    background-color: lime !important;
+}
+
+.bracket-loser {
+    background-color: deepskyblue !important;
+}

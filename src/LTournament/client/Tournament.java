@@ -1,14 +1,6 @@
 package LTournament.client;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.*;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.sun.org.apache.xpath.internal.operations.*;
-
 import java.lang.String;
-import java.math.MathContext;
 import java.util.*;
 
 /**
@@ -45,21 +37,13 @@ public class Tournament {
 
         for (Bracket bracket : initialBracketList){
             GUI.bracketGrid.setHTML(bracket.getRow(), bracket.getColumn(), bracket.getTeamName());
+            GUI.bracketGrid.getCellFormatter().addStyleName(bracket.getRow(), bracket.getColumn(), "bracket-default");
         }
+
+
 
         activeBracketStack.addAll(initialBracketList);
 
-    }
-
-    /**
-     * Method handles interaction with the GUI display of the tree
-     */
-    public void updateGrid(ArrayList<Stack<Bracket>> treeNodesByHeight){
-        for (Stack<Bracket> bracketStack : treeNodesByHeight){
-            for (Bracket bracket : bracketStack){
-                bracket.updateGUI();
-            }
-        }
     }
 
     public Bracket getPendingWinningTeam() {
@@ -89,10 +73,6 @@ public class Tournament {
 
     public Bracket[] getPendingMatchBrackets(){
         return  pendingMatchBrackets;
-    }
-
-    public void clearPendingMatchBrackets(){
-        pendingMatchBrackets = null;
     }
 
     public int getPendingRow() {
