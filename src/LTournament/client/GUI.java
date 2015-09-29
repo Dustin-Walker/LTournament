@@ -37,7 +37,7 @@ public class GUI {
     private static Button moveToBracketPhaseButton = new Button("Begin the tournament");
     private static Button undoBracketActionButton = new Button("Undo last action");
     private static Tournament tournament = new Tournament();
-    private static HorizontalPanel bracketHolderPanel = new HorizontalPanel();
+    private static DockPanel bracketHolderPanel = new DockPanel();
     private static VerticalPanel pickWinnerPanel = new VerticalPanel();
     public static HorizontalPanel teamDisplayPanel = new HorizontalPanel();
     private static VerticalPanel team1Panel = new VerticalPanel();
@@ -211,7 +211,10 @@ public class GUI {
     public static Grid bracketGrid;
 
     private static void assembleBracketPanel(){
-        bracketPanel.add(new Label("Bracket Panel"));
+        // TODO Style this label
+        Label bracketHeader = new Label("Bracket Panel");
+        bracketHeader.addStyleName("large-text");
+        bracketPanel.add(bracketHeader);
         int numberOfTeams = tournamentHandler.teams.size();
         int rows = 2*numberOfTeams - 1;
         int columns = 2*((int) Math.ceil(Math.log(numberOfTeams)/Math.log(2)))+2;
@@ -276,7 +279,6 @@ public class GUI {
         }
     };
 
-    // TODO Separate bracket panel from winner-selection panel to emphasize they are 2 different panels
     // TODO Style winner-selection panel
     // TODO Write content for control-panel in phase3
     // TODO Style bracket panel
@@ -292,28 +294,32 @@ public class GUI {
         controlPanel.remove(1);
 
         // Set up phase 3 interface
-        String phase3HeaderHTML = "Begin the tournament by having the teams shown on the right play against each other.";
+        // String phase3HeaderHTML = "Begin the tournament by having the teams shown on the right play against each other.";
+        final String phase3HeaderHTML = "<div class=\"panel panel-info\"><div class=\"panel-heading\"><h4>LTournament Information</h4></div><div class=\"panel-body\">Begin the tournament by having the teams listed on the right play against each other. Select and confirm a winner when the match is over to progress through the tournament until a winner is selected. Once the match is over, the winning team is highlighted in green while the losing team is highlighted in blue.</div></div>";
         controlPanelHeaderHTML.setHTML(phase3HeaderHTML);
         setBootstrapAlert(bootstrapAlerts.BEGIN_TOURNAMENT);
 
         // Set up GUI panels
         assembleBracketPanel();
-        bracketHolderPanel.add(bracketPanel);
+        bracketHolderPanel.add(bracketPanel, DockPanel.WEST);
         assemblePickWinnerPanel();
-        bracketHolderPanel.add(pickWinnerPanel);
+        bracketHolderPanel.add(pickWinnerPanel, DockPanel.EAST);
         middleMainPanel.add(bracketHolderPanel);
+        bracketHolderPanel.setWidth("100%");
     }
 
     private static void assemblePickWinnerPanel(){
-        pickWinnerPanel.add(new Label("Pick a winner when the match is over."));
+        Label pickWinnerLabel = new Label("Pick a winner when the match is over.");
+        pickWinnerLabel.addStyleName("large-text");
+        pickWinnerPanel.add(pickWinnerLabel);
         teamDisplayPanel.add(team1Panel);
         teamDisplayPanel.add(team2Panel);
         pickWinnerPanel.add(teamDisplayPanel);
         pickWinnerPanel.add(confirmWinnerButton);
-        confirmWinnerButton.addStyleName("btn btn-default");
+        confirmWinnerButton.addStyleName("btn btn-default confirm-btn");
         team2Panel.addStyleName("team2Style");
         updateTeamPanels(tournament.activeBracketStack.pop(), tournament.activeBracketStack.pop());
-        setBootstrapAlert("Number of beginning brackets: " + tournament.activeBracketStack.size());
+        //setBootstrapAlert("Number of beginning brackets: " + tournament.activeBracketStack.size());
     }
 
     public static void updateTeamPanels(Team team1, Team team2){
@@ -327,19 +333,42 @@ public class GUI {
          team2Panel.setTitle(team2.teamName);
 
         // what
-        setBootstrapAlert("private updateTeamPanels->team names are : " + team1.teamName + " and " + team2.teamName);
+       // setBootstrapAlert("private updateTeamPanels->team names are : " + team1.teamName + " and " + team2.teamName);
 
         // Start with team name
-        team1Panel.add(new Label(team1.teamName));
-        team2Panel.add(new Label(team2.teamName));
+        Label team1Label = new Label(team1.teamName);
+        team1Label.addStyleName("big-text");
+
+        Label team2Label = new Label(team2.teamName);
+        team2Label.addStyleName("big-text");
+
+        team1Panel.add(team1Label);
+        team2Panel.add(team2Label);
+
+        StringBuilder team1HTML = new StringBuilder();
+        StringBuilder team2HTML = new StringBuilder();
+
+        team1HTML.append("<ul class=\"list-group\">");
+        team2HTML.append("<ul class=\"list-group\">");
 
         // Iterate through players on each team and list them below the team name
         for (Player player : team1.values()){
-            team1Panel.add(new Label(player.getSummonerName()));
+//            team1Panel.add(new Label(player.getSummonerName()));
+            team1HTML.append("<li class=\"list-group-item\">").append(player.getSummonerName()).append("</li>");
         }
         for (Player player : team2.values()){
-            team2Panel.add(new Label(player.getSummonerName()));
+  //          team2Panel.add(new Label(player.getSummonerName()));
+            team2HTML.append("<li class=\"list-group-item\">").append(player.getSummonerName()).append("</li>");
         }
+
+        team1HTML.append("</ul>");
+        team2HTML.append("</ul>");
+
+        HTMLPanel team1HTMLPanel = new HTMLPanel(team1HTML.toString());
+        HTMLPanel team2HTMLPanel = new HTMLPanel(team2HTML.toString());
+
+        team1Panel.add(team1HTMLPanel);
+        team2Panel.add(team2HTMLPanel);
 
         Button team1button = new Button("Select team as winner", team1SelectorHandler);
         Button team2button = new Button("Select team as winner", team2SelectorHandler);
@@ -354,7 +383,7 @@ public class GUI {
 
     public static void updateTeamPanels(Bracket bracket1, Bracket bracket2){
 
-        setBootstrapAlert("public updateTeamPanels->team names are : " + bracket1.getTeam().teamName + " and " + bracket2.getTeamName());
+       // setBootstrapAlert("public updateTeamPanels->team names are : " + bracket1.getTeam().teamName + " and " + bracket2.getTeamName());
 
         tournament.setPendingMatchBrackets(bracket1, bracket2);
 
@@ -405,7 +434,7 @@ public class GUI {
                 // Check for win state
                 if (tournament.activeBracketStack.size() == 0 && tournament.nextRoundBracketStack.size() == 1 && !tournament.matchPending){
                     setWinnerBracket(bracket.getRow(), bracket.getColumn(), bracket.getTeamName());
-                    setWinState();
+                    setWinState(bracket);
                     return;
                 }
 
@@ -440,24 +469,33 @@ public class GUI {
     };
 
     private static void setWinnerBracket(int row, int column, String bracketContents){
-       // bracketGrid.setHTML(row, column, setBracketStyle(bracketContents, "lime"));
         bracketGrid.getCellFormatter().addStyleName(row, column, "bracket-winner");
     }
 
     private static void setLoserBracket(int row, int column, String bracketContents){
-       // bracketGrid.setHTML(row, column, setBracketStyle(bracketContents, "deepskyblue"));
         bracketGrid.getCellFormatter().addStyleName(row, column, "bracket-loser");
     }
 
-   // private static String setBracketStyle(String bracketContents, String color){
-    //    return "<span style=\"background-color: " + color + "; border: solid thin black; padding: 5px; font-size 1.2 em\">" + bracketContents + "</span>";
-  //  }
-
-    private static void setWinState(){
-        setBootstrapAlert(bootstrapAlerts.TOURNAMENT_FINISHED);
+    private static void setWinState(Bracket bracket){
+        // Remove old panels
         team1Panel.getWidget(team1Panel.getWidgetCount()-1).setVisible(false);
         team2Panel.getWidget(team2Panel.getWidgetCount()-1).setVisible(false);
-        confirmWinnerButton.setVisible(false);
+        confirmWinnerButton.removeFromParent();
+        team1Panel.removeFromParent();
+        team2Panel.removeFromParent();
+        pickWinnerPanel.getWidget(0).removeFromParent();
+
+        // Display winning team
+        setBootstrapAlert(bootstrapAlerts.TOURNAMENT_FINISHED);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<h2>").append(bracket.getTeamName()).append(" is the winning team!</h2>Congrats to the winning players!<br><ul class=\"list-group\">");
+        for (Player player : bracket.getTeam().values())
+            stringBuilder.append("<li class=\"list-group-item\">").append(player.getSummonerName()).append("</li>");
+        stringBuilder.append("</ul>");
+        HTMLPanel winnerPanel = new HTMLPanel(stringBuilder.toString());
+        winnerPanel.addStyleName("text-center");
+        teamDisplayPanel.add(winnerPanel);
+        teamDisplayPanel.setWidth("100%");
     }
 
     private static Button confirmWinnerButton = new Button("Confirm?", confirmWinnerHandler);

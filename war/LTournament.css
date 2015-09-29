@@ -216,3 +216,15 @@ body{
 .bracket-loser {
     background-color: deepskyblue !important;
 }
+
+.large-text {
+    font-size: xx-large !important;
+}
+
+.big-text {
+    font-size: large !important;
+}
+
+.confirm-btn {
+    margin-top: 10px;
+}
