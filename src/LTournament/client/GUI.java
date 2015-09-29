@@ -154,11 +154,9 @@ public class GUI {
         controlPanelHeaderHTML.setHTML(phase1HeaderHTML);
         controlPanel.add(controlPanelHeaderHTML);
 
-
         String colorLegendHTML = "<ul class=\"list-group\"><li class=\"list-group-item\">Player Ranking by Color</li><li class=\"list-group-item CHALLENGER\">CHALLENGER</li><li class=\"list-group-item MASTER\">MASTER</li><li class=\"list-group-item DIAMOND\">DIAMOND</li><li class=\"list-group-item PLATINUM\">PLATINUM</li><li class=\"list-group-item GOLD\">GOLD</li><li class=\"list-group-item SILVER\">SILVER</li><li class=\"list-group-item BRONZE\">BRONZE</li><li class=\"list-group-item UNRANKED\">UNRANKED</li> </ul>";
         HTMLPanel colorLegend = new HTMLPanel(colorLegendHTML);
         controlPanel.add(colorLegend);
-
 
         controlPanel.add(bootstrapAlert);
         controlPanel.add(addPanel);
@@ -211,7 +209,6 @@ public class GUI {
     public static Grid bracketGrid;
 
     private static void assembleBracketPanel(){
-        // TODO Style this label
         Label bracketHeader = new Label("Bracket Panel");
         bracketHeader.addStyleName("large-text");
         bracketPanel.add(bracketHeader);
@@ -245,7 +242,6 @@ public class GUI {
     }
 
     // TODO Implement a state design pattern to handle GUI state changes
-    // TODO Make team name label more noticeable
     private static void phase2StateChange(){
         addPanel.removeFromParent();
         addPlayerButton.removeFromParent();
@@ -279,9 +275,6 @@ public class GUI {
         }
     };
 
-    // TODO Style winner-selection panel
-    // TODO Write content for control-panel in phase3
-    // TODO Style bracket panel
     private static void phase3StateChange(){
         // Clear the values from phase 2
         bootstrapAlerts.resetTradeStatus();
@@ -294,7 +287,6 @@ public class GUI {
         controlPanel.remove(1);
 
         // Set up phase 3 interface
-        // String phase3HeaderHTML = "Begin the tournament by having the teams shown on the right play against each other.";
         final String phase3HeaderHTML = "<div class=\"panel panel-info\"><div class=\"panel-heading\"><h4>LTournament Information</h4></div><div class=\"panel-body\">Begin the tournament by having the teams listed on the right play against each other. Select and confirm a winner when the match is over to progress through the tournament until a winner is selected. Once the match is over, the winning team is highlighted in green while the losing team is highlighted in blue.</div></div>";
         controlPanelHeaderHTML.setHTML(phase3HeaderHTML);
         setBootstrapAlert(bootstrapAlerts.BEGIN_TOURNAMENT);
@@ -332,9 +324,6 @@ public class GUI {
          team1Panel.setTitle(team1.teamName);
          team2Panel.setTitle(team2.teamName);
 
-        // what
-       // setBootstrapAlert("private updateTeamPanels->team names are : " + team1.teamName + " and " + team2.teamName);
-
         // Start with team name
         Label team1Label = new Label(team1.teamName);
         team1Label.addStyleName("big-text");
@@ -353,11 +342,9 @@ public class GUI {
 
         // Iterate through players on each team and list them below the team name
         for (Player player : team1.values()){
-//            team1Panel.add(new Label(player.getSummonerName()));
             team1HTML.append("<li class=\"list-group-item\">").append(player.getSummonerName()).append("</li>");
         }
         for (Player player : team2.values()){
-  //          team2Panel.add(new Label(player.getSummonerName()));
             team2HTML.append("<li class=\"list-group-item\">").append(player.getSummonerName()).append("</li>");
         }
 
@@ -382,13 +369,8 @@ public class GUI {
     }
 
     public static void updateTeamPanels(Bracket bracket1, Bracket bracket2){
-
-       // setBootstrapAlert("public updateTeamPanels->team names are : " + bracket1.getTeam().teamName + " and " + bracket2.getTeamName());
-
         tournament.setPendingMatchBrackets(bracket1, bracket2);
-
         updateTeamPanels(bracket1.getTeam(), bracket2.getTeam());
-
         tournament.setPendingColumn(bracket1.getColumn() + 2);
         tournament.setPendingRow((bracket1.getRow() + bracket2.getRow()) / 2);
     }
