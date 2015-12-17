@@ -14,6 +14,8 @@ import java.util.*;
  */
 public class TournamentHandler {
 
+    public static final int MIN_TWISTED_TREELINE_PLAYER_SIZE = 6;
+    public static final int MIN_SUMMONERS_RIFT_PLAYER_SIZE = 10;
     static HashMap<String, Player> summonerNameList = new HashMap<String, Player>();
     private final String APIKEY = "?api_key=0fe5e184-13db-40a8-9100-bcc29c664cd2";
 
@@ -98,12 +100,17 @@ public class TournamentHandler {
                                     int column = playerListSize%10;
                                     final Player localPlayer = playerDataList.get(playerListSize);
                                     localPlayer.setRank(response.getText());
-                                    final HorizontalPanel playerPanel = new HorizontalPanel();
+                                    final VerticalPanel playerPanel = new VerticalPanel();
+                                    playerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
                                     final Label nameLabel = new Label(localPlayer.getSummonerName());
                                     nameLabel.addStyleName("h4");
                                     playerPanel.add(nameLabel);
+                                    // Player rank goes between player name and the remove button
+                                    final HTML rank = new HTML("<i class=\"fa fa-trophy\"></i> " + localPlayer.getRank().name());
+                                    rank.addStyleName("label label-info");
+                                    playerPanel.add(rank);
                                     final Button removePlayerButton = new Button();
-                                    removePlayerButton.setStyleName("btn btn-default remove-btn");
+                                    removePlayerButton.setStyleName("btn btn-default remove-btn push-down");
                                     removePlayerButton.setHTML("<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span>");
                                     playerPanel.add(removePlayerButton);
                                     playerPanel.addStyleName("panel-body");
@@ -128,9 +135,9 @@ public class TournamentHandler {
                                     GUI.setBootstrapAlert(bootstrapAlerts.PLAYER_ADDED_SUCCESSFULLY);
 
                                     // Display the matchmaking buttons if appropriate
-                                    if(playerDataList.size()>=6)
+                                    if(playerDataList.size()>= MIN_TWISTED_TREELINE_PLAYER_SIZE)
                                         GUI.matchmakingBy3.setVisible(true);
-                                    if(playerDataList.size()>=10)
+                                    if(playerDataList.size()>= MIN_SUMMONERS_RIFT_PLAYER_SIZE)
                                         GUI.matchmakingBy5.setVisible(true);
                                 }
 
