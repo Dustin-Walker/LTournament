@@ -71,7 +71,6 @@ public class GUI {
         newPlayerNameTextBox.addKeyDownHandler(new KeyDownHandler() {
             @Override
             public void onKeyDown(KeyDownEvent event) {
-
                 if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
                     tournamentHandler.addPlayer();
                     emptyPlayerNameInputBox();
